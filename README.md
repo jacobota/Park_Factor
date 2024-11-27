@@ -4,8 +4,6 @@ Are you a die-hard baseball fan looking for more than just scores and standings?
 
 Park Factor offers a personalized and interactive way to stay connected with Major League Baseball. From visualizing the movement of your favorite pitcher’s slider in 3D to exploring heat maps that reveal a hitter’s swing tendencies, every feature is crafted to enhance your understanding and appreciation of the game. Dive into detailed player stats, track live game updates, and get exclusive insights—this app is designed to bring you closer to the action, whether you’re on the go or watching from home. Welcome to Park Factor, your new go-to baseball companion.
 
----
-
 ## Features
 
 ### Account Functionality
@@ -40,8 +38,6 @@ Park Factor offers a personalized and interactive way to stay connected with Maj
   - Swing tendencies color-coded by frequency
 - Team of the Week:
   - Highlight the best-performing team dynamically based on Win Probability %
-
----
 
 ## Tech Stack
 
