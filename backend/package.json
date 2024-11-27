@@ -1,0 +1,37 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Park Factor Backend",
+  "main": "app.js",
+  "scripts": {
+    "start": "node ./app.js",
+    "test": "jest"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "<rootDir>/**.js"
+    ],
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/coverage/"
+    ],
+    "clearMocks": true
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.699.0",
+    "@aws-sdk/credential-provider-ini": "^3.699.0",
+    "@aws-sdk/lib-dynamodb": "^3.699.0",
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "jsonwebtoken": "^9.0.2",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
