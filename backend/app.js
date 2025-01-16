@@ -3,10 +3,14 @@ const express = require("express");
 const { logger } = require("./src/util/logger");
 
 // Routers (TODO)
+const usersController = require('./src/controller/UsersController');
 
 // Create the server on PORT 3000
 const app = express();
 const PORT = 3000;
+
+// Middleware to parse JSON bodies
+app.use(express.json());
 
 app.listen(PORT, () => {
     logger.info(`Started the server on Port ${PORT}`);
@@ -20,6 +24,4 @@ app.use((req, res, next) => {
 
 // HTTP Routes (TODO)
 
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-});
+app.use('/users', usersController);
