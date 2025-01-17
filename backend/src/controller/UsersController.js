@@ -17,7 +17,7 @@ router.post('/registration', async (req, res) => {
             return;
         }
 
-        // Need to make a validate email function (TODO)
+        // Implement Validation of Email function (TODO)
         if (typeof req.body.email !== 'string' || !req.body.email) {
             res.status(400).json({message: 'Invalid Email'});
             return;
@@ -116,20 +116,20 @@ router.put('/update/email', authenticateToken, async (req, res) => {
     }
 });
 
-// Update own User information Password (Need authenticate token middleware)
+// Update own User information Password (Need authenticate token middleware) (TODO)
 
-// Update own User information Profile Pic (Need authenticate token middleware)
+// Update own User information Profile Pic (Need authenticate token middleware) (TODO)
 
-// Update own User Favorite Team(s) (Need authenticate token middleware)
+// Update own User Favorite Team(s) (Need authenticate token middleware) (TODO)
 
-// Update own User Favorite Player(s) (Need authenticate token middleware)
+// Update own User Favorite Player(s) (Need authenticate token middleware) (TODO)
 
-// Update another User admin status (Need Admin permissions)
+// Update another User admin status (Need Admin permissions) (TODO)
 
-//Update another User verified status (Need Admin permissions)
+//Update another User verified status (Need Admin permissions) (TODO)
 
 // DELETE
-// Delete Account (Going to be stretch goal for now)
+// Delete Account (TODO)
 
 
 // Helper Functions for Username and Password Validation
@@ -164,5 +164,7 @@ function validatePassword(password) {
     // Password must be between 8 and 20 characters
     return password.length >= 8 && password.length <= 20;
 }
+
+// Validate Email (TODO)
 
 module.exports = router;
