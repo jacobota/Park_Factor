@@ -2,6 +2,7 @@
 const { logger } = require("../util/logger");
 const encrypt = require("../util/encryption");
 const usersDao = require("../repository/UsersDAO");
+const { profile } = require("winston");
 
 /**
  * createUser will bridge the gap between the controller and the DAO to create a
@@ -13,16 +14,19 @@ const usersDao = require("../repository/UsersDAO");
  */
 async function createUser(body) {
     try {
+        // check if the user already exists
         if(!await userExists(body.username)) {
+            // encrypt the password and pass data to DAO
             const encryptedPassword = await encrypt.encryptPassword(body.password);
             const data = await usersDao.createUser({
                 username: body.username,
-                email: body.email,
-                password: encryptedPassword,
                 admin: false,
-                verified: false,
+                email: body.email,
+                favoritePlayers: [],
                 favoriteTeams: [],
-                favoritePlayers: []
+                password: encryptedPassword,
+                profilePicture: "",
+                verified: false,
             });
             return data;
         }
@@ -42,8 +46,10 @@ async function createUser(body) {
  */
 async function loginUser(body) {
     try {
+        // check if the user exists or throw a no user found error
         const data = await usersDao.getUserByUsername(body.username);
         if(data.Item) {
+            // validate the password, if correct then return the user data else throw error
             if(await encrypt.validatePassword(body.password, data.Item.password)) {
                 return data;
             }
@@ -52,6 +58,22 @@ async function loginUser(body) {
         throw Error("No User found with entered username. Please Try Again.");
     } catch (err) {
         throw Error(err.message);
+    }
+}
+
+/**
+ * getUserbyUsername will bridge the gap between the controller and the DAO to get a user,
+ * this function will be used for both gathering own user information and other user information.
+ * 
+ * @param {string} username username of user to get information
+ * @returns data of user if present or error
+ */
+async function getUserInformation(username) {
+    try {
+        const data = await usersDao.getUserByUsername(username);
+        return data;
+    } catch (err) {
+        throw Error("Error retrieving user information");
     }
 }
 
@@ -73,5 +95,6 @@ async function userExists(username) {
 
 module.exports = {
     createUser,
-    loginUser
+    loginUser,
+    getUserInformation
 }

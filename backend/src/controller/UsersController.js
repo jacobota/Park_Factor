@@ -2,7 +2,7 @@
 const { logger } = require("../util/logger");
 const express = require("express");
 const usersService = require("../service/UsersService");
-const { generateToken } = require("../util/token");
+const { generateToken, authenticateToken } = require("../util/token");
 
 // Create the router
 const router = express.Router();
@@ -65,20 +65,49 @@ router.post('/login', async (req, res) => {
 });
 
 // READ
-// Get own User information (Need authenticate token method)
+// Get own User information (Need authenticate token middleware)
+router.get('/profile', authenticateToken, async (req, res) => {
+    try {
+        // Call the service to get the user information
+        const data = await usersService.getUserInformation(req.user.username);
+
+        // Return the user information
+        res.status(200).json(data.Item);
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
+
+// Get another User information (Need authenticate token middleware)
+router.get('/profile/:username', authenticateToken, async (req, res) => {
+    try {
+        // Call the service to get the user information
+        const data = await usersService.getUserInformation(req.params.username);
+
+        // Only can see verified users currently 
+        if (!data.Item.verified) {
+            throw new Error("Cannot view unverified users");
+        }
+
+        // Return the user information
+        res.status(200).json(data.Item);
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
 
 // UPDATE
-// Update own User information Username (Need authenticate token method) 
+// Update own User information Username (Need authenticate token middleware)
 
-// Update own User information Email (Need authenticate token method) 
+// Update own User information Email (Need authenticate token middleware)
 
-// Update own User information Password (Need authenticate token method) 
+// Update own User information Password (Need authenticate token middleware)
 
-// Update own User information Profile Pic (Need authenticate token method) 
+// Update own User information Profile Pic (Need authenticate token middleware)
 
-// Update own User Favorite Team(s) (Need authenticate token method)
+// Update own User Favorite Team(s) (Need authenticate token middleware)
 
-// Update own User Favorite Player(s) (Need authenticate token method)
+// Update own User Favorite Player(s) (Need authenticate token middleware)
 
 // Update another User admin status (Need Admin permissions)
 
