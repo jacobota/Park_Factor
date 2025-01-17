@@ -27,21 +27,17 @@ const TableName = process.env.USERS_TABLENAME;
  * @returns data of user info or error
  */
 async function createUser(Item) {
-    logger.info(`createUser called`);
     const command = new PutCommand({
         TableName,
         Item
     });
 
-    logger.info(`${JSON.stringify(command)}`);
-
     try {
         const data = await documentClient.send(command);
         return data;
-    } catch (error) {
-        logger.error(error);
+    } catch (err) {
+        throw new Error(err);
     }
-    return null;
 }
 
 /**
@@ -59,7 +55,7 @@ async function getUserByUsername(username) {
     try {
         const data = await documentClient.send(command);
         return data;
-    } catch (error) {
+    } catch (err) {
         return null;
     }
 }

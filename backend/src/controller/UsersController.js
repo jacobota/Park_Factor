@@ -29,7 +29,7 @@ router.post('/registration', async (req, res) => {
         }
         
         // Call the service to create the user
-        const data = req.body ? await usersService.createUser(req.body) : null;
+        const data = await usersService.createUser(req.body);
 
         // Return the user information
         res.status(201).json({message: 'User Created'});

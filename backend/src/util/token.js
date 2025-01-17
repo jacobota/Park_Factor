@@ -17,8 +17,12 @@ const secretKey = process.env.PARK_FACTOR_JWT_SECRET_KEY;
 function generateToken(userData) {
     const jwtToken = jwt.sign(
         {
-            userId: userData.userId,
-            username: userData.username
+            username: userData.username,
+            email: userData.email,
+            admin: userData.admin,
+            verified: userData.verified,
+            favoriteTeams: userData.favoriteTeams,
+            favoritePlayers: userData.favoritePlayers
         },
         secretKey,
         {
