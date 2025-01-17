@@ -2,7 +2,6 @@
 const { logger } = require("../util/logger");
 const encrypt = require("../util/encryption");
 const usersDao = require("../repository/UsersDAO");
-const { profile } = require("winston");
 
 /**
  * createUser will bridge the gap between the controller and the DAO to create a
@@ -78,6 +77,26 @@ async function getUserInformation(username) {
 }
 
 /**
+ * updateUserEmail will bridge the gap between the controller and the DAO to update a users email,
+ * this function will check if the user exists in the database and then update their email.
+ * 
+ * @param {String} username username to search for in the table
+ * @param {*} newEmail new username
+ * @returns data of user if changed or error
+ */
+async function updateUserEmail(username, newEmail) {
+    try {
+        if(await userExists(username)) {
+            const data = await usersDao.updateEmail(username, newEmail);
+            return data;
+        }
+        throw Error("Username not found");
+    } catch (err) {
+        throw Error(err.message);
+    }
+}
+
+/**
  * Helper functin that checks if a user exists in the database
  *
  * @param {string} username to pass to GetCommand in DAO
@@ -96,5 +115,6 @@ async function userExists(username) {
 module.exports = {
     createUser,
     loginUser,
-    getUserInformation
+    getUserInformation,
+    updateUserEmail
 }

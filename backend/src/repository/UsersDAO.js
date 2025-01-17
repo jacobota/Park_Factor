@@ -60,7 +60,36 @@ async function getUserByUsername(username) {
     }
 }
 
+/**
+ * updateEmail will UPDATE the users email in the table
+ * 
+ * @param {String} username username to search for in the table
+ * @param {*} newEmail new username
+ * @returns data of user if changed or null
+ */
+async function updateEmail(username, newEmail) {
+    const command = new UpdateCommand({
+        TableName,
+        Key: {username: username},
+        UpdateExpression: 'SET #email = :newEmail',
+        ExpressionAttributeNames: {
+            '#email': 'email'
+        },
+        ExpressionAttributeValues: {
+            ':newEmail': newEmail
+        }
+    });
+
+    try {
+        const data = await documentClient.send(command);
+        return data;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
 module.exports = {
     createUser,
-    getUserByUsername
+    getUserByUsername,
+    updateEmail
 }

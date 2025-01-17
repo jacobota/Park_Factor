@@ -97,9 +97,24 @@ router.get('/profile/:username', authenticateToken, async (req, res) => {
 });
 
 // UPDATE
-// Update own User information Username (Need authenticate token middleware)
-
 // Update own User information Email (Need authenticate token middleware)
+router.put('/update/email', authenticateToken, async (req, res) => {
+    try {
+        // Validate the email
+        if (typeof req.body.email !== 'string' || !req.body.email) {
+            res.status(400).json({message: 'Invalid Email'});
+            return;
+        }
+
+        // Call the service to update the user email
+        const data = await usersService.updateUserEmail(req.user.username, req.body.email);
+
+        // Return the user information
+        res.status(200).json(data);
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
 
 // Update own User information Password (Need authenticate token middleware)
 
