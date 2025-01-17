@@ -79,5 +79,7 @@ function verifyVerified(jwtToken) {
 module.exports = {
     jwt,
     generateToken,
-    authenticateToken
+    authenticateToken,
+    verifyAdmin,
+    verifyVerified
 }
