@@ -32,9 +32,9 @@ function generateToken(userData) {
  * Middleware functon used to authenticate a token prior to calling a 
  * function that requires authentication
  * 
- * @param req 
- * @param res 
- * @param next 
+ * @param req Incoming request
+ * @param res Outgoing response
+ * @param next Move to next middleware/route
  */
 function authenticateToken(req, res, next) {
     const authHeader = req.headers['authorization'];
@@ -52,6 +52,28 @@ function authenticateToken(req, res, next) {
             }
         })
     }
+}
+
+/**
+ * verifyAdmin function used to verify that the user is an admin.
+ * 
+ * @param jwtToken JWT Token
+ * @return boolean
+ */
+function verifyAdmin(jwtToken) {
+    const decoded = jwt.decode(jwtToken);
+    return decoded.admin;
+}
+
+/**
+ * verifyVerified function used to verify that the user is verified.
+ * 
+ * @param jwtToken JWT Token
+ * @return boolean
+ */
+function verifyVerified(jwtToken) {
+    const decoded = jwt.decode(jwtToken);
+    return decoded.verified;
 }
 
 module.exports = {
