@@ -117,6 +117,23 @@ router.put('/update/email', authenticateToken, async (req, res) => {
 });
 
 // Update own User information Password (Need authenticate token middleware) (TODO)
+router.put('/update/password', authenticateToken, async (req, res) => {
+    try {
+        // Validate the email
+        if (!validatePassword(req.body.password) || typeof req.body.password !== 'string' || !req.body.password) {
+            res.status(400).json({message: 'Invalid Password'});
+            return;
+        }
+
+        // Call the service to update the user email
+        const data = await usersService.updateUserPassword(req.user.username, req.body.password);
+
+        // Return the user information
+        res.status(200).json(data);
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
 
 // Update own User information Profile Pic (Need authenticate token middleware) (TODO)
 

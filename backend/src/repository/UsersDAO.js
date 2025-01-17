@@ -64,7 +64,7 @@ async function getUserByUsername(username) {
  * updateEmail will UPDATE the users email in the table
  * 
  * @param {String} username username to search for in the table
- * @param {*} newEmail new username
+ * @param {*} newEmail new email
  * @returns data of user if changed or null
  */
 async function updateEmail(username, newEmail) {
@@ -88,8 +88,37 @@ async function updateEmail(username, newEmail) {
     }
 }
 
+/**
+ * updatePassword will UPDATE the users password in the table
+ * 
+ * @param {String} username username to search for in the table
+ * @param {*} newPassword new password
+ * @returns data of user if changed or null
+ */
+async function updatePassword(username, newPassword) {
+    const command = new UpdateCommand({
+        TableName,
+        Key: {username: username},
+        UpdateExpression: 'SET #password = :newPassword',
+        ExpressionAttributeNames: {
+            '#password': 'password'
+        },
+        ExpressionAttributeValues: {
+            ':newPassword': newPassword
+        }
+    });
+
+    try {
+        const data = await documentClient.send(command);
+        return data;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
 module.exports = {
     createUser,
     getUserByUsername,
-    updateEmail
+    updateEmail,
+    updatePassword
 }

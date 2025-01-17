@@ -97,6 +97,27 @@ async function updateUserEmail(username, newEmail) {
 }
 
 /**
+ * updateUserPassword will bridge the gap between the controller and the DAO to update a users password,
+ * this function will check if the user exists in the database and then update their password.
+ * 
+ * @param {String} username username to search for in the table
+ * @param {*} newPassword new password
+ * @returns data of user if changed or error
+ */
+async function updateUserPassword(username, newPassword) {
+    try {
+        if(await userExists(username)) {
+            const encryptedPassword = await encrypt.encryptPassword(newPassword);
+            const data = await usersDao.updatePassword(username, encryptedPassword);
+            return data;
+        }
+        throw Error("Username not found");
+    } catch (err) {
+        throw Error(err.message);
+    }
+}
+
+/**
  * Helper functin that checks if a user exists in the database
  *
  * @param {string} username to pass to GetCommand in DAO
@@ -116,5 +137,6 @@ module.exports = {
     createUser,
     loginUser,
     getUserInformation,
-    updateUserEmail
+    updateUserEmail,
+    updateUserPassword
 }
