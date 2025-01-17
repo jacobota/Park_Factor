@@ -60,9 +60,8 @@ async function getUserByUsername(username) {
         const data = await documentClient.send(command);
         return data;
     } catch (error) {
-        logger.error(error)
+        return null;
     }
-    return null;
 }
 
 module.exports = {
