@@ -116,9 +116,46 @@ async function updatePassword(username, newPassword) {
     }
 }
 
+async function toggleUserAdmin(username) {
+    // Retrieve the current admin status
+    const getUserCommand = new GetCommand({
+        TableName,
+        Key: { username: username }
+    });
+    try {
+        const userData = await documentClient.send(getUserCommand);
+        const currentAdminStatus = userData.Item.admin;
+
+        // Toggle the admin status
+        const newAdminStatus = !currentAdminStatus;
+
+        // Update the admin status
+        const updateCommand = new UpdateCommand({
+            TableName,
+            Key: { username: username },
+            UpdateExpression: 'SET #admin = :adminStatus',
+            ExpressionAttributeNames: {
+                '#admin': 'admin'
+            },
+            ExpressionAttributeValues: {
+                ':adminStatus': newAdminStatus
+            }
+        });
+
+        await documentClient.send(updateCommand);
+
+        // Return new user data
+        const data = await documentClient.send(getUserCommand);
+        return data;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
 module.exports = {
     createUser,
     getUserByUsername,
     updateEmail,
-    updatePassword
+    updatePassword,
+    toggleUserAdmin
 }

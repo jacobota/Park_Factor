@@ -116,7 +116,7 @@ router.put('/update/email', authenticateToken, async (req, res) => {
     }
 });
 
-// Update own User information Password (Need authenticate token middleware) (TODO)
+// Update own User information Password (Need authenticate token middleware)
 router.put('/update/password', authenticateToken, async (req, res) => {
     try {
         // Validate the email
@@ -141,7 +141,28 @@ router.put('/update/password', authenticateToken, async (req, res) => {
 
 // Update own User Favorite Player(s) (Need authenticate token middleware) (TODO)
 
-// Update another User admin status (Need Admin permissions) (TODO)
+// Toggle another User admin status (Need Admin permissions) (TODO)
+router.put('/update/admin/:username', authenticateToken, async (req, res) => {
+    try {
+        // check admin status of req.user
+        if (req.user.admin) {
+            // User can't change their own admin status
+            if (req.user.username === req.params.username) {
+                res.status(403).json({message: 'Cannot change own admin status'});
+                return;
+            }
+            // Call the service to toggle the user admin status
+            const data = await usersService.toggleAdmin(req.params.username);
+            
+            // Return the user information
+            res.status(200).json({username: data.Item.username, adminStatus: data.Item.admin});
+        } else {
+            res.status(403).json({message: 'User must have admin priveleges'});
+        }        
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
 
 //Update another User verified status (Need Admin permissions) (TODO)
 

@@ -118,6 +118,26 @@ async function updateUserPassword(username, newPassword) {
 }
 
 /**
+ * toggleAdmin will bridge the gap between the controller and the DAO to toggle a users admin status,
+ * this function will check if the user exists in the database and then toggle their admin status.
+ * 
+ * @param {String} username username to toggle admin
+ * @returns data of toggled user or error
+ */
+async function toggleAdmin(username) {
+    try {
+        // check if the user exists and toggle the admin status
+        if(await userExists(username)) {
+            const data = await usersDao.toggleUserAdmin(username);
+            return data;
+        }
+        throw Error("User not found");
+    } catch (err) {
+        throw Error(err.message);
+    }
+}
+
+/**
  * Helper functin that checks if a user exists in the database
  *
  * @param {string} username to pass to GetCommand in DAO
@@ -138,5 +158,6 @@ module.exports = {
     loginUser,
     getUserInformation,
     updateUserEmail,
-    updateUserPassword
+    updateUserPassword,
+    toggleAdmin
 }
