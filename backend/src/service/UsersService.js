@@ -221,6 +221,44 @@ async function toggleVerified(adminUser, username) {
 }
 
 /**
+ * deleteUser will bridge the gap between the controller and the DAO to delete a user from the database,
+ * this function will check if the user exists in the database and then delete the user.
+ * 
+ * @param {String} username username to delete
+ * @returns data of deleted user or error
+ */
+async function deleteUser(username) {
+    try {
+        if (await userExists(username)) {
+            const data = await usersDao.deleteUserAccount(username);
+            return data;
+        }
+        throw new Error("Username not found");
+    } catch (err) {
+        throw new Error(err.message);
+    }
+}
+
+/**
+ * deleteUserAdminPermission will bridge the gap between the controller and the DAO to delete another user account,
+ * checks if user calling is an admin, and then calls the deleteUser function.
+ * 
+ * @param {Object} adminUser requesting admin user
+ * @param {String} username username to delete
+ * @returns data of deleted user or error
+ */
+async function deleteUserAdminPermission(adminUser, username) {
+    try {
+        if (adminUser.admin) {
+            return deleteUser(username);
+        }
+        throw new Error('User must have admin privileges');
+    } catch (err) {
+        throw new Error(err.message);
+    }
+}
+
+/**
  * Helper function that checks if a user exists in the database
  *
  * @param {string} username to pass to GetCommand in DAO
@@ -276,5 +314,7 @@ module.exports = {
     updateUserEmail,
     updateUserPassword,
     toggleAdmin,
-    toggleVerified
+    toggleVerified,
+    deleteUser,
+    deleteUserAdminPermission
 }

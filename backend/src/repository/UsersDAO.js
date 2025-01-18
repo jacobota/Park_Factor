@@ -1,6 +1,6 @@
 // imports
 const {DynamoDBClient} = require('@aws-sdk/client-dynamodb');
-const {DynamoDBDocumentClient, PutCommand, GetCommand, UpdateCommand} = require('@aws-sdk/lib-dynamodb');
+const {DynamoDBDocumentClient, PutCommand, GetCommand, UpdateCommand, DeleteCommand} = require('@aws-sdk/lib-dynamodb');
 const dotenv = require('dotenv');
 const path = require('path');
 const { logger } = require("../util/logger");
@@ -200,11 +200,32 @@ async function toggleUserVerified(username) {
     }
 }
 
+/**
+ * DELETE a user from the database
+ * 
+ * @param {String} username
+ * @returns data of user deleted or error
+ */
+async function deleteUserAccount(username) {
+    const deleteCommand = new DeleteCommand({
+        TableName,
+        Key: { username: username }
+    });
+
+    try {
+        const data = await documentClient.send(deleteCommand);
+        return data;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
 module.exports = {
     createUser,
     getUserByUsername,
     updateEmail,
     updatePassword,
     toggleUserAdmin,
-    toggleUserVerified
+    toggleUserVerified,
+    deleteUserAccount
 }

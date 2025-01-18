@@ -118,6 +118,31 @@ router.put('/update/verified/:username', authenticateToken, async (req, res) => 
 });
 
 // DELETE
-// Delete Account (TODO)
+// Delete Own Account
+router.delete('/delete', authenticateToken, async (req, res) => {
+    try {
+        // Call the service to delete the user
+        const data = await usersService.deleteUser(req.user.username);
+        logger.info(JSON.stringify(data.Item));
+        // Return the user information
+        res.status(200).json({message: 'User Deleted', userDeleted: req.user.username});
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
+
+// Delete Another User Account
+router.delete('/delete/:username', authenticateToken, async (req, res) => {
+    try {
+        // Call the service to delete the user
+        const data = await usersService.deleteUserAdminPermission(req.user, req.params.username);
+        
+        // Return the user information
+        res.status(200).json({message: 'User Deleted', userDeleted: req.params.username});
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
+
 
 module.exports = router;
