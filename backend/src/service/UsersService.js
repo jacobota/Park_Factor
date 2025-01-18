@@ -13,9 +13,22 @@ const usersDao = require("../repository/UsersDAO");
  */
 async function createUser(body) {
     try {
-        // check if the user already exists
-        if(!await userExists(body.username)) {
-            // encrypt the password and pass data to DAO
+        // Validate the username, email, and password
+        if (!validateUsername(body.username) || typeof body.username !== 'string' || !body.username) {
+            throw new Error('Invalid Username');
+        }
+
+        if (typeof body.email !== 'string' || !body.email) {
+            throw new Error('Invalid Email');
+        }
+
+        if (!validatePassword(body.password) || typeof body.password !== 'string' || !body.password) {
+            throw new Error('Invalid Password');
+        }
+
+        // Check if the user already exists
+        if (!await userExists(body.username)) {
+            // Encrypt the password and pass data to DAO
             const encryptedPassword = await encrypt.encryptPassword(body.password);
             const data = await usersDao.createUser({
                 username: body.username,
@@ -29,9 +42,9 @@ async function createUser(body) {
             });
             return data;
         }
-        throw Error("User already exists");
+        throw new Error("User already exists");
     } catch (err) {
-        throw Error(err.message);
+        throw new Error(err.message);
     }
 }
 
@@ -45,18 +58,27 @@ async function createUser(body) {
  */
 async function loginUser(body) {
     try {
-        // check if the user exists or throw a no user found error
+        // Validate the username and password
+        if (!validateUsername(body.username) || typeof body.username !== 'string' || !body.username) {
+            throw new Error('Invalid Username. Please Reenter.');
+        }
+
+        if (!validatePassword(body.password) || typeof body.password !== 'string' || !body.password) {
+            throw new Error('Invalid Password. Please Reenter.');
+        }
+
+        // Check if the user exists or throw a no user found error
         const data = await usersDao.getUserByUsername(body.username);
-        if(data.Item) {
-            // validate the password, if correct then return the user data else throw error
-            if(await encrypt.validatePassword(body.password, data.Item.password)) {
+        if (data.Item) {
+            // Validate the password, if correct then return the user data else throw error
+            if (await encrypt.validatePassword(body.password, data.Item.password)) {
                 return data;
             }
-            throw Error("Invalid Password. Please Try Again.");
+            throw new Error("Incorrect Password. Please Try Again.");
         }
-        throw Error("No User found with entered username. Please Try Again.");
+        throw new Error("No User found with entered username. Please Try Again.");
     } catch (err) {
-        throw Error(err.message);
+        throw new Error(err.message);
     }
 }
 
@@ -69,10 +91,13 @@ async function loginUser(body) {
  */
 async function getUserInformation(username) {
     try {
-        const data = await usersDao.getUserByUsername(username);
-        return data;
+        if (await userExists(username)) {
+            const data = await usersDao.getUserByUsername(username);
+            return data;
+        }
+        throw new Error("Username not found");
     } catch (err) {
-        throw Error("Error retrieving user information");
+        throw Error(err.message);
     }
 }
 
@@ -86,13 +111,19 @@ async function getUserInformation(username) {
  */
 async function updateUserEmail(username, newEmail) {
     try {
-        if(await userExists(username)) {
+        // Validate the email
+        if (typeof newEmail !== 'string' || !newEmail) {
+            throw new Error('Invalid Email');
+        }
+
+        // Check if the user exists
+        if (await userExists(username)) {
             const data = await usersDao.updateEmail(username, newEmail);
             return data;
         }
-        throw Error("Username not found");
+        throw new Error("Username not found");
     } catch (err) {
-        throw Error(err.message);
+        throw new Error(err.message);
     }
 }
 
@@ -106,14 +137,20 @@ async function updateUserEmail(username, newEmail) {
  */
 async function updateUserPassword(username, newPassword) {
     try {
-        if(await userExists(username)) {
+        // Validate the password
+        if (!validatePassword(newPassword) || typeof newPassword !== 'string' || !newPassword) {
+            throw new Error('Invalid Password');
+        }
+
+        // Check if the user exists
+        if (await userExists(username)) {
             const encryptedPassword = await encrypt.encryptPassword(newPassword);
             const data = await usersDao.updatePassword(username, encryptedPassword);
             return data;
         }
-        throw Error("Username not found");
+        throw new Error("Username not found");
     } catch (err) {
-        throw Error(err.message);
+        throw new Error(err.message);
     }
 }
 
@@ -121,24 +158,36 @@ async function updateUserPassword(username, newPassword) {
  * toggleAdmin will bridge the gap between the controller and the DAO to toggle a users admin status,
  * this function will check if the user exists in the database and then toggle their admin status.
  * 
+ * @param {String} adminUser requesting admin user
  * @param {String} username username to toggle admin
  * @returns data of toggled user or error
  */
-async function toggleAdmin(username) {
+async function toggleAdmin(adminUser, username) {
     try {
-        // check if the user exists and toggle the admin status
-        if(await userExists(username)) {
-            const data = await usersDao.toggleUserAdmin(username);
-            return data;
+        // Check if the adminUser is an admin
+        if (!adminUser.admin) {
+            throw new Error('User must have admin privileges');
         }
-        throw Error("User not found");
+
+        // Check if the adminUser is trying to change their own admin status
+        if (adminUser.username === username) {
+            throw new Error('Cannot change own admin status');
+        }
+
+        // Check if the user to toggle exists
+        if (await userExists(username)) {
+            const data = await usersDao.toggleUserAdmin(username);
+            return { username: data.Item.username, adminStatus: data.Item.admin };
+        }
+
+        throw new Error("User not found");
     } catch (err) {
-        throw Error(err.message);
+        throw new Error(err.message);
     }
 }
 
 /**
- * Helper functin that checks if a user exists in the database
+ * Helper function that checks if a user exists in the database
  *
  * @param {string} username to pass to GetCommand in DAO
  * @returns boolean
@@ -151,6 +200,39 @@ async function userExists(username) {
     } else {
         return false;
     }
+}
+
+/**
+ * Helper function to validate the username of the user:
+ * Blacklist characters that are not allowed but allow for a username to be between 
+ * 5 and 20 characters and numbers are good.
+ * 
+ * @param {string} username 
+ * @returns boolean
+ */
+function validateUsername(username) {
+    // Blacklist of characters that are not allowed in the username
+    const blacklist = ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "=", "+", "{", "}", "[", "]", "|", "\\", ":", ";", "'", "\"", "<", ">", ",", ".", "?", "/"];
+    
+    for (let char of username) {
+        if (blacklist.includes(char)) {
+            return false;
+        }
+    }
+
+    return username.length >= 5 && username.length <= 20;
+}
+
+/**
+ * Helper function that validates a password:
+ * Password must be between 8 and 20 characters, can use any symbol, numbers, and letters.
+ * 
+ * @param {string} password 
+ * @returns boolean
+ */
+function validatePassword(password) {
+    // Password must be between 8 and 20 characters
+    return password.length >= 8 && password.length <= 20;
 }
 
 module.exports = {
