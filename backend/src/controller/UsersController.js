@@ -97,7 +97,7 @@ router.put('/update/password', authenticateToken, async (req, res) => {
 
 // Update own User Favorite Player(s) (Need authenticate token middleware) (TODO)
 
-// Toggle another User admin status (Need Admin permissions) (TODO)
+// Toggle another User admin status
 router.put('/update/admin/:username', authenticateToken, async (req, res) => {
     try {
         const data = await usersService.toggleAdmin(req.user, req.params.username);
@@ -107,7 +107,15 @@ router.put('/update/admin/:username', authenticateToken, async (req, res) => {
     }
 });
 
-//Update another User verified status (Need Admin permissions) (TODO)
+//Update another User verified status
+router.put('/update/verified/:username', authenticateToken, async (req, res) => {
+    try {
+        const data = await usersService.toggleVerified(req.user, req.params.username);
+        res.status(200).json(data);
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
 
 // DELETE
 // Delete Account (TODO)

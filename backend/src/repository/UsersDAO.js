@@ -123,7 +123,7 @@ async function updatePassword(username, newPassword) {
  * @returns 
  */
 async function toggleUserAdmin(username) {
-    // Retrieve the current admin status
+    // Retrieve the current user to access current admin access
     const getUserCommand = new GetCommand({
         TableName,
         Key: { username: username }
@@ -158,10 +158,53 @@ async function toggleUserAdmin(username) {
     }
 }
 
+/**
+ * Toggles the verfied status of a user
+ * 
+ * @param {String} username 
+ * @returns 
+ */
+async function toggleUserVerified(username) {
+    // Retrieve the current user to access current verified access
+    const getUserCommand = new GetCommand({
+        TableName,
+        Key: { username: username }
+    });
+    try {
+        const userData = await documentClient.send(getUserCommand);
+        const currentVerifiedStatus = userData.Item.verified;
+
+        // Toggle the verified status
+        const newVerifiedStatus = !currentVerifiedStatus;
+
+        // Update the verified status
+        const updateCommand = new UpdateCommand({
+            TableName,
+            Key: { username: username },
+            UpdateExpression: 'SET #verified = :verifiedStatus',
+            ExpressionAttributeNames: {
+                '#verified': 'verified'
+            },
+            ExpressionAttributeValues: {
+                ':verifiedStatus': newVerifiedStatus
+            }
+        });
+
+        await documentClient.send(updateCommand);
+
+        // Return new user data
+        const data = await documentClient.send(getUserCommand);
+        return data;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
 module.exports = {
     createUser,
     getUserByUsername,
     updateEmail,
     updatePassword,
-    toggleUserAdmin
+    toggleUserAdmin,
+    toggleUserVerified
 }

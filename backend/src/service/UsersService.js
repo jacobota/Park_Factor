@@ -188,6 +188,39 @@ async function toggleAdmin(adminUser, username) {
 }
 
 /**
+ * toggleVerified will bridge the gap between the controller and the DAO to toggle a users verified status,
+ * this function will check if the user making the call is an admin, if the user making the call is changing
+ * their own status, and will check if the user exists in the database and then toggle their verified status.
+ * 
+ * @param {String} adminUser requesting admin user
+ * @param {String} username username to toggle verified
+ * @returns data of toggled user or error
+ */
+async function toggleVerified(adminUser, username) {
+    try {
+        // Check if the adminUser is an admin
+        if (!adminUser.admin) {
+            throw new Error('User must have admin privileges');
+        }
+
+        // Check if the adminUser is trying to change their own verified status
+        if (adminUser.username === username) {
+            throw new Error('Cannot change own verified status');
+        }
+
+        // Check if the user to toggle exists
+        if (await userExists(username)) {
+            const data = await usersDao.toggleUserVerified(username);
+            return { username: data.Item.username, adminStatus: data.Item.verified };
+        }
+
+        throw new Error("User not found");
+    } catch (err) {
+        throw new Error(err.message);
+    }
+}
+
+/**
  * Helper function that checks if a user exists in the database
  *
  * @param {string} username to pass to GetCommand in DAO
@@ -242,5 +275,6 @@ module.exports = {
     getUserInformation,
     updateUserEmail,
     updateUserPassword,
-    toggleAdmin
+    toggleAdmin,
+    toggleVerified
 }
