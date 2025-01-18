@@ -4,8 +4,8 @@ const encrypt = require("../util/encryption");
 const usersDao = require("../repository/UsersDAO");
 
 /**
- * createUser will bridge the gap between the controller and the DAO to create a
- * new user in the database, this function will check if the user already exists in
+ * createUser will bridge the gap between the controller and the DAO to create a new user in the database, 
+ * this function will validate the username, email, and password, check if the user already exists in 
  * the database and also encrypts the password before storing it in the database.
  * 
  * @param {Object} body username, email, and password
@@ -50,8 +50,8 @@ async function createUser(body) {
 
 /**
  * loginUser will bridge the gap between the controller and the DAO to login a user, this
- * function will check if the user exists in the database, gather the user data if it does 
- * exist, and then validate the password.
+ * function will validate username and password, check if the user exists in the database, gather the 
+ * user data if it does exist, and then validate the password.
  * 
  * @param {Object} body username and password
  * @returns data of user if username and password is correct
@@ -83,7 +83,7 @@ async function loginUser(body) {
 }
 
 /**
- * getUserbyUsername will bridge the gap between the controller and the DAO to get a user,
+ * getUserInformation will bridge the gap between the controller and the DAO to get a user,
  * this function will be used for both gathering own user information and other user information.
  * 
  * @param {string} username username of user to get information
@@ -103,7 +103,7 @@ async function getUserInformation(username) {
 
 /**
  * updateUserEmail will bridge the gap between the controller and the DAO to update a users email,
- * this function will check if the user exists in the database and then update their email.
+ * this function validates the email, checks if the user exists in the database and then update their email.
  * 
  * @param {String} username username to search for in the table
  * @param {*} newEmail new username
@@ -129,7 +129,7 @@ async function updateUserEmail(username, newEmail) {
 
 /**
  * updateUserPassword will bridge the gap between the controller and the DAO to update a users password,
- * this function will check if the user exists in the database and then update their password.
+ * this function validates the password, check if the user exists in the database and then update their password.
  * 
  * @param {String} username username to search for in the table
  * @param {*} newPassword new password
@@ -156,7 +156,8 @@ async function updateUserPassword(username, newPassword) {
 
 /**
  * toggleAdmin will bridge the gap between the controller and the DAO to toggle a users admin status,
- * this function will check if the user exists in the database and then toggle their admin status.
+ * this function will check if the user making the call is an admin, if the user making the call is changing
+ * their own status, and will check if the user exists in the database and then toggle their admin status.
  * 
  * @param {String} adminUser requesting admin user
  * @param {String} username username to toggle admin

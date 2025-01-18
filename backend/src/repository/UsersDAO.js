@@ -116,6 +116,12 @@ async function updatePassword(username, newPassword) {
     }
 }
 
+/**
+ * Toggles the admin status of a user
+ * 
+ * @param {String} username 
+ * @returns 
+ */
 async function toggleUserAdmin(username) {
     // Retrieve the current admin status
     const getUserCommand = new GetCommand({
