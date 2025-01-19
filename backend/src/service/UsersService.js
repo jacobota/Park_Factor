@@ -155,6 +155,48 @@ async function updateUserPassword(username, newPassword) {
 }
 
 /**
+ * updateFavoriteTeams will bridge the gap between the controller and the DAO to update a users favorite teams,
+ * this function will check if the user exists in the database and then update their favorite teams.
+ * 
+ * @param {String} username username to update favorite teams
+ * @param {Array} favoriteTeams array of favorite teams
+ * @returns 
+ */
+async function updateFavoriteTeams(username, favoriteTeams) {
+    try {
+        // Check if the user exists
+        if (await userExists(username)) {
+            const data = await usersDao.updateUsersFavoriteTeams(username, favoriteTeams);
+            return data;
+        }
+        throw new Error("Username not found");
+    } catch (err) {
+        throw new Error(err.message);
+    }
+}
+
+/**
+ * updateFavoritePlayers will bridge the gap between the controller and the DAO to update a users favorite players,
+ * this function will check if the user exists in the database and then update their favorite players.
+ * 
+ * @param {String} username username to update favorite players
+ * @param {Array} favoritePlayers array of favorite players
+ * @returns 
+ */
+async function updateFavoritePlayers(username, favoritePlayers) {
+    try {
+        // Check if the user exists
+        if (await userExists(username)) {
+            const data = await usersDao.updateUsersFavoritePlayers(username, favoritePlayers);
+            return data;
+        }
+        throw new Error("Username not found");
+    } catch (err) {
+        throw new Error(err.message);
+    }
+}
+
+/**
  * toggleAdmin will bridge the gap between the controller and the DAO to toggle a users admin status,
  * this function will check if the user making the call is an admin, if the user making the call is changing
  * their own status, and will check if the user exists in the database and then toggle their admin status.
@@ -313,6 +355,8 @@ module.exports = {
     getUserInformation,
     updateUserEmail,
     updateUserPassword,
+    updateFavoriteTeams,
+    updateFavoritePlayers,
     toggleAdmin,
     toggleVerified,
     deleteUser,

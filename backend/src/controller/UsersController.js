@@ -93,9 +93,27 @@ router.put('/update/password', authenticateToken, async (req, res) => {
 
 // Update own User information Profile Pic (Need authenticate token middleware) (TODO)
 
-// Update own User Favorite Team(s) (Need authenticate token middleware) (TODO)
+// Update own User Favorite Team(s) (Need authenticate token middleware)
+router.put('/update/favoriteTeams', authenticateToken, async (req, res) => {
+    try {
+        // Call the service to update the user favorite team
+        const data = await usersService.updateFavoriteTeams(req.user.username, req.body.favoriteTeams);
+        res.status(200).json({message: 'Favorite Team(s) Updated', favoriteTeams: req.body.favoriteTeams});
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
 
-// Update own User Favorite Player(s) (Need authenticate token middleware) (TODO)
+// Update own User Favorite Player(s) (Need authenticate token middleware)
+router.put('/update/favoritePlayers', authenticateToken, async (req, res) => {
+    try {
+        // Call the service to update the user favorite players
+        const data = await usersService.updateFavoritePlayers(req.user.username, req.body.favoritePlayers);
+        res.status(200).json({message: 'Favorite Player(s) Updated', favoritePlayers: req.body.favoritePlayers});
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
 
 // Toggle another User admin status
 router.put('/update/admin/:username', authenticateToken, async (req, res) => {

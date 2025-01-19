@@ -117,6 +117,62 @@ async function updatePassword(username, newPassword) {
 }
 
 /**
+ * updateUsersFavoriteTeams will UPDATE the users favorite teams in the table
+ * 
+ * @param {String} username username to update favorite teams
+ * @param {Array} favoriteTeams array of favorite teams
+ * @returns 
+ */
+async function updateUsersFavoriteTeams(username, favoriteTeams) {
+    const command = new UpdateCommand({
+        TableName,
+        Key: {username: username},
+        UpdateExpression: 'SET #favoriteTeams = :favoriteTeams',
+        ExpressionAttributeNames: {
+            '#favoriteTeams': 'favoriteTeams'
+        },
+        ExpressionAttributeValues: {
+            ':favoriteTeams': favoriteTeams
+        }
+    });
+
+    try {
+        const data = await documentClient.send(command);
+        return data;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+/**
+ * updateUsersFavoritePlayers will UPDATE the users favorite players in the table
+ * 
+ * @param {String} username username to update favorite players
+ * @param {Array} favoritePlayers array of favorite players
+ * @returns 
+ */
+async function updateUsersFavoritePlayers(username, favoritePlayers) {
+    const command = new UpdateCommand({
+        TableName,
+        Key: {username: username},
+        UpdateExpression: 'SET #favoritePlayers = :favoritePlayers',
+        ExpressionAttributeNames: {
+            '#favoritePlayers': 'favoritePlayers'
+        },
+        ExpressionAttributeValues: {
+            ':favoritePlayers': favoritePlayers
+        }
+    });
+
+    try {
+        const data = await documentClient.send(command);
+        return data;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+/**
  * Toggles the admin status of a user
  * 
  * @param {String} username 
@@ -225,6 +281,8 @@ module.exports = {
     getUserByUsername,
     updateEmail,
     updatePassword,
+    updateUsersFavoriteTeams,
+    updateUsersFavoritePlayers,
     toggleUserAdmin,
     toggleUserVerified,
     deleteUserAccount
