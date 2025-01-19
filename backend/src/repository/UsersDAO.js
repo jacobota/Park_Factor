@@ -312,6 +312,7 @@ async function deleteUserAccount(username) {
     }
 }
 
+// Export functions
 module.exports = {
     createUser,
     getUserByUsername,
