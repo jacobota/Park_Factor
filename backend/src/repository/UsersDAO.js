@@ -33,8 +33,8 @@ async function createUser(Item) {
     });
 
     try {
-        const data = await documentClient.send(command);
-        return data;
+        await documentClient.send(command);
+        return;
     } catch (err) {
         throw new Error(err);
     }
@@ -81,8 +81,8 @@ async function updateEmail(username, newEmail) {
     });
 
     try {
-        const data = await documentClient.send(command);
-        return data;
+        await documentClient.send(command);
+        return;
     } catch (err) {
         throw new Error(err);
     }
@@ -109,8 +109,8 @@ async function updatePassword(username, newPassword) {
     });
 
     try {
-        const data = await documentClient.send(command);
-        return data;
+        await documentClient.send(command);
+        return;
     } catch (err) {
         throw new Error(err);
     }
@@ -137,8 +137,8 @@ async function updateUserProfilePicture(username, profilePicture) {
     });
 
     try {
-        const data = await documentClient.send(command);
-        return data;
+        await documentClient.send(command);
+        return;
     } catch (err) {
         throw new Error(err);
     }

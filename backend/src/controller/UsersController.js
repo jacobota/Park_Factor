@@ -12,7 +12,7 @@ const router = express.Router();
 router.post('/registration', async (req, res) => {
     try {
         // Call the service to create the user
-        const data = await usersService.createUser(req.body);
+        await usersService.createUser(req.body);
 
         // Return the user information
         res.status(201).json({message: 'User Created'});
@@ -30,7 +30,7 @@ router.post('/login', async (req, res) => {
         const jwtToken = generateToken(data.Item);
 
         // Return the user information and token
-        res.status(201).json({user: data.Item, token: jwtToken});
+        res.status(200).json({user: data.Item, token: jwtToken});
     } catch (err) {
         res.status(400).json({message: err.message});
     }
@@ -73,8 +73,8 @@ router.get('/profile/:username', authenticateToken, async (req, res) => {
 router.put('/update/email', authenticateToken, async (req, res) => {
     try {
         // Call the service to update the user email
-        const data = await usersService.updateUserEmail(req.user.username, req.body.email);
-        res.status(200).json({message: 'Email Updated', email: req.body.email});
+        await usersService.updateUserEmail(req.user.username, req.body.email);
+        res.status(201).json({message: 'Email Updated', email: req.body.email});
     } catch (err) {
         res.status(400).json({message: err.message});
     }
@@ -84,19 +84,19 @@ router.put('/update/email', authenticateToken, async (req, res) => {
 router.put('/update/password', authenticateToken, async (req, res) => {
     try {
         // Call the service to update the user password
-        const data = await usersService.updateUserPassword(req.user.username, req.body.password);
-        res.status(200).json({message: 'Password Updated', password: req.body.password});
+        await usersService.updateUserPassword(req.user.username, req.body.password);
+        res.status(201).json({message: 'Password Updated', password: req.body.password});
     } catch (err) {
         res.status(400).json({message: err.message});
     }
 });
 
-// Update own User information Profile Picture (Need authenticate token middleware) (TODO)
+// Update own User information Profile Picture (Need authenticate token middleware)
 router.put('/update/profilePicture', authenticateToken, async (req, res) => {
     try {
         // Call the service to update the user profile pic
-        const data = await usersService.updateProfilePicture(req.user.username, req.body.profilePicture);
-        res.status(200).json({message: 'Profile Pic Updated', profilePic: req.body.profilePicture});
+        await usersService.updateProfilePicture(req.user.username, req.body.profilePicture);
+        res.status(201).json({message: 'Profile Pic Updated', profilePic: req.body.profilePicture});
     } catch (err) {
         res.status(400).json({message: err.message});
     }
@@ -106,8 +106,8 @@ router.put('/update/profilePicture', authenticateToken, async (req, res) => {
 router.put('/update/favoriteTeams', authenticateToken, async (req, res) => {
     try {
         // Call the service to update the user favorite team
-        const data = await usersService.updateFavoriteTeams(req.user.username, req.body.favoriteTeams);
-        res.status(200).json({message: 'Favorite Team(s) Updated', favoriteTeams: req.body.favoriteTeams});
+        await usersService.updateFavoriteTeams(req.user.username, req.body.favoriteTeams);
+        res.status(201).json({message: 'Favorite Team(s) Updated', favoriteTeams: req.body.favoriteTeams});
     } catch (err) {
         res.status(400).json({message: err.message});
     }
@@ -117,8 +117,8 @@ router.put('/update/favoriteTeams', authenticateToken, async (req, res) => {
 router.put('/update/favoritePlayers', authenticateToken, async (req, res) => {
     try {
         // Call the service to update the user favorite players
-        const data = await usersService.updateFavoritePlayers(req.user.username, req.body.favoritePlayers);
-        res.status(200).json({message: 'Favorite Player(s) Updated', favoritePlayers: req.body.favoritePlayers});
+        await usersService.updateFavoritePlayers(req.user.username, req.body.favoritePlayers);
+        res.status(201).json({message: 'Favorite Player(s) Updated', favoritePlayers: req.body.favoritePlayers});
     } catch (err) {
         res.status(400).json({message: err.message});
     }
@@ -128,7 +128,7 @@ router.put('/update/favoritePlayers', authenticateToken, async (req, res) => {
 router.put('/update/admin/:username', authenticateToken, async (req, res) => {
     try {
         const data = await usersService.toggleAdmin(req.user, req.params.username);
-        res.status(200).json(data);
+        res.status(201).json(data);
     } catch (err) {
         res.status(400).json({message: err.message});
     }
@@ -138,7 +138,7 @@ router.put('/update/admin/:username', authenticateToken, async (req, res) => {
 router.put('/update/verified/:username', authenticateToken, async (req, res) => {
     try {
         const data = await usersService.toggleVerified(req.user, req.params.username);
-        res.status(200).json(data);
+        res.status(201).json(data);
     } catch (err) {
         res.status(400).json({message: err.message});
     }
@@ -149,8 +149,7 @@ router.put('/update/verified/:username', authenticateToken, async (req, res) => 
 router.delete('/delete', authenticateToken, async (req, res) => {
     try {
         // Call the service to delete the user
-        const data = await usersService.deleteUser(req.user.username);
-        logger.info(JSON.stringify(data.Item));
+        await usersService.deleteUser(req.user.username);
         // Return the user information
         res.status(200).json({message: 'User Deleted', userDeleted: req.user.username});
     } catch (err) {
@@ -162,7 +161,7 @@ router.delete('/delete', authenticateToken, async (req, res) => {
 router.delete('/delete/:username', authenticateToken, async (req, res) => {
     try {
         // Call the service to delete the user
-        const data = await usersService.deleteUserAdminPermission(req.user, req.params.username);
+        await usersService.deleteUserAdminPermission(req.user, req.params.username);
         
         // Return the user information
         res.status(200).json({message: 'User Deleted', userDeleted: req.params.username});

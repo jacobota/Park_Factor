@@ -9,7 +9,7 @@ const usersDao = require("../repository/UsersDAO");
  * the database and also encrypts the password before storing it in the database.
  * 
  * @param {Object} body username, email, and password
- * @returns data of newly created user
+ * @returns nothing or error
  */
 async function createUser(body) {
     try {
@@ -30,7 +30,7 @@ async function createUser(body) {
         if (!await userExists(body.username)) {
             // Encrypt the password and pass data to DAO
             const encryptedPassword = await encrypt.encryptPassword(body.password);
-            const data = await usersDao.createUser({
+            await usersDao.createUser({
                 username: body.username,
                 admin: false,
                 email: body.email,
@@ -40,7 +40,7 @@ async function createUser(body) {
                 profilePicture: "",
                 verified: false,
             });
-            return data;
+            return;
         }
         throw new Error("User already exists");
     } catch (err) {
@@ -107,7 +107,7 @@ async function getUserInformation(username) {
  * 
  * @param {String} username username to search for in the table
  * @param {*} newEmail new username
- * @returns data of user if changed or error
+ * @returns nothing or error
  */
 async function updateUserEmail(username, newEmail) {
     try {
@@ -118,8 +118,8 @@ async function updateUserEmail(username, newEmail) {
 
         // Check if the user exists
         if (await userExists(username)) {
-            const data = await usersDao.updateEmail(username, newEmail);
-            return data;
+            await usersDao.updateEmail(username, newEmail);
+            return;
         }
         throw new Error("Username not found");
     } catch (err) {
@@ -133,7 +133,7 @@ async function updateUserEmail(username, newEmail) {
  * 
  * @param {String} username username to search for in the table
  * @param {*} newPassword new password
- * @returns data of user if changed or error
+ * @returns nothing or error
  */
 async function updateUserPassword(username, newPassword) {
     try {
@@ -145,8 +145,8 @@ async function updateUserPassword(username, newPassword) {
         // Check if the user exists
         if (await userExists(username)) {
             const encryptedPassword = await encrypt.encryptPassword(newPassword);
-            const data = await usersDao.updatePassword(username, encryptedPassword);
-            return data;
+            await usersDao.updatePassword(username, encryptedPassword);
+            return;
         }
         throw new Error("Username not found");
     } catch (err) {
@@ -160,13 +160,13 @@ async function updateUserPassword(username, newPassword) {
  * 
  * @param {String} username username to update profile picture
  * @param {String} profilePicture new profile picture
- * @returns 
+ * @returns nothing or error
  */
 async function updateProfilePicture(username, profilePicture) {
     try {
         if (await userExists(username)) {
-            const data = await usersDao.updateUserProfilePicture(username, profilePicture);
-            return data;
+            await usersDao.updateUserProfilePicture(username, profilePicture);
+            return;
         }
         throw new Error("Username not found");
     } catch (err) {
@@ -180,14 +180,14 @@ async function updateProfilePicture(username, profilePicture) {
  * 
  * @param {String} username username to update favorite teams
  * @param {Array} favoriteTeams array of favorite teams
- * @returns 
+ * @returns nothing or error
  */
 async function updateFavoriteTeams(username, favoriteTeams) {
     try {
         // Check if the user exists
         if (await userExists(username)) {
-            const data = await usersDao.updateUsersFavoriteTeams(username, favoriteTeams);
-            return data;
+            await usersDao.updateUsersFavoriteTeams(username, favoriteTeams);
+            return;
         }
         throw new Error("Username not found");
     } catch (err) {
@@ -201,14 +201,14 @@ async function updateFavoriteTeams(username, favoriteTeams) {
  * 
  * @param {String} username username to update favorite players
  * @param {Array} favoritePlayers array of favorite players
- * @returns 
+ * @returns nothing or error
  */
 async function updateFavoritePlayers(username, favoritePlayers) {
     try {
         // Check if the user exists
         if (await userExists(username)) {
-            const data = await usersDao.updateUsersFavoritePlayers(username, favoritePlayers);
-            return data;
+            await usersDao.updateUsersFavoritePlayers(username, favoritePlayers);
+            return;
         }
         throw new Error("Username not found");
     } catch (err) {
@@ -287,13 +287,13 @@ async function toggleVerified(adminUser, username) {
  * this function will check if the user exists in the database and then delete the user.
  * 
  * @param {String} username username to delete
- * @returns data of deleted user or error
+ * @returns nothing or error
  */
 async function deleteUser(username) {
     try {
         if (await userExists(username)) {
-            const data = await usersDao.deleteUserAccount(username);
-            return data;
+            await usersDao.deleteUserAccount(username);
+            return;
         }
         throw new Error("Username not found");
     } catch (err) {
@@ -307,12 +307,13 @@ async function deleteUser(username) {
  * 
  * @param {Object} adminUser requesting admin user
  * @param {String} username username to delete
- * @returns data of deleted user or error
+ * @returns nothing or error
  */
 async function deleteUserAdminPermission(adminUser, username) {
     try {
         if (adminUser.admin) {
-            return deleteUser(username);
+            await deleteUser(username);
+            return;
         }
         throw new Error('User must have admin privileges');
     } catch (err) {
