@@ -13,8 +13,6 @@ router.post('/registration', async (req, res) => {
     try {
         // Call the service to create the user
         await usersService.createUser(req.body);
-
-        // Return the user information
         res.status(201).json({message: 'User Created'});
     } catch (err) {
         res.status(400).json({message: err.message});
@@ -27,9 +25,8 @@ router.post('/login', async (req, res) => {
         // Call the service to log in the user
         const data = await usersService.loginUser(req.body);
 
+        // Generate a jwt token for the user
         const jwtToken = generateToken(data.Item);
-
-        // Return the user information and token
         res.status(200).json({user: data.Item, token: jwtToken});
     } catch (err) {
         res.status(400).json({message: err.message});
@@ -42,8 +39,6 @@ router.get('/profile', authenticateToken, async (req, res) => {
     try {
         // Call the service to get the user information
         const data = await usersService.getUserInformation(req.user.username);
-
-        // Return the user information
         res.status(200).json(data.Item);
     } catch (err) {
         res.status(400).json({message: err.message});
@@ -60,8 +55,6 @@ router.get('/profile/:username', authenticateToken, async (req, res) => {
         if (!data.Item.verified) {
             throw new Error("Cannot view unverified users");
         }
-
-        // Return the user information
         res.status(200).json(data.Item);
     } catch (err) {
         res.status(400).json({message: err.message});
@@ -127,6 +120,7 @@ router.put('/update/favoritePlayers', authenticateToken, async (req, res) => {
 // Toggle another User admin status
 router.put('/update/admin/:username', authenticateToken, async (req, res) => {
     try {
+        // call the service to toggle the users admin status
         const data = await usersService.toggleAdmin(req.user, req.params.username);
         res.status(201).json(data);
     } catch (err) {
@@ -137,6 +131,7 @@ router.put('/update/admin/:username', authenticateToken, async (req, res) => {
 //Update another User verified status
 router.put('/update/verified/:username', authenticateToken, async (req, res) => {
     try {
+        // call the service to toggle the users verified status
         const data = await usersService.toggleVerified(req.user, req.params.username);
         res.status(201).json(data);
     } catch (err) {
@@ -150,7 +145,6 @@ router.delete('/delete', authenticateToken, async (req, res) => {
     try {
         // Call the service to delete the user
         await usersService.deleteUser(req.user.username);
-        // Return the user information
         res.status(200).json({message: 'User Deleted', userDeleted: req.user.username});
     } catch (err) {
         res.status(400).json({message: err.message});
@@ -162,8 +156,6 @@ router.delete('/delete/:username', authenticateToken, async (req, res) => {
     try {
         // Call the service to delete the user
         await usersService.deleteUserAdminPermission(req.user, req.params.username);
-        
-        // Return the user information
         res.status(200).json({message: 'User Deleted', userDeleted: req.params.username});
     } catch (err) {
         res.status(400).json({message: err.message});

@@ -91,6 +91,7 @@ async function loginUser(body) {
  */
 async function getUserInformation(username) {
     try {
+        // Check if the user exists and get user information
         if (await userExists(username)) {
             const data = await usersDao.getUserByUsername(username);
             return data;
@@ -116,7 +117,7 @@ async function updateUserEmail(username, newEmail) {
             throw new Error('Invalid Email');
         }
 
-        // Check if the user exists
+        // Check if the user exists and update email
         if (await userExists(username)) {
             await usersDao.updateEmail(username, newEmail);
             return;
@@ -142,7 +143,7 @@ async function updateUserPassword(username, newPassword) {
             throw new Error('Invalid Password');
         }
 
-        // Check if the user exists
+        // Check if the user exists and update password
         if (await userExists(username)) {
             const encryptedPassword = await encrypt.encryptPassword(newPassword);
             await usersDao.updatePassword(username, encryptedPassword);
@@ -164,6 +165,7 @@ async function updateUserPassword(username, newPassword) {
  */
 async function updateProfilePicture(username, profilePicture) {
     try {
+        // check if the user exists and update profile picture
         if (await userExists(username)) {
             await usersDao.updateUserProfilePicture(username, profilePicture);
             return;
@@ -184,7 +186,7 @@ async function updateProfilePicture(username, profilePicture) {
  */
 async function updateFavoriteTeams(username, favoriteTeams) {
     try {
-        // Check if the user exists
+        // Check if the user exists and update favorite teams
         if (await userExists(username)) {
             await usersDao.updateUsersFavoriteTeams(username, favoriteTeams);
             return;
@@ -205,7 +207,7 @@ async function updateFavoriteTeams(username, favoriteTeams) {
  */
 async function updateFavoritePlayers(username, favoritePlayers) {
     try {
-        // Check if the user exists
+        // Check if the user exists and update favorite players
         if (await userExists(username)) {
             await usersDao.updateUsersFavoritePlayers(username, favoritePlayers);
             return;
@@ -227,7 +229,7 @@ async function updateFavoritePlayers(username, favoritePlayers) {
  */
 async function toggleAdmin(adminUser, username) {
     try {
-        // Check if the adminUser is an admin
+        // Check if the adminUser is indeed an admin
         if (!adminUser.admin) {
             throw new Error('User must have admin privileges');
         }
@@ -237,7 +239,7 @@ async function toggleAdmin(adminUser, username) {
             throw new Error('Cannot change own admin status');
         }
 
-        // Check if the user to toggle exists
+        // Check if the user to toggle exists and then toggle admin status
         if (await userExists(username)) {
             const data = await usersDao.toggleUserAdmin(username);
             return { username: data.Item.username, adminStatus: data.Item.admin };
@@ -260,7 +262,7 @@ async function toggleAdmin(adminUser, username) {
  */
 async function toggleVerified(adminUser, username) {
     try {
-        // Check if the adminUser is an admin
+        // Check if the adminUser is indeed an admin
         if (!adminUser.admin) {
             throw new Error('User must have admin privileges');
         }
@@ -270,7 +272,7 @@ async function toggleVerified(adminUser, username) {
             throw new Error('Cannot change own verified status');
         }
 
-        // Check if the user to toggle exists
+        // Check if the user to toggle exists and then toggle verified status
         if (await userExists(username)) {
             const data = await usersDao.toggleUserVerified(username);
             return { username: data.Item.username, adminStatus: data.Item.verified };
@@ -291,6 +293,7 @@ async function toggleVerified(adminUser, username) {
  */
 async function deleteUser(username) {
     try {
+        // check if the user exists and delete the user
         if (await userExists(username)) {
             await usersDao.deleteUserAccount(username);
             return;
@@ -311,6 +314,7 @@ async function deleteUser(username) {
  */
 async function deleteUserAdminPermission(adminUser, username) {
     try {
+        // check if the user is an admin and then call deleteUser function
         if (adminUser.admin) {
             await deleteUser(username);
             return;
@@ -328,6 +332,7 @@ async function deleteUserAdminPermission(adminUser, username) {
  * @returns boolean
  */
 async function userExists(username) {
+    // use getUserbyUsername from DAO to check if user exists return true if it does
     const data = await usersDao.getUserByUsername(username);
 
     if (data.Item) {
@@ -349,12 +354,14 @@ function validateUsername(username) {
     // Blacklist of characters that are not allowed in the username
     const blacklist = ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "=", "+", "{", "}", "[", "]", "|", "\\", ":", ";", "'", "\"", "<", ">", ",", ".", "?", "/"];
     
+    // check if the username has any blacklisted characters
     for (let char of username) {
         if (blacklist.includes(char)) {
             return false;
         }
     }
 
+    // Username must be between 5 and 20 characters
     return username.length >= 5 && username.length <= 20;
 }
 
@@ -366,10 +373,10 @@ function validateUsername(username) {
  * @returns boolean
  */
 function validatePassword(password) {
-    // Password must be between 8 and 20 characters
     return password.length >= 8 && password.length <= 20;
 }
 
+// Export functions
 module.exports = {
     createUser,
     loginUser,

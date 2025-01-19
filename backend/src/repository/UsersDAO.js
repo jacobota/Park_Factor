@@ -27,6 +27,7 @@ const TableName = process.env.USERS_TABLENAME;
  * @returns data of user info or error
  */
 async function createUser(Item) {
+    // Create the PutCommand to add the user to the table
     const command = new PutCommand({
         TableName,
         Item
@@ -47,6 +48,7 @@ async function createUser(Item) {
  * @returns data of user if present or null
  */
 async function getUserByUsername(username) {
+    // Create the GetCommand to retrieve the user from the table
     const command = new GetCommand({
         TableName,
         Key: {username: username}
@@ -68,6 +70,7 @@ async function getUserByUsername(username) {
  * @returns data of user if changed or null
  */
 async function updateEmail(username, newEmail) {
+    // Create the UpdateCommand to update the user's email
     const command = new UpdateCommand({
         TableName,
         Key: {username: username},
@@ -96,6 +99,7 @@ async function updateEmail(username, newEmail) {
  * @returns data of user if changed or null
  */
 async function updatePassword(username, newPassword) {
+    // Create the UpdateCommand to update the user's password
     const command = new UpdateCommand({
         TableName,
         Key: {username: username},
@@ -124,6 +128,7 @@ async function updatePassword(username, newPassword) {
  * @returns 
  */
 async function updateUserProfilePicture(username, profilePicture) {
+    // Create the UpdateCommand to update the user's profile picture
     const command = new UpdateCommand({
         TableName,
         Key: {username: username},
@@ -152,6 +157,7 @@ async function updateUserProfilePicture(username, profilePicture) {
  * @returns 
  */
 async function updateUsersFavoriteTeams(username, favoriteTeams) {
+    // Create the UpdateCommand to update the user's favorite teams
     const command = new UpdateCommand({
         TableName,
         Key: {username: username},
@@ -180,6 +186,7 @@ async function updateUsersFavoriteTeams(username, favoriteTeams) {
  * @returns 
  */
 async function updateUsersFavoritePlayers(username, favoritePlayers) {
+    // Create the UpdateCommand to update the user's favorite players
     const command = new UpdateCommand({
         TableName,
         Key: {username: username},
@@ -291,6 +298,7 @@ async function toggleUserVerified(username) {
  * @returns data of user deleted or error
  */
 async function deleteUserAccount(username) {
+    // Create the DeleteCommand to remove the user from the table
     const deleteCommand = new DeleteCommand({
         TableName,
         Key: { username: username }
