@@ -155,6 +155,26 @@ async function updateUserPassword(username, newPassword) {
 }
 
 /**
+ * updateProfilePicture will bridge the gap between the controller and the DAO to update a users profile picture,
+ * this function will check if the user exists in the database and then update their profile picture.
+ * 
+ * @param {String} username username to update profile picture
+ * @param {String} profilePicture new profile picture
+ * @returns 
+ */
+async function updateProfilePicture(username, profilePicture) {
+    try {
+        if (await userExists(username)) {
+            const data = await usersDao.updateUserProfilePicture(username, profilePicture);
+            return data;
+        }
+        throw new Error("Username not found");
+    } catch (err) {
+        throw new Error(err.message);
+    }
+}
+
+/**
  * updateFavoriteTeams will bridge the gap between the controller and the DAO to update a users favorite teams,
  * this function will check if the user exists in the database and then update their favorite teams.
  * 
@@ -355,6 +375,7 @@ module.exports = {
     getUserInformation,
     updateUserEmail,
     updateUserPassword,
+    updateProfilePicture,
     updateFavoriteTeams,
     updateFavoritePlayers,
     toggleAdmin,

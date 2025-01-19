@@ -91,7 +91,16 @@ router.put('/update/password', authenticateToken, async (req, res) => {
     }
 });
 
-// Update own User information Profile Pic (Need authenticate token middleware) (TODO)
+// Update own User information Profile Picture (Need authenticate token middleware) (TODO)
+router.put('/update/profilePicture', authenticateToken, async (req, res) => {
+    try {
+        // Call the service to update the user profile pic
+        const data = await usersService.updateProfilePicture(req.user.username, req.body.profilePicture);
+        res.status(200).json({message: 'Profile Pic Updated', profilePic: req.body.profilePicture});
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
 
 // Update own User Favorite Team(s) (Need authenticate token middleware)
 router.put('/update/favoriteTeams', authenticateToken, async (req, res) => {

@@ -117,6 +117,34 @@ async function updatePassword(username, newPassword) {
 }
 
 /**
+ * updateUserProfilePicture will UPDATE the users profile picture in the table
+ * 
+ * @param {String} username username to update profile picture
+ * @param {String} profilePicture new profile picture
+ * @returns 
+ */
+async function updateUserProfilePicture(username, profilePicture) {
+    const command = new UpdateCommand({
+        TableName,
+        Key: {username: username},
+        UpdateExpression: 'SET #profilePicture = :profilePicture',
+        ExpressionAttributeNames: {
+            '#profilePicture': 'profilePicture'
+        },
+        ExpressionAttributeValues: {
+            ':profilePicture': profilePicture
+        }
+    });
+
+    try {
+        const data = await documentClient.send(command);
+        return data;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+/**
  * updateUsersFavoriteTeams will UPDATE the users favorite teams in the table
  * 
  * @param {String} username username to update favorite teams
@@ -281,6 +309,7 @@ module.exports = {
     getUserByUsername,
     updateEmail,
     updatePassword,
+    updateUserProfilePicture,
     updateUsersFavoriteTeams,
     updateUsersFavoritePlayers,
     toggleUserAdmin,
