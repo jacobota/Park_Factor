@@ -107,10 +107,34 @@ async function getAllVerifiedPostsByAuthorDAO(username) {
     }
 }
 
+/**
+ * deleteVerifiedPostByIdDAO will DELETE a verified post by postId from Park Factors Verified Post table in DynamoDB
+ * 
+ * @param {String} postId postId of the verified post
+ * @returns nothing or error
+ */
+async function deleteVerifiedPostByIdDAO(postId) {
+    // Create the DeleteCommand to delete a verified post by id
+    const command = new DeleteCommand({
+        TableName,
+        Key: {
+            postId
+        }
+    });
+
+    try {
+        await documentClient.send(command);
+        return;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
 // Export functions
 module.exports = {
     createVerifiedPostDAO,
     getAllVerifiedPostsDAO,
     getVerifiedPostByIdDAO,
-    getAllVerifiedPostsByAuthorDAO
+    getAllVerifiedPostsByAuthorDAO,
+    deleteVerifiedPostByIdDAO
 };

@@ -73,14 +73,18 @@ async function getAllVerifiedPosts() {
 
 /**
  * getVerifiedPostById bridges the gap between the controller and the DAO to get a verified
- * post by its postId. It will return the verified post if it exists, otherwise it will return
- * an error.
+ * post by its postId, if it exists. It will return the verified post if it exists, otherwise 
+ * it will return an error.
  * 
  * @param {String} postId postId of the verified post
  * @returns verified post or error
  */
 async function getVerifiedPostById(postId) {
     try {
+        // Check if the post exists
+        if(!await postExists(postId)) {
+            throw new Error("Post does not exist");
+        }
         // Call the DAO to get a verified post by id
         const data = await verifiedPostDAO.getVerifiedPostByIdDAO(postId);
         return data;
@@ -108,9 +112,75 @@ async function getAllVerifiedPostsByAuthor(username) {
         if(user.Item.verified) {
             // Call the DAO to get all verified posts by author
             const data = await verifiedPostDAO.getAllVerifiedPostsByAuthorDAO(username);
+            // Sort by date and time in reverse order
+            data.Items.sort((a, b) => {
+                return b.createdAt.localeCompare(a.createdAt);
+            });
             return data;
         } else {
             throw new Error("User is not verified");
+        }
+    } catch (err) {
+        throw new Error(err.message);
+    }
+}
+
+/**
+ * deleteVerifiedPostById bridges the gap between the controller and the DAO to delete a verified
+ * post by its postId. It will check if the post exists, if the user exists, and if the user is the
+ * author of the post. If all checks pass, it will delete the post.
+ * 
+ * @param {Object} user user object
+ * @param {String} postId postId of the post to delete
+ * @returns nothing or error
+ */
+async function deleteVerifiedPostById(user, postId) {
+    try {
+        // Check if the post exists
+        if(!await postExists(postId)) {
+            throw new Error("Post does not exist");
+        }
+        // Check if the user exists
+        if(!await userService.userExists(user.username)) {
+            throw new Error("User does not exist");
+        }
+        // Check if the user is the author of the post
+        const post = await verifiedPostDAO.getVerifiedPostByIdDAO(postId);
+        if(post.Item.author === user.username) {
+            // Call the DAO to delete a verified post by id
+            await verifiedPostDAO.deleteVerifiedPostByIdDAO(postId);
+            return;
+        } else {
+            throw new Error("User is not the author of the post");
+        }
+
+    } catch (err) {
+        throw new Error(err.message);
+    }
+}
+
+/**
+ * adminDeleteVerifiedPostById bridges the gap between the controller and the DAO to delete a verified
+ * post by its postId. It will check if the post exists and if the user is an admin. If all checks pass,
+ * it will call deleteVerifiedPostByIdDAO to delete the post.
+ * 
+ * @param {Object} user admin user object
+ * @param {String} postId postId of the post to delete
+ * @returns nothing or error
+ */
+async function adminDeleteVerifiedPostById(user, postId) {
+    try {
+        // Check if the user is an admin
+        if(user.admin) {
+            // Check if the post exists
+            if(!await postExists(postId)) {
+                throw new Error("Post does not exist");
+            }
+            // Call the DAO to delete a verified post by id
+            await verifiedPostDAO.deleteVerifiedPostByIdDAO(postId);
+            return;
+        } else {
+            throw new Error("User is not an admin");
         }
     } catch (err) {
         throw new Error(err.message);
@@ -131,10 +201,27 @@ function validateContentofPost(content) {
     }
 }
 
+/**
+ * Check if post exists
+ * 
+ * @param {String} postId postId of the post
+ * @return boolean
+ */
+async function postExists(postId) {
+    const post = await verifiedPostDAO.getVerifiedPostByIdDAO(postId);
+    if(post.Item) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 // Export functions
 module.exports = {
     createVerifiedPost,
     getAllVerifiedPosts,
     getVerifiedPostById,
-    getAllVerifiedPostsByAuthor
+    getAllVerifiedPostsByAuthor,
+    deleteVerifiedPostById,
+    adminDeleteVerifiedPostById
 };

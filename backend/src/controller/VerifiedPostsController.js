@@ -32,10 +32,10 @@ router.get("/", authenticateToken, async (req, res) => {
 });
 
 // Get a verified post by id (Need authenticate token middleware)
-router.get("/postId/:id", authenticateToken, async (req, res) => {
+router.get("/postId/:postId", authenticateToken, async (req, res) => {
     try {
         // Call the service to get a verified post by id
-        const data = await verifiedPostsService.getVerifiedPostById(req.params.id);
+        const data = await verifiedPostsService.getVerifiedPostById(req.params.postId);
         res.status(200).json({post: data.Item});
     } catch (err) {
         res.status(400).json({message: err.message});
@@ -57,7 +57,27 @@ router.get("/author/:username", authenticateToken, async (req, res) => {
 // Update a verified post by id (Need authenticate token middleware) (TODO)
 
 // DELETE
-// Delete a verified post by id (Need authenticate token middleware) (TODO)
+// Author can delete their own verified post by id (Need authenticate token middleware)
+router.delete("/delete/:postId", authenticateToken, async (req, res) => {
+    try {
+        // Call the service to delete a verified post by id
+        await verifiedPostsService.deleteVerifiedPostById(req.user, req.params.postId);
+        res.status(200).json({message: "Verified Post Deleted"});
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
+
+// Delete another user's verified post by id (Admin only)
+router.delete("/admin/delete/:postId", authenticateToken, async (req, res) => {
+    try {
+        // Call the service to delete a verified post by id
+        await verifiedPostsService.adminDeleteVerifiedPostById(req.user, req.params.postId);
+        res.status(200).json({message: "Admin Deleted Verified Post"});
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
 
 // Export the router
 module.exports = router;
