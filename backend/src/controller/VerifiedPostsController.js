@@ -42,7 +42,16 @@ router.get("/postId/:id", authenticateToken, async (req, res) => {
     }
 });
 
-// Get all verified posts by a user (Need authenticate token middleware) (TODO)
+// Get all verified posts by a user (Need authenticate token middleware)
+router.get("/author/:username", authenticateToken, async (req, res) => {
+    try {
+        // Call the service to get all verified posts by a user
+        const data = await verifiedPostsService.getAllVerifiedPostsByAuthor(req.params.username);
+        res.status(200).json({posts: data.Items, count: data.Count});
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
 
 // UPDATE
 // Update a verified post by id (Need authenticate token middleware) (TODO)

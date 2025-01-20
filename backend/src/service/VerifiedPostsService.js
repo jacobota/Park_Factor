@@ -2,6 +2,8 @@
 const { logger } = require("../util/logger");
 const uuid = require("uuid");
 const verifiedPostDAO = require("../repository/VerifiedPostsDAO");
+const userDAO = require("../repository/UsersDAO");
+const userService = require("./UsersService");
 
 /**
  * createVerifiedPost bridges the gap between the controller and the DAO to create a new
@@ -87,6 +89,34 @@ async function getVerifiedPostById(postId) {
     }
 }
 
+/**
+ * getAllVerifiedPostsByAuthor bridges the gap between the controller and the DAO to get all
+ * verified posts by a specific author. It will check if the author is verified and return all
+ * posts by the author if they exist, otherwise it will return an error.
+ * 
+ * @param {String} username username of the author
+ * @returns all posts by the author or error
+ */
+async function getAllVerifiedPostsByAuthor(username) {
+    try {
+        // Check if the user exists
+        if(!await userService.userExists(username)) {
+            throw new Error("User does not exist");
+        }
+        // Call getUserByUsername to check if the author is verified
+        const user = await userDAO.getUserByUsername(username);
+        if(user.Item.verified) {
+            // Call the DAO to get all verified posts by author
+            const data = await verifiedPostDAO.getAllVerifiedPostsByAuthorDAO(username);
+            return data;
+        } else {
+            throw new Error("User is not verified");
+        }
+    } catch (err) {
+        throw new Error(err.message);
+    }
+}
+
 // Helper functions
 /**
  * Validate the content of a post make sure it is below 255 characters (arbitrary)
@@ -105,5 +135,6 @@ function validateContentofPost(content) {
 module.exports = {
     createVerifiedPost,
     getAllVerifiedPosts,
-    getVerifiedPostById
+    getVerifiedPostById,
+    getAllVerifiedPostsByAuthor
 };

@@ -83,9 +83,34 @@ async function getVerifiedPostByIdDAO(postId) {
     }
 }
 
+/**
+ * getAllVerifiedPostsByAuthorDAO will GET all verified posts by author from Park Factors Verified Post table in DynamoDB
+ * 
+ * @param {String} username username of the author
+ * @returns all posts by the author or error
+ */
+async function getAllVerifiedPostsByAuthorDAO(username) {
+    // Create the ScanCommand to get all verified posts by author
+    const command = new ScanCommand({
+        TableName,
+        FilterExpression: 'author = :author',
+        ExpressionAttributeValues: {
+            ':author': username
+        }
+    });
+
+    try {
+        const data = await documentClient.send(command);
+        return data;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
 // Export functions
 module.exports = {
     createVerifiedPostDAO,
     getAllVerifiedPostsDAO,
-    getVerifiedPostByIdDAO
+    getVerifiedPostByIdDAO,
+    getAllVerifiedPostsByAuthorDAO
 };

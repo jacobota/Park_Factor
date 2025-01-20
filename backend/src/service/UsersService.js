@@ -389,5 +389,6 @@ module.exports = {
     toggleAdmin,
     toggleVerified,
     deleteUser,
-    deleteUserAdminPermission
+    deleteUserAdminPermission,
+    userExists
 }
