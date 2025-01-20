@@ -60,8 +60,32 @@ async function getAllVerifiedPostsDAO() {
     }
 }
 
+/**
+ * getVerifiedPostByIdDAO will GET a verified post by postId from Park Factors Verified Post table in DynamoDB
+ * 
+ * @param {String} postId postId of the verified post
+ * @returns post from DynamoDB or error
+ */
+async function getVerifiedPostByIdDAO(postId) {
+    // Create the GetCommand to get a verified post by id
+    const command = new GetCommand({
+        TableName,
+        Key: {
+            postId
+        }
+    });
+
+    try {
+        const data = await documentClient.send(command);
+        return data;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
 // Export functions
 module.exports = {
     createVerifiedPostDAO,
-    getAllVerifiedPostsDAO
+    getAllVerifiedPostsDAO,
+    getVerifiedPostByIdDAO
 };

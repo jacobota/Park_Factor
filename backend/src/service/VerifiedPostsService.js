@@ -69,6 +69,24 @@ async function getAllVerifiedPosts() {
     }
 }
 
+/**
+ * getVerifiedPostById bridges the gap between the controller and the DAO to get a verified
+ * post by its postId. It will return the verified post if it exists, otherwise it will return
+ * an error.
+ * 
+ * @param {String} postId postId of the verified post
+ * @returns verified post or error
+ */
+async function getVerifiedPostById(postId) {
+    try {
+        // Call the DAO to get a verified post by id
+        const data = await verifiedPostDAO.getVerifiedPostByIdDAO(postId);
+        return data;
+    } catch (err) {
+        throw new Error(err.message);
+    }
+}
+
 // Helper functions
 /**
  * Validate the content of a post make sure it is below 255 characters (arbitrary)
@@ -86,5 +104,6 @@ function validateContentofPost(content) {
 // Export functions
 module.exports = {
     createVerifiedPost,
-    getAllVerifiedPosts
+    getAllVerifiedPosts,
+    getVerifiedPostById
 };

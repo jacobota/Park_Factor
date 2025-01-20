@@ -31,7 +31,16 @@ router.get("/", authenticateToken, async (req, res) => {
     }
 });
 
-// Get a verified post by id (Need authenticate token middleware) (TODO)
+// Get a verified post by id (Need authenticate token middleware)
+router.get("/:id", authenticateToken, async (req, res) => {
+    try {
+        // Call the service to get a verified post by id
+        const data = await verifiedPostsService.getVerifiedPostById(req.params.id);
+        res.status(200).json({post: data.Item});
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
 
 // Get all verified posts by a user (Need authenticate token middleware) (TODO)
 
