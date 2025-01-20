@@ -3,7 +3,16 @@ const { logger } = require("../util/logger");
 const uuid = require("uuid");
 const verifiedPostDAO = require("../repository/VerifiedPostsDAO");
 
-// Create a new verified post
+/**
+ * createVerifiedPost bridges the gap between the controller and the DAO to create a new
+ * verified post in the database. It checks if the user is verified, if the post content is
+ * too long, if the post content is valid, and if the postImage is there. If all checks pass,
+ * it will create the verified post.
+ * 
+ * @param {Object} user verified user posting
+ * @param {Object} body verified post contents
+ * @returns 
+ */
 async function createVerifiedPost(user, body) {
     try {
         //ensure the user posting if verified
@@ -27,14 +36,34 @@ async function createVerifiedPost(user, body) {
                 authorProfilePicture: user.profilePicture,
                 content: body.content,
                 postImage: body.postImage,
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString
+                createdAt: new Date().toISOString()
             });
 
             return;
         } else {
             throw new Error("User is not verified");
         }
+    } catch (err) {
+        throw new Error(err.message);
+    }
+}
+
+/**
+ * getAllVerifiedPosts bridges the gap between the controller and the DAO to get all
+ * verified posts in the database. Once it gets the data, it will sort the posts by 
+ * date and time in reverse order and return it.
+ * 
+ * @returns all verified posts
+ */
+async function getAllVerifiedPosts() {
+    try {
+        // Call the DAO to get all verified posts
+        const data = await verifiedPostDAO.getAllVerifiedPostsDAO();
+        // Sort the posts by date and time in reverse order
+        data.Items.sort((a, b) => {
+            return b.createdAt.localeCompare(a.createdAt);
+        });
+        return data;
     } catch (err) {
         throw new Error(err.message);
     }
@@ -56,5 +85,6 @@ function validateContentofPost(content) {
 
 // Export functions
 module.exports = {
-    createVerifiedPost
+    createVerifiedPost,
+    getAllVerifiedPosts
 };

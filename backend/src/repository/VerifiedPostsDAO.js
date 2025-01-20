@@ -1,6 +1,6 @@
 // imports
 const {DynamoDBClient} = require('@aws-sdk/client-dynamodb');
-const {DynamoDBDocumentClient, PutCommand, GetCommand, UpdateCommand, DeleteCommand} = require('@aws-sdk/lib-dynamodb');
+const {DynamoDBDocumentClient, PutCommand, ScanCommand, GetCommand, UpdateCommand, DeleteCommand} = require('@aws-sdk/lib-dynamodb');
 const dotenv = require('dotenv');
 const path = require('path');
 const { logger } = require("../util/logger");
@@ -41,7 +41,27 @@ async function createVerifiedPostDAO(Item) {
     }
 }
 
+/**
+ * getallVerifiedPostsDAO will GET all verified posts from Park Factors Verified Post table in DynamoDB
+ * 
+ * @returns all verified posts from DynamoDB
+ */
+async function getAllVerifiedPostsDAO() {
+    // Create the GetCommand to get all verified posts
+    const command = new ScanCommand({
+        TableName
+    });
+
+    try {
+        const data = await documentClient.send(command);
+        return data;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
 // Export functions
 module.exports = {
-    createVerifiedPostDAO
+    createVerifiedPostDAO,
+    getAllVerifiedPostsDAO
 };
