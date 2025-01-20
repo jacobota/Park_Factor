@@ -32,7 +32,7 @@ router.get("/", authenticateToken, async (req, res) => {
 });
 
 // Get a verified post by id (Need authenticate token middleware)
-router.get("/:id", authenticateToken, async (req, res) => {
+router.get("/postId/:id", authenticateToken, async (req, res) => {
     try {
         // Call the service to get a verified post by id
         const data = await verifiedPostsService.getVerifiedPostById(req.params.id);
