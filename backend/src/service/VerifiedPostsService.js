@@ -131,6 +131,71 @@ async function getAllVerifiedPostsByAuthor(username) {
 }
 
 /**
+ * updateVerifiedPostById bridges the gap between the controller and the DAO to update a verified post
+ * by its postId. It will check if the post exists, if the user exists, if the user is the author of the
+ * post, post content and image are different than previous, and verify post content. If all checks pass, 
+ * it will update the post.
+ * 
+ * @param {String} username 
+ * @param {String} postId 
+ * @param {Object} body contains the new content and postImage
+ * @returns updated Post
+ * @throws error if post does not exist, user does not exist, user is not the author, post content is too long, or database error
+ */
+async function updateVerifiedPostById(username, postId, body) {
+    try {
+        // Check if the post exists
+        if(!await postExists(postId)) {
+            throw new Error("Post does not exist");
+        }
+        // Check if the user exists
+        if(!await userService.userExists(username)) {
+            throw new Error("User does not exist");
+        }
+        // Check if the user is the author of the post
+        const post = await verifiedPostDAO.getVerifiedPostByIdDAO(postId);
+        if(post.Item.author === username) {
+            let newContent, newPostImage;
+            // Check if the post content is the different then run validations
+            if(body.content !== post.Item.content) {
+                newContent = body.content;
+                // Check if the post content is too long
+                if(!validateContentofPost(newContent)) {
+                    throw new Error("Post content is too long");
+                }
+                // Check if the post content is valid
+                if(typeof newContent !== "string" || !newContent) {
+                    throw new Error("Post content is invalid. Please Retry.");
+                }
+                // Call the DAO to update the post content
+                await verifiedPostDAO.updateContentDAO(postId, newContent);
+            } else {
+                newContent = post.Item.content;
+            }
+            // Check if the postImage is different
+            if(body.postImage !== post.Item.postImage) {
+                newPostImage = body.postImage;
+                // Call the DAO to update the post image
+                await verifiedPostDAO.updatePostImageDAO(postId, newPostImage);
+            } else {
+                newPostImage = post.Item.postImage;
+            }
+            // Update the verified post
+            const updatedPost = {
+                postId: postId,
+                content: newContent,
+                postImage: newPostImage
+            }
+            return updatedPost;
+        } else {
+            throw new Error("User is not the author of the post");
+        }
+    } catch (err) {
+        throw new Error(err.message);
+    }
+}
+
+/**
  * deleteVerifiedPostById bridges the gap between the controller and the DAO to delete a verified
  * post by its postId. It will check if the post exists, if the user exists, and if the user is the
  * author of the post. If all checks pass, it will delete the post.
@@ -230,6 +295,7 @@ module.exports = {
     getAllVerifiedPosts,
     getVerifiedPostById,
     getAllVerifiedPostsByAuthor,
+    updateVerifiedPostById,
     deleteVerifiedPostById,
     adminDeleteVerifiedPostById
 };

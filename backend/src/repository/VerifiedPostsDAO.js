@@ -21,7 +21,8 @@ const documentClient = DynamoDBDocumentClient.from(client);
 const TableName = process.env.VERIFIEDPOSTS_TABLENAME;
 
 /**
- * createVerifiedPostDAO will PUT a new verified post in Park Factors Verified Post table in DynamoDB
+ * createVerifiedPostDAO will PUT a new verified post in Park 
+ * Factors Verified Post table 
  * 
  * @param {Object} Item postId, author, authorProfilePicture, content, postImage, createdAt, updatedAt
  * @returns on success
@@ -43,7 +44,8 @@ async function createVerifiedPostDAO(Item) {
 }
 
 /**
- * getallVerifiedPostsDAO will GET all verified posts from Park Factors Verified Post table in DynamoDB
+ * getallVerifiedPostsDAO will GET all verified posts from Park 
+ * Factors Verified Post table
  * 
  * @returns all verified posts from DynamoDB
  * @throws database error
@@ -63,7 +65,8 @@ async function getAllVerifiedPostsDAO() {
 }
 
 /**
- * getVerifiedPostByIdDAO will GET a verified post by postId from Park Factors Verified Post table in DynamoDB
+ * getVerifiedPostByIdDAO will GET a verified post by postId from 
+ * Park Factors Verified Post table
  * 
  * @param {String} postId postId of the verified post
  * @returns post from DynamoDB
@@ -87,7 +90,8 @@ async function getVerifiedPostByIdDAO(postId) {
 }
 
 /**
- * getAllVerifiedPostsByAuthorDAO will GET all verified posts by author from Park Factors Verified Post table in DynamoDB
+ * getAllVerifiedPostsByAuthorDAO will GET all verified posts by author from 
+ * Park Factors Verified Post table
  * 
  * @param {String} username username of the author
  * @returns all posts by the author
@@ -112,7 +116,74 @@ async function getAllVerifiedPostsByAuthorDAO(username) {
 }
 
 /**
- * deleteVerifiedPostByIdDAO will DELETE a verified post by postId from Park Factors Verified Post table in DynamoDB
+ * updateContentDAO will UPDATE the content of a verified post's content in 
+ * Park Factors Verified Post table
+ * 
+ * @param {String} postId 
+ * @param {String} content 
+ * @returns on success
+ * @throws database error
+ */
+async function updateContentDAO(postId, content) {
+    // Create the UpdateCommand to update the content of a verified post
+    const command = new UpdateCommand({
+        TableName,
+        Key: {
+            postId
+        },
+        UpdateExpression: 'SET #content = :content',
+        ExpressionAttributeNames: {
+            '#content': 'content'
+        },
+        ExpressionAttributeValues: {
+            ':content': content
+        }
+    });
+
+    try {
+        const data = await documentClient.send(command);
+        return data;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+/**
+ * updatePostImageDAO will UPDATE the post image of a verified post's postImage
+ *  in Park Factors Verified Post table
+ * 
+ * @param {String} postId 
+ * @param {String} postImage 
+ * @returns on success
+ * @throws database error
+ */
+async function updatePostImageDAO(postId, postImage) {
+    // Create the UpdateCommand to update the post image of a verified post
+    const command = new UpdateCommand({
+        TableName,
+        Key: {
+            postId
+        },
+        UpdateExpression: 'SET #postImage = :postImage',
+        ExpressionAttributeNames: {
+            '#postImage': 'postImage'
+        },
+        ExpressionAttributeValues: {
+            ':postImage': postImage
+        }
+    });
+
+    try {
+        await documentClient.send(command);
+        return;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+/**
+ * deleteVerifiedPostByIdDAO will DELETE a verified post by postId from 
+ * Park Factors Verified Post table
  * 
  * @param {String} postId postId of the verified post
  * @returns on success
@@ -141,5 +212,7 @@ module.exports = {
     getAllVerifiedPostsDAO,
     getVerifiedPostByIdDAO,
     getAllVerifiedPostsByAuthorDAO,
+    updateContentDAO,
+    updatePostImageDAO,
     deleteVerifiedPostByIdDAO
 };

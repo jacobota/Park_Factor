@@ -54,7 +54,16 @@ router.get("/author/:username", authenticateToken, async (req, res) => {
 });
 
 // UPDATE
-// Update a verified post by id (Need authenticate token middleware) (TODO)
+// Update a verified post by id (Need authenticate token middleware)
+router.put("/update/:postId", authenticateToken, async (req, res) => {
+    try {
+        // Call the service to update a verified post by id
+        const updatedPost = await verifiedPostsService.updateVerifiedPostById(req.user.username, req.params.postId, req.body);
+        res.status(200).json({message: "Verified Post Updated", post: updatedPost});
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
 
 // DELETE
 // Author can delete their own verified post by id (Need authenticate token middleware)
