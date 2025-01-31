@@ -1,3 +1,4 @@
 backend/node_modules/
 *.log
 *.env
+stats_api/venv/
