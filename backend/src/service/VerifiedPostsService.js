@@ -13,7 +13,8 @@ const userService = require("./UsersService");
  * 
  * @param {Object} user verified user posting
  * @param {Object} body verified post contents
- * @returns 
+ * @returns verified post data
+ * @throws error if user is not verified, post content is too long, or post content is invalid, or database error
  */
 async function createVerifiedPost(user, body) {
     try {
@@ -32,16 +33,17 @@ async function createVerifiedPost(user, body) {
                 body.postImage = "";
             }
             // create the verified post 
-            await verifiedPostDAO.createVerifiedPostDAO({
+            const verifiedPost = {
                 postId: uuid.v4(),
                 author: user.username,
                 authorProfilePicture: user.profilePicture,
                 content: body.content,
                 postImage: body.postImage,
                 createdAt: new Date().toISOString()
-            });
+            }
+            await verifiedPostDAO.createVerifiedPostDAO(verifiedPost);
 
-            return;
+            return verifiedPost;
         } else {
             throw new Error("User is not verified");
         }
@@ -56,6 +58,7 @@ async function createVerifiedPost(user, body) {
  * date and time in reverse order and return it.
  * 
  * @returns all verified posts
+ * @throws database error
  */
 async function getAllVerifiedPosts() {
     try {
@@ -77,7 +80,8 @@ async function getAllVerifiedPosts() {
  * it will return an error.
  * 
  * @param {String} postId postId of the verified post
- * @returns verified post or error
+ * @returns verified post
+ * @throws error if post does not exist or database error
  */
 async function getVerifiedPostById(postId) {
     try {
@@ -99,7 +103,8 @@ async function getVerifiedPostById(postId) {
  * posts by the author if they exist, otherwise it will return an error.
  * 
  * @param {String} username username of the author
- * @returns all posts by the author or error
+ * @returns all posts by the author
+ * @throws error if user does not exist, user is not verified, or database error
  */
 async function getAllVerifiedPostsByAuthor(username) {
     try {
@@ -132,7 +137,8 @@ async function getAllVerifiedPostsByAuthor(username) {
  * 
  * @param {Object} user user object
  * @param {String} postId postId of the post to delete
- * @returns nothing or error
+ * @returns on success
+ * @throws error if post does not exist, user does not exist, user is not the author, or database error
  */
 async function deleteVerifiedPostById(user, postId) {
     try {
@@ -166,7 +172,8 @@ async function deleteVerifiedPostById(user, postId) {
  * 
  * @param {Object} user admin user object
  * @param {String} postId postId of the post to delete
- * @returns nothing or error
+ * @returns on success
+ * @throws error if post does not exist, user is not an admin, or database error
  */
 async function adminDeleteVerifiedPostById(user, postId) {
     try {
@@ -191,6 +198,7 @@ async function adminDeleteVerifiedPostById(user, postId) {
 /**
  * Validate the content of a post make sure it is below 255 characters (arbitrary)
  * @param {String} content 
+ * @returns boolean
  */
 function validateContentofPost(content) {
     if (content.length > 255) {

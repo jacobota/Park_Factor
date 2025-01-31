@@ -24,7 +24,8 @@ const TableName = process.env.VERIFIEDPOSTS_TABLENAME;
  * createVerifiedPostDAO will PUT a new verified post in Park Factors Verified Post table in DynamoDB
  * 
  * @param {Object} Item postId, author, authorProfilePicture, content, postImage, createdAt, updatedAt
- * @returns nothing or an error
+ * @returns on success
+ * @throws database error
  */
 async function createVerifiedPostDAO(Item) {
     // Create the PutCommand to add the user to the table
@@ -45,6 +46,7 @@ async function createVerifiedPostDAO(Item) {
  * getallVerifiedPostsDAO will GET all verified posts from Park Factors Verified Post table in DynamoDB
  * 
  * @returns all verified posts from DynamoDB
+ * @throws database error
  */
 async function getAllVerifiedPostsDAO() {
     // Create the GetCommand to get all verified posts
@@ -64,7 +66,8 @@ async function getAllVerifiedPostsDAO() {
  * getVerifiedPostByIdDAO will GET a verified post by postId from Park Factors Verified Post table in DynamoDB
  * 
  * @param {String} postId postId of the verified post
- * @returns post from DynamoDB or error
+ * @returns post from DynamoDB
+ * @throws database error
  */
 async function getVerifiedPostByIdDAO(postId) {
     // Create the GetCommand to get a verified post by id
@@ -87,7 +90,8 @@ async function getVerifiedPostByIdDAO(postId) {
  * getAllVerifiedPostsByAuthorDAO will GET all verified posts by author from Park Factors Verified Post table in DynamoDB
  * 
  * @param {String} username username of the author
- * @returns all posts by the author or error
+ * @returns all posts by the author
+ * @throws database error
  */
 async function getAllVerifiedPostsByAuthorDAO(username) {
     // Create the ScanCommand to get all verified posts by author
@@ -111,7 +115,8 @@ async function getAllVerifiedPostsByAuthorDAO(username) {
  * deleteVerifiedPostByIdDAO will DELETE a verified post by postId from Park Factors Verified Post table in DynamoDB
  * 
  * @param {String} postId postId of the verified post
- * @returns nothing or error
+ * @returns on success
+ * @throws database error
  */
 async function deleteVerifiedPostByIdDAO(postId) {
     // Create the DeleteCommand to delete a verified post by id
