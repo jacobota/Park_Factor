@@ -12,8 +12,8 @@ const router = express.Router();
 router.post('/registration', async (req, res) => {
     try {
         // Call the service to create the user
-        await usersService.createUser(req.body);
-        res.status(201).json({message: 'User Created'});
+        const data = await usersService.createUser(req.body);
+        res.status(201).json({message: 'User Created', user: data});
     } catch (err) {
         res.status(400).json({message: err.message});
     }
@@ -66,8 +66,8 @@ router.get('/profile/:username', authenticateToken, async (req, res) => {
 router.put('/update/email', authenticateToken, async (req, res) => {
     try {
         // Call the service to update the user email
-        await usersService.updateUserEmail(req.user.username, req.body.email);
-        res.status(201).json({message: 'Email Updated', email: req.body.email});
+        const updatedEmail = await usersService.updateUserEmail(req.user.username, req.body.email);
+        res.status(201).json({message: 'Email Updated', email: updatedEmail});
     } catch (err) {
         res.status(400).json({message: err.message});
     }
@@ -77,8 +77,8 @@ router.put('/update/email', authenticateToken, async (req, res) => {
 router.put('/update/password', authenticateToken, async (req, res) => {
     try {
         // Call the service to update the user password
-        await usersService.updateUserPassword(req.user.username, req.body.password);
-        res.status(201).json({message: 'Password Updated', password: req.body.password});
+        const updatedPassword = await usersService.updateUserPassword(req.user.username, req.body.password);
+        res.status(201).json({message: 'Password Updated', password: updatedPassword});
     } catch (err) {
         res.status(400).json({message: err.message});
     }
@@ -88,8 +88,8 @@ router.put('/update/password', authenticateToken, async (req, res) => {
 router.put('/update/profilePicture', authenticateToken, async (req, res) => {
     try {
         // Call the service to update the user profile pic
-        await usersService.updateProfilePicture(req.user.username, req.body.profilePicture);
-        res.status(201).json({message: 'Profile Pic Updated', profilePic: req.body.profilePicture});
+        const updatedProfilePic = await usersService.updateProfilePicture(req.user.username, req.body.profilePicture);
+        res.status(201).json({message: 'Profile Pic Updated', profilePic: updatedProfilePic});
     } catch (err) {
         res.status(400).json({message: err.message});
     }
@@ -99,8 +99,8 @@ router.put('/update/profilePicture', authenticateToken, async (req, res) => {
 router.put('/update/favoriteTeams', authenticateToken, async (req, res) => {
     try {
         // Call the service to update the user favorite team
-        await usersService.updateFavoriteTeams(req.user.username, req.body.favoriteTeams);
-        res.status(201).json({message: 'Favorite Team(s) Updated', favoriteTeams: req.body.favoriteTeams});
+        const favoriteTeams = await usersService.updateFavoriteTeams(req.user.username, req.body.favoriteTeams);
+        res.status(201).json({message: 'Favorite Team(s) Updated', favoriteTeams: favoriteTeams});
     } catch (err) {
         res.status(400).json({message: err.message});
     }
@@ -110,8 +110,8 @@ router.put('/update/favoriteTeams', authenticateToken, async (req, res) => {
 router.put('/update/favoritePlayers', authenticateToken, async (req, res) => {
     try {
         // Call the service to update the user favorite players
-        await usersService.updateFavoritePlayers(req.user.username, req.body.favoritePlayers);
-        res.status(201).json({message: 'Favorite Player(s) Updated', favoritePlayers: req.body.favoritePlayers});
+        const favoritePlayers = await usersService.updateFavoritePlayers(req.user.username, req.body.favoritePlayers);
+        res.status(201).json({message: 'Favorite Player(s) Updated', favoritePlayers: favoritePlayers});
     } catch (err) {
         res.status(400).json({message: err.message});
     }
@@ -144,8 +144,8 @@ router.put('/update/verified/:username', authenticateToken, async (req, res) => 
 router.delete('/delete', authenticateToken, async (req, res) => {
     try {
         // Call the service to delete the user
-        await usersService.deleteUser(req.user.username);
-        res.status(200).json({message: 'User Deleted', userDeleted: req.user.username});
+        const deletedUser = await usersService.deleteUser(req.user.username);
+        res.status(200).json({message: 'User Deleted', userDeleted: deletedUser});
     } catch (err) {
         res.status(400).json({message: err.message});
     }
@@ -155,8 +155,8 @@ router.delete('/delete', authenticateToken, async (req, res) => {
 router.delete('/delete/:username', authenticateToken, async (req, res) => {
     try {
         // Call the service to delete the user
-        await usersService.deleteUserAdminPermission(req.user, req.params.username);
-        res.status(200).json({message: 'User Deleted', userDeleted: req.params.username});
+        const deletedUser = await usersService.deleteUserAdminPermission(req.user, req.params.username);
+        res.status(200).json({message: 'User Deleted', userDeleted: deletedUser});
     } catch (err) {
         res.status(400).json({message: err.message});
     }

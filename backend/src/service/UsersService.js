@@ -9,7 +9,8 @@ const usersDao = require("../repository/UsersDAO");
  * the database and also encrypts the password before storing it in the database.
  * 
  * @param {Object} body username, email, and password
- * @returns nothing or error
+ * @returns user data
+ * @throws error if user already exists or invalid data or database error
  */
 async function createUser(body) {
     try {
@@ -30,7 +31,7 @@ async function createUser(body) {
         if (!await userExists(body.username)) {
             // Encrypt the password and pass data to DAO
             const encryptedPassword = await encrypt.encryptPassword(body.password);
-            await usersDao.createUser({
+            const userData = {
                 username: body.username,
                 admin: false,
                 email: body.email,
@@ -39,8 +40,9 @@ async function createUser(body) {
                 password: encryptedPassword,
                 profilePicture: "",
                 verified: false,
-            });
-            return;
+            }
+            await usersDao.createUser(userData);
+            return userData;
         }
         throw new Error("User already exists");
     } catch (err) {
@@ -55,6 +57,7 @@ async function createUser(body) {
  * 
  * @param {Object} body username and password
  * @returns data of user if username and password is correct
+ * @throws error if user does not exist, invalid data, or incorrect password
  */
 async function loginUser(body) {
     try {
@@ -87,7 +90,8 @@ async function loginUser(body) {
  * this function will be used for both gathering own user information and other user information.
  * 
  * @param {string} username username of user to get information
- * @returns data of user if present or error
+ * @returns data of user if present
+ * @throws error if user not found or database error
  */
 async function getUserInformation(username) {
     try {
@@ -107,8 +111,9 @@ async function getUserInformation(username) {
  * this function validates the email, checks if the user exists in the database and then update their email.
  * 
  * @param {String} username username to search for in the table
- * @param {*} newEmail new username
- * @returns nothing or error
+ * @param {String} newEmail new username
+ * @returns updated email 
+ * @throws error if invalid email or username not found or database error
  */
 async function updateUserEmail(username, newEmail) {
     try {
@@ -120,7 +125,7 @@ async function updateUserEmail(username, newEmail) {
         // Check if the user exists and update email
         if (await userExists(username)) {
             await usersDao.updateEmail(username, newEmail);
-            return;
+            return newEmail;
         }
         throw new Error("Username not found");
     } catch (err) {
@@ -133,8 +138,9 @@ async function updateUserEmail(username, newEmail) {
  * this function validates the password, check if the user exists in the database and then update their password.
  * 
  * @param {String} username username to search for in the table
- * @param {*} newPassword new password
- * @returns nothing or error
+ * @param {String} newPassword new password
+ * @returns new password
+ * @throws error if invalid password or username not found or database error
  */
 async function updateUserPassword(username, newPassword) {
     try {
@@ -147,7 +153,7 @@ async function updateUserPassword(username, newPassword) {
         if (await userExists(username)) {
             const encryptedPassword = await encrypt.encryptPassword(newPassword);
             await usersDao.updatePassword(username, encryptedPassword);
-            return;
+            return newPassword;
         }
         throw new Error("Username not found");
     } catch (err) {
@@ -161,14 +167,15 @@ async function updateUserPassword(username, newPassword) {
  * 
  * @param {String} username username to update profile picture
  * @param {String} profilePicture new profile picture
- * @returns nothing or error
+ * @returns profile picture
+ * @throws error if username not found or database error
  */
 async function updateProfilePicture(username, profilePicture) {
     try {
         // check if the user exists and update profile picture
         if (await userExists(username)) {
             await usersDao.updateUserProfilePicture(username, profilePicture);
-            return;
+            return profilePicture;
         }
         throw new Error("Username not found");
     } catch (err) {
@@ -182,14 +189,15 @@ async function updateProfilePicture(username, profilePicture) {
  * 
  * @param {String} username username to update favorite teams
  * @param {Array} favoriteTeams array of favorite teams
- * @returns nothing or error
+ * @returns favorite teams
+ * @throws error if username not found or database error
  */
 async function updateFavoriteTeams(username, favoriteTeams) {
     try {
         // Check if the user exists and update favorite teams
         if (await userExists(username)) {
             await usersDao.updateUsersFavoriteTeams(username, favoriteTeams);
-            return;
+            return favoriteTeams;
         }
         throw new Error("Username not found");
     } catch (err) {
@@ -203,14 +211,15 @@ async function updateFavoriteTeams(username, favoriteTeams) {
  * 
  * @param {String} username username to update favorite players
  * @param {Array} favoritePlayers array of favorite players
- * @returns nothing or error
+ * @returns favorite players
+ * @throws error if username not found or database error
  */
 async function updateFavoritePlayers(username, favoritePlayers) {
     try {
         // Check if the user exists and update favorite players
         if (await userExists(username)) {
             await usersDao.updateUsersFavoritePlayers(username, favoritePlayers);
-            return;
+            return favoritePlayers;
         }
         throw new Error("Username not found");
     } catch (err) {
@@ -225,7 +234,8 @@ async function updateFavoritePlayers(username, favoritePlayers) {
  * 
  * @param {String} adminUser requesting admin user
  * @param {String} username username to toggle admin
- * @returns data of toggled user or error
+ * @returns data of toggled user
+ * @throws error if user not found, user must have admin privileges, or cannot change own admin status
  */
 async function toggleAdmin(adminUser, username) {
     try {
@@ -258,7 +268,8 @@ async function toggleAdmin(adminUser, username) {
  * 
  * @param {String} adminUser requesting admin user
  * @param {String} username username to toggle verified
- * @returns data of toggled user or error
+ * @returns data of toggled user
+ * @throws error if user not found, user must have admin privileges, or cannot change own verified status
  */
 async function toggleVerified(adminUser, username) {
     try {
@@ -289,14 +300,15 @@ async function toggleVerified(adminUser, username) {
  * this function will check if the user exists in the database and then delete the user.
  * 
  * @param {String} username username to delete
- * @returns nothing or error
+ * @returns deleted username
+ * @throws error if username not found or database error
  */
 async function deleteUser(username) {
     try {
         // check if the user exists and delete the user
         if (await userExists(username)) {
             await usersDao.deleteUserAccount(username);
-            return;
+            return username;
         }
         throw new Error("Username not found");
     } catch (err) {
@@ -310,14 +322,15 @@ async function deleteUser(username) {
  * 
  * @param {Object} adminUser requesting admin user
  * @param {String} username username to delete
- * @returns nothing or error
+ * @returns delete user
+ * @throws error if user must have admin privileges or database
  */
 async function deleteUserAdminPermission(adminUser, username) {
     try {
         // check if the user is an admin and then call deleteUser function
         if (adminUser.admin) {
-            await deleteUser(username);
-            return;
+            const deletedUser = await deleteUser(username);
+            return deletedUser;
         }
         throw new Error('User must have admin privileges');
     } catch (err) {

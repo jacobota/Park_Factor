@@ -24,7 +24,8 @@ const TableName = process.env.USERS_TABLENAME;
  * createUser will PUT a new user data in Park Factors Users table in DynamoDB
  * 
  * @param {Object} Item username, email, and encrypted password
- * @returns data of user info or error
+ * @returns on success
+ * @throws database error
  */
 async function createUser(Item) {
     // Create the PutCommand to add the user to the table
@@ -45,7 +46,8 @@ async function createUser(Item) {
  * getUserByUsername will GET the user data if there is a matching username
  * 
  * @param {String} username username to search for in the table
- * @returns data of user if present or null
+ * @returns data of user if present
+ * @throws database error
  */
 async function getUserByUsername(username) {
     // Create the GetCommand to retrieve the user from the table
@@ -58,7 +60,7 @@ async function getUserByUsername(username) {
         const data = await documentClient.send(command);
         return data;
     } catch (err) {
-        return null;
+        return err;
     }
 }
 
@@ -67,7 +69,8 @@ async function getUserByUsername(username) {
  * 
  * @param {String} username username to search for in the table
  * @param {*} newEmail new email
- * @returns data of user if changed or null
+ * @returns on success
+ * @throws database error
  */
 async function updateEmail(username, newEmail) {
     // Create the UpdateCommand to update the user's email
@@ -96,7 +99,8 @@ async function updateEmail(username, newEmail) {
  * 
  * @param {String} username username to search for in the table
  * @param {*} newPassword new password
- * @returns data of user if changed or null
+ * @returns on success
+ * @throws database error
  */
 async function updatePassword(username, newPassword) {
     // Create the UpdateCommand to update the user's password
@@ -125,7 +129,8 @@ async function updatePassword(username, newPassword) {
  * 
  * @param {String} username username to update profile picture
  * @param {String} profilePicture new profile picture
- * @returns 
+ * @returns on success
+ * @throws database error
  */
 async function updateUserProfilePicture(username, profilePicture) {
     // Create the UpdateCommand to update the user's profile picture
@@ -154,7 +159,8 @@ async function updateUserProfilePicture(username, profilePicture) {
  * 
  * @param {String} username username to update favorite teams
  * @param {Array} favoriteTeams array of favorite teams
- * @returns 
+ * @returns on success
+ * @throws database error
  */
 async function updateUsersFavoriteTeams(username, favoriteTeams) {
     // Create the UpdateCommand to update the user's favorite teams
@@ -171,8 +177,8 @@ async function updateUsersFavoriteTeams(username, favoriteTeams) {
     });
 
     try {
-        const data = await documentClient.send(command);
-        return data;
+        await documentClient.send(command);
+        return;
     } catch (err) {
         throw new Error(err);
     }
@@ -183,7 +189,8 @@ async function updateUsersFavoriteTeams(username, favoriteTeams) {
  * 
  * @param {String} username username to update favorite players
  * @param {Array} favoritePlayers array of favorite players
- * @returns 
+ * @returns on success
+ * @throws database error
  */
 async function updateUsersFavoritePlayers(username, favoritePlayers) {
     // Create the UpdateCommand to update the user's favorite players
@@ -200,8 +207,8 @@ async function updateUsersFavoritePlayers(username, favoritePlayers) {
     });
 
     try {
-        const data = await documentClient.send(command);
-        return data;
+        await documentClient.send(command);
+        return;
     } catch (err) {
         throw new Error(err);
     }
@@ -211,7 +218,8 @@ async function updateUsersFavoritePlayers(username, favoritePlayers) {
  * Toggles the admin status of a user
  * 
  * @param {String} username 
- * @returns 
+ * @returns  user data
+ * @throws database error
  */
 async function toggleUserAdmin(username) {
     // Retrieve the current user to access current admin access
@@ -253,7 +261,8 @@ async function toggleUserAdmin(username) {
  * Toggles the verfied status of a user
  * 
  * @param {String} username 
- * @returns 
+ * @returns user data
+ * @throws database error
  */
 async function toggleUserVerified(username) {
     // Retrieve the current user to access current verified access
@@ -295,7 +304,8 @@ async function toggleUserVerified(username) {
  * DELETE a user from the database
  * 
  * @param {String} username
- * @returns data of user deleted or error
+ * @returns data of user deleted
+ * @throws database error
  */
 async function deleteUserAccount(username) {
     // Create the DeleteCommand to remove the user from the table
