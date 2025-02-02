@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from pybaseball.playerid_lookup import _get_client
 import pybaseball as pb
+import pylahman as lahman
 
 # Get an instance of PlayerSearchClient using _get_client
 player_search = _get_client()
@@ -55,5 +56,36 @@ def get_id_of_player():
         playerid_results = pb.playerid_lookup(last, first)
         player_info = playerid_results.to_dict('records')
         return jsonify(player_info)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+@player_route.route('/api/player-bio')
+def test():
+    try:
+        # Get player-id from query parameters
+        player_id = request.args.get('player-id')
+        
+        # Player biographical info based on bbref id
+        people_df = lahman.people()
+        people_record = people_df[people_df['bbrefID'] == player_id].to_dict('records')
+        people_record_selected_attributes = ['nameFirst', 'nameLast', 'birthYear', 'birthMonth', 'birthDay', 'birthCountry',  'weight', 'height', 'bats', 'throws']
+        people_selected_attribute_record = [
+            {attr: hitter[attr] for attr in people_record_selected_attributes if attr in hitter}
+            for hitter in people_record
+        ]
+
+        # Player award info based on bbref id
+        awards_df = lahman.awards_players()
+        awards_record = awards_df[awards_df['playerID'] == player_id].to_dict('records')
+
+        df, pb_bio = pb.get_splits(player_id, player_info=True)
+
+        position = pb_bio['Position'] 
+        for person in people_selected_attribute_record:
+            person['Position'] = position
+
+        # TODO: Find Team
+
+        return jsonify({'player_bio': people_selected_attribute_record, 'awards': awards_record})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
