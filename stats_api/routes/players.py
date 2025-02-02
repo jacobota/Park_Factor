@@ -36,8 +36,7 @@ Return:
     JSON: The player's player information
 Throws:
     Exception: If an error occurs while getting playerid or first and last name are not given
-"""
-    
+""" 
 @player_route.route('/api/playerid')
 def get_id_of_player():
     # Get last and first name from query parameters
