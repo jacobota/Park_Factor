@@ -59,7 +59,8 @@ def get_id_of_player():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-"""Gather player biographical information based on bbref id and mlbam id
+"""Gather player biographical information based on bbref id and mlbam id. This pulls player
+biographical information from Lahman and Statcast data.
 
 Return: 
     JSON: The player's biographical information
