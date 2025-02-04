@@ -38,22 +38,22 @@ def get_hitter_stats_this_season():
         statcast_sprint_speed_data = pb.statcast_sprint_speed(current_year)  
         statcast_sprint_speed_record = statcast_sprint_speed_data[statcast_sprint_speed_data['player_id'] == key_mlbam].to_dict('records')      
 
-        # Get statcast data for fielding stats
-        # TODO: Need to get position for player to filter by position
-        statcast_oaa_data = pb.statcast_outs_above_average(current_year, 3)
-        statcast_oaa_record = statcast_oaa_data[statcast_oaa_data['player_id'] == key_mlbam].to_dict('records')
-
          # Select specific attributes to return for batting, sprint speed, oaa stats
         fg_hitter_record_selected_attributes = ['G', 'AVG', 'OBP', 'SLG', 'OPS', 'WAR', 'HR', 'R', 'H', 'RBI', 'SB', 'wOBA', 'xwOBA', 'xBA', 'xSLG', 'EV', 'maxEV', 'Barrel%', 'HardHit%', 'Swing%', 'Z-Swing%', 'Contact%', 'WPA', 'BB%', 'K%', 'BB/K', 'BsR', 'SB% (pi)', 'wSB', 'ISO', 'BABIP']
         fg_selected_attribute_record = [
             {attr: hitter[attr] for attr in fg_hitter_record_selected_attributes if attr in hitter}
             for hitter in fg_hitter_record
         ]
-        statcast_sprint_speed_selected_attributes = ['sprint_speed']
+        statcast_sprint_speed_selected_attributes = ['sprint_speed', 'position']
         statcast_sprint_speed_record = [
             {attr: sprint_speed[attr] for attr in statcast_sprint_speed_selected_attributes if attr in sprint_speed}
             for sprint_speed in statcast_sprint_speed_record
         ]
+
+        # Get statcast data for fielding stats
+        # Need to get position for player to filter by position for outs above average function       
+        statcast_oaa_data = pb.statcast_outs_above_average(current_year, "All", 1)
+        statcast_oaa_record = statcast_oaa_data[statcast_oaa_data['player_id'] == key_mlbam].to_dict('records')
         statcast_oaa_selected_attributes = ['outs_above_average']
         statcast_oaa_record = [
             {attr: oaa[attr] for attr in statcast_oaa_selected_attributes if attr in oaa}
