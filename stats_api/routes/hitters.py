@@ -43,7 +43,7 @@ def get_hitter_stats_this_season():
         fg_hitter_record = fg_hitter_data[fg_hitter_data['IDfg'] == key_fangraphs].to_dict('records')
         
         if not fg_hitter_record:
-            return jsonify({'playerid': key_fangraphs, 'hitter_stats': None})
+            return jsonify({'hitter_stats': None})
 
         # Get statcast data for sprint speed
         statcast_sprint_speed_data = pb.statcast_sprint_speed(current_year)  
@@ -80,7 +80,7 @@ def get_hitter_stats_this_season():
         if statcast_oaa_record:
             hitter_stats.update(statcast_oaa_record[0])
 
-        return jsonify({'player_id': key_fangraphs, 'hitter_stats': hitter_stats})
+        return jsonify({'hitter_stats': hitter_stats})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -117,7 +117,7 @@ def get_hitter_stats_career():
         fg_hitter_record = fg_hitter_data[fg_hitter_data['IDfg'] == key_fangraphs].to_dict('records')
         
         if not fg_hitter_record:
-            return jsonify({'playerid': key_fangraphs, 'hitter_stats': None})
+            return jsonify({'career_stats': None})
 
          # Select specific attributes to return for batting, sprint speed, oaa stats
         fg_hitter_record_selected_attributes = ['G', 'AVG', 'OBP', 'SLG', 'OPS', 'WAR', 'HR', 'R', 'H', 'RBI', 'SB', 'wOBA', 'EV', 'maxEV', 'Barrel%', 'HardHit%', 'Swing%', 'Z-Swing%', 'Contact%', 'WPA', 'BB%', 'K%', 'BB/K', 'BsR', 'SB% (pi)', 'wSB', 'ISO', 'BABIP']

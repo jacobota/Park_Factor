@@ -85,7 +85,7 @@ def test():
         # Player biographical info based on bbref id
         people_df = lahman.people()
         people_record = people_df[people_df['bbrefID'] == bbref_id].to_dict('records')
-        people_record_selected_attributes = ['nameFirst', 'nameLast', 'birthCountry',  'weight', 'height', 'bats', 'throws']
+        people_record_selected_attributes = ['birthCountry',  'weight', 'height', 'bats', 'throws']
         people_selected_attribute_record = [
             {attr: hitter[attr] for attr in people_record_selected_attributes if attr in hitter}
             for hitter in people_record
@@ -95,7 +95,7 @@ def test():
         statcast_hitter_bio_data = pb.statcast_sprint_speed(current_year)  
         statcast_hitter_bio_record = statcast_hitter_bio_data[statcast_hitter_bio_data['player_id'] == mlbam_id].to_dict('records')      
 
-        statcast_hitter_bio_selected_attributes = ['age', 'team', 'position', 'team_id']
+        statcast_hitter_bio_selected_attributes = ['last_name, first_name', 'age', 'team', 'position', 'team_id']
         statcast_hitter_bio_record = [
             {attr: sprint_speed[attr] for attr in statcast_hitter_bio_selected_attributes if attr in sprint_speed}
             for sprint_speed in statcast_hitter_bio_record
