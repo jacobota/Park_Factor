@@ -44,7 +44,7 @@ def get_hitter_stats_this_season():
             {attr: hitter[attr] for attr in fg_hitter_record_selected_attributes if attr in hitter}
             for hitter in fg_hitter_record
         ]
-        statcast_sprint_speed_selected_attributes = ['sprint_speed', 'position']
+        statcast_sprint_speed_selected_attributes = ['sprint_speed']
         statcast_sprint_speed_record = [
             {attr: sprint_speed[attr] for attr in statcast_sprint_speed_selected_attributes if attr in sprint_speed}
             for sprint_speed in statcast_sprint_speed_record
@@ -73,6 +73,38 @@ def get_hitter_stats_this_season():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
-# TODO: Get Career Stats for Hitter
+@hitter_route.route('/api/hitter-stats/career')
+def get_hitter_stats_career():
+    try:
+        # Get hitter id from query parameters
+        key_fangraphs = request.args.get('fg-id')
+        start_year = request.args.get('start-year')
+        end_year = request.args.get('end-year')
+        
+        # Check if key_fangraphs is given or convert to int
+        if not key_fangraphs:
+            return jsonify({'error': 'Fangraph ID required'}), 400
+        else:
+            key_fangraphs = int(key_fangraphs)
 
-# TODO: Get Preview Stats for Hitter
+        # Ensure start_year and end_year are present
+        if not start_year or not end_year:
+            return jsonify({'error': 'Start year and end year are required'}), 400
+
+        # Get Fangraphs batting stats for the current season and filter by playerid
+        fg_hitter_data = pb.batting_stats(start_year, end_year, qual=1, ind=0);
+        fg_hitter_record = fg_hitter_data[fg_hitter_data['IDfg'] == key_fangraphs].to_dict('records')
+        
+        if not fg_hitter_record:
+            return jsonify({'playerid': key_fangraphs, 'hitter_stats': None})
+
+         # Select specific attributes to return for batting, sprint speed, oaa stats
+        fg_hitter_record_selected_attributes = ['G', 'AVG', 'OBP', 'SLG', 'OPS', 'WAR', 'HR', 'R', 'H', 'RBI', 'SB', 'wOBA', 'EV', 'maxEV', 'Barrel%', 'HardHit%', 'Swing%', 'Z-Swing%', 'Contact%', 'WPA', 'BB%', 'K%', 'BB/K', 'BsR', 'SB% (pi)', 'wSB', 'ISO', 'BABIP']
+        fg_selected_attribute_record = [
+            {attr: hitter[attr] for attr in fg_hitter_record_selected_attributes if attr in hitter}
+            for hitter in fg_hitter_record
+        ]
+
+        return jsonify({'career_stats': fg_selected_attribute_record})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
