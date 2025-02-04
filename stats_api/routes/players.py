@@ -58,7 +58,15 @@ def get_id_of_player():
         return jsonify(player_info)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-    
+
+"""Gather player biographical information based on bbref id and mlbam id
+
+Return: 
+    JSON: The player's biographical information
+Throws:
+    Exception: If an error occurs while getting player biographical information
+"""
+   
 @player_route.route('/api/player-bio')
 def test():
     try:

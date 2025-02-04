@@ -8,6 +8,17 @@ hitter_route = Blueprint('hitter_route', __name__)
 def home():
     return jsonify( {'message': 'Hitter API'} )
 
+"""Get hitter stats for this current season, if season hasn't started yet then the last
+season will be used. The stats will be returned for the player with the given playerid 
+from the query parameters. The playerid from fangraphs and baseball reference is required 
+to get the stats for the player.
+
+Return: 
+    JSON: The hitter stats for the current season
+Throws:
+    Exception: If an error occurs while getting player stats or playerids is not given
+"""
+
 @hitter_route.route('/api/hitter-stats/current-season')
 def get_hitter_stats_this_season():
     try:
@@ -72,6 +83,16 @@ def get_hitter_stats_this_season():
         return jsonify({'player_id': key_fangraphs, 'hitter_stats': hitter_stats})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+"""Get stats for a hitter for their career. The stats will be returned for the player with the given playerid
+and start year and last (previous) year of their career. The playerid from fangraphs is required to get the 
+stats.
+
+Return: 
+    JSON: The hitter stats for their career
+Throws:
+    Exception: If an error occurs while getting player stats or playerid, start year or end year is not given
+"""
 
 @hitter_route.route('/api/hitter-stats/career')
 def get_hitter_stats_career():
