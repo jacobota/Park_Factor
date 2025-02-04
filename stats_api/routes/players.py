@@ -63,29 +63,47 @@ def get_id_of_player():
 def test():
     try:
         # Get player-id from query parameters
-        player_id = request.args.get('player-id')
+        bbref_id = request.args.get('bbref-id')
+        mlbam_id = request.args.get('mlbam-id')
+
+        if not mlbam_id:
+            return jsonify({'error': 'Savant ID required'}), 400
+        else:
+            mlbam_id = int(mlbam_id)
+
+        current_year = pb.utils.most_recent_season()
         
         # Player biographical info based on bbref id
         people_df = lahman.people()
-        people_record = people_df[people_df['bbrefID'] == player_id].to_dict('records')
-        people_record_selected_attributes = ['nameFirst', 'nameLast', 'birthYear', 'birthMonth', 'birthDay', 'birthCountry',  'weight', 'height', 'bats', 'throws']
+        people_record = people_df[people_df['bbrefID'] == bbref_id].to_dict('records')
+        people_record_selected_attributes = ['nameFirst', 'nameLast', 'birthCountry',  'weight', 'height', 'bats', 'throws']
         people_selected_attribute_record = [
             {attr: hitter[attr] for attr in people_record_selected_attributes if attr in hitter}
             for hitter in people_record
         ]
 
+        #Grab team, position, age and team_id from statcast (out above average)
+        statcast_hitter_bio_data = pb.statcast_sprint_speed(current_year)  
+        statcast_hitter_bio_record = statcast_hitter_bio_data[statcast_hitter_bio_data['player_id'] == mlbam_id].to_dict('records')      
+
+        statcast_hitter_bio_selected_attributes = ['age', 'team', 'position', 'team_id']
+        statcast_hitter_bio_record = [
+            {attr: sprint_speed[attr] for attr in statcast_hitter_bio_selected_attributes if attr in sprint_speed}
+            for sprint_speed in statcast_hitter_bio_record
+        ]
+
+        # TODO: Pitcher Biographic Information
+
+        player_bio = {}
+        if people_selected_attribute_record:
+            player_bio.update(people_selected_attribute_record[0])
+        if statcast_hitter_bio_record:
+            player_bio.update(statcast_hitter_bio_record[0])
+
         # Player award info based on bbref id
         awards_df = lahman.awards_players()
-        awards_record = awards_df[awards_df['playerID'] == player_id].to_dict('records')
+        awards_record = awards_df[awards_df['playerID'] == bbref_id].to_dict('records')
 
-        df, pb_bio = pb.get_splits(player_id, player_info=True)
-
-        position = pb_bio['Position'] 
-        for person in people_selected_attribute_record:
-            person['Position'] = position
-
-        # TODO: Find Team
-
-        return jsonify({'player_bio': people_selected_attribute_record, 'awards': awards_record})
+        return jsonify({'player_bio': player_bio, 'awards': awards_record})
     except Exception as e:
         return jsonify({'error': str(e)}), 500

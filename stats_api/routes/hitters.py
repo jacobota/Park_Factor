@@ -39,11 +39,12 @@ def get_hitter_stats_this_season():
         statcast_sprint_speed_record = statcast_sprint_speed_data[statcast_sprint_speed_data['player_id'] == key_mlbam].to_dict('records')      
 
         # Get statcast data for fielding stats
+        # TODO: Need to get position for player to filter by position
         statcast_oaa_data = pb.statcast_outs_above_average(current_year, 3)
         statcast_oaa_record = statcast_oaa_data[statcast_oaa_data['player_id'] == key_mlbam].to_dict('records')
 
          # Select specific attributes to return for batting, sprint speed, oaa stats
-        fg_hitter_record_selected_attributes = ['Name', 'G', 'AVG', 'OBP', 'SLG', 'OPS', 'HR', 'R', 'H', 'RBI', 'SB', 'wOBA', 'xwOBA', 'xBA', 'xSLG', 'EV', 'maxEV', 'Barrel%', 'HardHit%', 'Swing%', 'Z-Swing%', 'Contact%', 'WPA', 'BB%', 'K%', 'BB/K', 'BsR', 'SB% (pi)', 'wSB', 'ISO', 'BABIP']
+        fg_hitter_record_selected_attributes = ['G', 'AVG', 'OBP', 'SLG', 'OPS', 'WAR', 'HR', 'R', 'H', 'RBI', 'SB', 'wOBA', 'xwOBA', 'xBA', 'xSLG', 'EV', 'maxEV', 'Barrel%', 'HardHit%', 'Swing%', 'Z-Swing%', 'Contact%', 'WPA', 'BB%', 'K%', 'BB/K', 'BsR', 'SB% (pi)', 'wSB', 'ISO', 'BABIP']
         fg_selected_attribute_record = [
             {attr: hitter[attr] for attr in fg_hitter_record_selected_attributes if attr in hitter}
             for hitter in fg_hitter_record
@@ -68,7 +69,10 @@ def get_hitter_stats_this_season():
         if statcast_oaa_record:
             hitter_stats.update(statcast_oaa_record[0])
 
-        return jsonify({'player_id': key_fangraphs, 'hitter_stats': hitter_stats })
+        return jsonify({'player_id': key_fangraphs, 'hitter_stats': hitter_stats})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+# TODO: Get Career Stats for Hitter
+
+# TODO: Get Preview Stats for Hitter
