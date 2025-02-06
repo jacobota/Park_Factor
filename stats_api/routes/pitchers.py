@@ -1,8 +1,19 @@
 from flask import Blueprint, jsonify, request
 import pybaseball as pb
+import numpy as np
 
 # Set up Blueprint for pitcher_route
 pitcher_route = Blueprint('pitcher_route', __name__)
+
+def replace_nan_with_none(data):
+    if isinstance(data, list):
+        return [replace_nan_with_none(item) for item in data]
+    elif isinstance(data, dict):
+        return {key: replace_nan_with_none(value) for key, value in data.items()}
+    elif isinstance(data, float) and np.isnan(data):
+        return None
+    else:
+        return data
 
 @pitcher_route.route('/')
 def home():
@@ -49,6 +60,8 @@ def get_pitcher_stats_this_season():
             {attr: pitcher[attr] for attr in fg_pitcher_record_selected_attributes if attr in pitcher}
             for pitcher in fg_pitcher_record
         ]
+
+        fg_pitcher_record = replace_nan_with_none(fg_pitcher_record)
         
         return jsonify({'pitcher_stats': fg_pitcher_record})
     except Exception as e:
@@ -93,6 +106,8 @@ def get_pitcher_stats_career():
             {attr: pitcher[attr] for attr in fg_pitcher_record_selected_attributes if attr in pitcher}
             for pitcher in fg_pitcher_record
         ]
+
+        fg_pitcher_record = replace_nan_with_none(fg_pitcher_record)
 
         return jsonify({'career_stats': fg_pitcher_record})
     except Exception as e:
