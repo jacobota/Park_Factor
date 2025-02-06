@@ -55,6 +55,8 @@ def get_id_of_player():
         # Call the playerid_lookup function from pybaseball and return player info
         playerid_results = pb.playerid_lookup(last, first)
         player_info = playerid_results.to_dict('records')
+        if not player_info:
+            return jsonify({'error': 'No player found'}), 404
         return jsonify(player_info)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
