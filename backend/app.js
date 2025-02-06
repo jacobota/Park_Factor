@@ -8,6 +8,7 @@ const verifiedPostsController = require('./src/controller/VerifiedPostsControlle
 const playerInformationController = require('./src/controller/PlayerInformationController');
 const hitterStatsController = require('./src/controller/HitterStatsController');
 const pitcherStatsController = require('./src/controller/PitcherStatsController');
+const teamInformationController = require('./src/controller/TeamInformationController');
 
 // Create the server on PORT 3000
 const app = express();
@@ -32,3 +33,4 @@ app.use('/verifiedPosts', verifiedPostsController);
 app.use('/players', playerInformationController);
 app.use('/hitters', hitterStatsController);
 app.use('/pitchers', pitcherStatsController);
+app.use('/teams', teamInformationController);
