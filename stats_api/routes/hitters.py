@@ -42,33 +42,31 @@ def get_hitter_stats_this_season():
         fg_hitter_data = pb.batting_stats(current_year, qual=1);
         fg_hitter_record = fg_hitter_data[fg_hitter_data['IDfg'] == key_fangraphs].to_dict('records')
         
-        if not fg_hitter_record:
-            return jsonify({'hitter_stats': None})
+        # Get Fangraphs fielding stats for the current season and filter by playerid
+        fg_fielding_data = pb.fielding_stats(current_year, qual=1);
+        fg_fielding_record = fg_fielding_data[fg_fielding_data['IDfg'] == key_fangraphs].to_dict('records')
 
         # Get statcast data for sprint speed
         statcast_sprint_speed_data = pb.statcast_sprint_speed(current_year)  
         statcast_sprint_speed_record = statcast_sprint_speed_data[statcast_sprint_speed_data['player_id'] == key_mlbam].to_dict('records')      
 
-         # Select specific attributes to return for batting, sprint speed, oaa stats
-        fg_hitter_record_selected_attributes = ['G', 'AVG', 'OBP', 'SLG', 'OPS', 'WAR', 'HR', 'R', 'H', 'RBI', 'SB', 'wOBA', 'xwOBA', 'xBA', 'xSLG', 'EV', 'maxEV', 'Barrel%', 'HardHit%', 'Swing%', 'Z-Swing%', 'Contact%', 'WPA', 'BB%', 'K%', 'BB/K', 'BsR', 'SB% (pi)', 'wSB', 'ISO', 'BABIP']
+         # Select specific attributes to return for batting, sprint speed, fielding stats
+        fg_hitter_record_selected_attributes = ['G', 'AVG', 'OBP', 'SLG', 'OPS', 'WAR', 'HR', 'R', 'H', 'RBI', 'SB', 'wOBA', 'xwOBA', 'xBA', 'xSLG', 'EV', 'maxEV', 'Barrel%', 'HardHit%', 'Swing%', 'Z-Swing%', 'Contact%', 'WPA', 'BB%', 'K%', 'BB/K', 'BsR', 'CS', 'wSB', 'ISO', 'BABIP']
         fg_selected_attribute_record = [
             {attr: hitter[attr] for attr in fg_hitter_record_selected_attributes if attr in hitter}
             for hitter in fg_hitter_record
         ]
+
+        fg_fielding_record_selected_attributes = ['FP', 'E', 'DRS', 'OAA', 'UZR']
+        fg_fielding_record = [
+            {attr: fielding[attr] for attr in fg_fielding_record_selected_attributes if attr in fielding}
+            for fielding in fg_fielding_record
+        ]
+
         statcast_sprint_speed_selected_attributes = ['sprint_speed']
         statcast_sprint_speed_record = [
             {attr: sprint_speed[attr] for attr in statcast_sprint_speed_selected_attributes if attr in sprint_speed}
             for sprint_speed in statcast_sprint_speed_record
-        ]
-
-        # Get statcast data for fielding stats
-        # Need to get position for player to filter by position for outs above average function       
-        statcast_oaa_data = pb.statcast_outs_above_average(current_year, "All", 1)
-        statcast_oaa_record = statcast_oaa_data[statcast_oaa_data['player_id'] == key_mlbam].to_dict('records')
-        statcast_oaa_selected_attributes = ['outs_above_average']
-        statcast_oaa_record = [
-            {attr: oaa[attr] for attr in statcast_oaa_selected_attributes if attr in oaa}
-            for oaa in statcast_oaa_record
         ]
 
         #combine all stats into one
@@ -77,8 +75,9 @@ def get_hitter_stats_this_season():
             hitter_stats.update(fg_selected_attribute_record[0])
         if statcast_sprint_speed_record:
             hitter_stats.update(statcast_sprint_speed_record[0])
-        if statcast_oaa_record:
-            hitter_stats.update(statcast_oaa_record[0])
+        if fg_fielding_record:
+            hitter_stats.update(fg_fielding_record[0])
+        
 
         return jsonify({'hitter_stats': hitter_stats})
     except Exception as e:
@@ -120,7 +119,7 @@ def get_hitter_stats_career():
             return jsonify({'career_stats': None})
 
          # Select specific attributes to return for batting, sprint speed, oaa stats
-        fg_hitter_record_selected_attributes = ['G', 'AVG', 'OBP', 'SLG', 'OPS', 'WAR', 'HR', 'R', 'H', 'RBI', 'SB', 'wOBA', 'EV', 'maxEV', 'Barrel%', 'HardHit%', 'Swing%', 'Z-Swing%', 'Contact%', 'WPA', 'BB%', 'K%', 'BB/K', 'BsR', 'SB% (pi)', 'wSB', 'ISO', 'BABIP']
+        fg_hitter_record_selected_attributes = ['G', 'AVG', 'OBP', 'SLG', 'OPS', 'WAR', 'HR', 'R', 'H', 'RBI', 'SB', 'wOBA', 'EV', 'maxEV', 'Barrel%', 'HardHit%', 'Swing%', 'Z-Swing%', 'Contact%', 'WPA', 'BB%', 'K%', 'BB/K', 'BsR', 'CS', 'wSB', 'ISO', 'BABIP']
         fg_selected_attribute_record = [
             {attr: hitter[attr] for attr in fg_hitter_record_selected_attributes if attr in hitter}
             for hitter in fg_hitter_record
