@@ -5,7 +5,8 @@ const { logger } = require("./src/util/logger");
 // Routers (TODO)
 const usersController = require('./src/controller/UsersController');
 const verifiedPostsController = require('./src/controller/VerifiedPostsController');
-const playerInformationController = require('./src/controller/PlayerInformation');
+const playerInformationController = require('./src/controller/PlayerInformationController');
+const hitterStatsController = require('./src/controller/HitterStatsController');
 
 // Create the server on PORT 3000
 const app = express();
@@ -28,3 +29,4 @@ app.use((req, res, next) => {
 app.use('/users', usersController);
 app.use('/verifiedPosts', verifiedPostsController);
 app.use('/players', playerInformationController);
+app.use('/hitters', hitterStatsController);
