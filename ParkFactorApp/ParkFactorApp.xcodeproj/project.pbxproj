@@ -29,9 +29,22 @@
 		CE123FB62D72E68F0044B888 /* ParkFactorAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ParkFactorAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		CE123FDB2D731A040044B888 /* Exceptions for "ParkFactorApp" folder in "ParkFactorApp" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = CE123F9B2D72E68D0044B888 /* ParkFactorApp */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		CE123F9E2D72E68D0044B888 /* ParkFactorApp */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				CE123FDB2D731A040044B888 /* Exceptions for "ParkFactorApp" folder in "ParkFactorApp" target */,
+			);
 			path = ParkFactorApp;
 			sourceTree = "<group>";
 		};
@@ -399,6 +412,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"ParkFactorApp/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ParkFactorApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Park Factor";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.sports";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -434,6 +448,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"ParkFactorApp/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ParkFactorApp/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Park Factor";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.sports";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
