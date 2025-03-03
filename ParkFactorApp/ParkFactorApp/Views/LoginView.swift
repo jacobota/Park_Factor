@@ -7,12 +7,6 @@
 
 import SwiftUI
 
-// Codable struct to hold username and password
-struct UserLoginFields : Codable {
-    var username: String = ""
-    var password: String = ""
-}
-
 struct LoginView: View {
     @Binding var isLoggedIn: Bool
     @AppStorage("accessToken") private var accessToken: String?
@@ -169,6 +163,7 @@ struct LoginView: View {
             
             // handle the result
             if let httpResponse = res as? HTTPURLResponse {
+                // If the result of the http response is a 400 then the message of what went wrong will be returned and placed in errorMessage
                 if httpResponse.statusCode == 400 {
                     let decodedNodeError = try JSONDecoder().decode(NodeError.self, from: data)
                     errorMessage = decodedNodeError.message
@@ -177,6 +172,7 @@ struct LoginView: View {
                 }
             }
             
+            // If the result of the http response goes through successfully, decode the response to a codable UserResponse
             let decodedUserResponse = try JSONDecoder().decode(UserResponse.self, from: data)
             savedUser.user = decodedUserResponse.user
             let token = decodedUserResponse.token

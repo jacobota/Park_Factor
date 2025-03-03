@@ -7,11 +7,19 @@
 
 import Foundation
 
+// Codable struct to hold username and password
+struct UserLoginFields : Codable {
+    var username: String = ""
+    var password: String = ""
+}
+
+// Codable struct for user response when calling http login
 struct UserResponse: Codable {
     let user: User
     let token: String
 }
 
+// Codable Struct of a User object
 struct User: Codable {
     let password: String
     let admin: Bool
@@ -23,6 +31,7 @@ struct User: Codable {
     let verified: Bool
 }
 
+// This is the main way of saving a users information to User Defaults
 @Observable
 class SavedUser {
     var user: User {
