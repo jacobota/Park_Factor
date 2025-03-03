@@ -9,7 +9,20 @@ import SwiftUI
 
 struct FavoriteTeamsView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            Color.parkFactorSecondary.ignoresSafeArea()
+            VStack {
+                Section {
+                    Text("Select Favorite Teams")
+                        .font(.parkFactorFontTitle)
+                        .foregroundStyle(Color.white)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.white)
+                }
+                .padding(.bottom, 20)
+            }
+        }
+        .navigationBarBackButtonHidden(true)
     }
 }
 

@@ -26,7 +26,7 @@ function generateToken(userData) {
         },
         secretKey,
         {
-            expiresIn: '30m'
+            expiresIn: '100y'
         }
     );
     return jwtToken;

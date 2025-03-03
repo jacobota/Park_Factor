@@ -17,7 +17,7 @@ struct HomeView: View {
         ZStack {
             Color.parkFactorSecondary.ignoresSafeArea()
             VStack {
-                Text("\(savedUser.user.admin)")
+                Text("\(savedUser.user.username)")
                     .font(.largeTitle)
                     .foregroundColor(.parkFactorPrimary)
                 
