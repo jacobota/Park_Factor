@@ -14,21 +14,23 @@ struct ContentView: View {
     @State private var isLoggedIn = false
     
     var body: some View {
-        ZStack {
-            Color.parkFactorSecondary.ignoresSafeArea()
-            if isLoading {
-                LoadingScreenView()
-                    .onAppear {
-                        checkLoginStatus()
-                    }
-                    .transition(.opacity)
-            } else {
-                if !isLoggedIn {
-                    LoginView(isLoggedIn: $isLoggedIn, savedUser: savedUser)
+        NavigationStack {
+            ZStack {
+                Color.parkFactorSecondary.ignoresSafeArea()
+                if isLoading {
+                    LoadingScreenView()
+                        .onAppear {
+                            checkLoginStatus()
+                        }
                         .transition(.opacity)
                 } else {
-                    HomeView(isLoggedIn: $isLoggedIn, savedUser: savedUser)
-                        .transition(.opacity)
+                    if !isLoggedIn {
+                        LoginView(isLoggedIn: $isLoggedIn, savedUser: savedUser)
+                            .transition(.opacity)
+                    } else {
+                        HomeView(isLoggedIn: $isLoggedIn, savedUser: savedUser)
+                            .transition(.opacity)
+                    }
                 }
             }
         }
@@ -38,7 +40,7 @@ struct ContentView: View {
     
     private func checkLoginStatus() {
         // Checks if the value in accessToken is not nil with a delay
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             if let _ = accessToken {
                 isLoggedIn = true
             }

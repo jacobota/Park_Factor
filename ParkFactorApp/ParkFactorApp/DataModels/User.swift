@@ -13,8 +13,15 @@ struct UserLoginFields : Codable {
     var password: String = ""
 }
 
+// Codable struct to hold username, email and password
+struct UserSignupFields : Codable {
+    var username: String = ""
+    var email: String = ""
+    var password: String = ""
+}
+
 // Codable struct for user response when calling http login
-struct UserResponse: Codable {
+struct UserLoginResponse: Codable {
     let user: User
     let token: String
 }
@@ -29,6 +36,12 @@ struct User: Codable {
     let email: String
     let favoriteTeams: [String]
     let verified: Bool
+}
+
+// Codable struct for user response when calling the http register
+struct UserRegisterResponse: Codable {
+    let message: String
+    let user: User
 }
 
 // This is the main way of saving a users information to User Defaults

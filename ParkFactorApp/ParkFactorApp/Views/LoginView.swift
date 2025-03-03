@@ -23,8 +23,7 @@ struct LoginView: View {
     }
     
     var body: some View {
-        NavigationStack {
-            ZStack {
+        ZStack {
                 Color.parkFactorSecondary.ignoresSafeArea()
                 VStack {
                     Section {
@@ -125,7 +124,7 @@ struct LoginView: View {
                         HStack {
                             Text("Don't have an account?")
                                 .foregroundStyle(Color.white)
-                            NavigationLink(destination: SignupView()) {
+                            NavigationLink(destination: SignupView(isLoggedIn: $isLoggedIn, savedUser: savedUser)) {
                                 Text("Sign up")
                                     .foregroundColor(Color.parkFactorPrimary)
                             }
@@ -134,7 +133,6 @@ struct LoginView: View {
                     }
                     .padding(.top, 30)
                 }
-            }
             .navigationTitle("Login")
             .navigationBarHidden(true)
         }
@@ -145,7 +143,7 @@ struct LoginView: View {
     }
     
     func login() async {
-        // Network request to get user information and set the token to Env
+        // Network request to login a user
         let baseUrl = Env.expressBaseURL
         guard let encoded = try? JSONEncoder().encode(userLoginFields) else {
             print("Failed to encode userLoginFields")
@@ -173,13 +171,14 @@ struct LoginView: View {
             }
             
             // If the result of the http response goes through successfully, decode the response to a codable UserResponse
-            let decodedUserResponse = try JSONDecoder().decode(UserResponse.self, from: data)
-            savedUser.user = decodedUserResponse.user
-            let token = decodedUserResponse.token
+            let decodedUserLoginResponse = try JSONDecoder().decode(UserLoginResponse.self, from: data)
+            savedUser.user = decodedUserLoginResponse.user
+            let token = decodedUserLoginResponse.token
             accessToken = token
             isLoggedIn = true
         } catch {
-            print("Failure: \(error.localizedDescription)")
+            errorMessage = error.localizedDescription
+            errorShow = true
         }
     }
 }
