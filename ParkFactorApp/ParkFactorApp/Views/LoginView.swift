@@ -7,11 +7,23 @@
 
 import SwiftUI
 
+// Codable struct to hold username and password
+struct UserLoginFields : Codable {
+    var username: String = ""
+    var password: String = ""
+}
+
 struct LoginView: View {
-    @State private var username: String = ""
-    @State private var password: String = ""
+    @Binding var isLoggedIn: Bool
+    @AppStorage("accessToken") private var accessToken: String?
+    @State private var userLoginFields = UserLoginFields()
+    @State private var errorMessage: String = ""
+    @State private var errorShow: Bool = false
     @FocusState private var focus: FocusedField?
     
+    var savedUser: SavedUser
+    
+    // enum to focus on username or password
     enum FocusedField {
         case username, password
     }
@@ -35,13 +47,19 @@ struct LoginView: View {
                     }
                     
                     Section {
+                        Text("\(errorMessage)")
+                            .font(.parkFactorFontText)
+                            .foregroundStyle(Color.red)
+                            .multilineTextAlignment(.center)
+                            .opacity(errorShow ? 1 : 0)
+                        
                         VStack {
                             VStack(alignment: .leading) {
                                 Text("Username")
                                     .foregroundColor(focus == .username ? Color.parkFactorPrimary : Color.white)
                                     .font(.parkFactorFontSubtitle)
                                     .opacity(focus == .username ? 1 : 0.6)
-                                TextField("", text: $username)
+                                TextField("", text: $userLoginFields.username)
                                     .keyboardType(.default)
                                     .padding()
                                     .background(Color.black)
@@ -60,7 +78,7 @@ struct LoginView: View {
                                     .foregroundColor(focus == .password ? Color.parkFactorPrimary : Color.white)
                                     .font(.parkFactorFontSubtitle)
                                     .opacity(focus == .password ? 1 : 0.6)
-                                SecureField("", text: $password)
+                                SecureField("", text: $userLoginFields.password)
                                     .keyboardType(.default)
                                     .padding()
                                     .background(Color.black)
@@ -84,7 +102,9 @@ struct LoginView: View {
                         }
                         
                         Button(action: {
-                            print("\(username) with a password of \(password)")
+                            Task {
+                                await login()
+                            }
                         }) {
                             Text("Login")
                                 .font(.parkFactorFontSubtitle)
@@ -120,19 +140,62 @@ struct LoginView: View {
                     }
                     .padding(.top, 30)
                 }
-                .navigationTitle("Login")
-                .navigationBarHidden(true)
             }
+            .navigationTitle("Login")
+            .navigationBarHidden(true)
         }
     }
     
     var isFormValid: Bool {
-        !username.isEmpty && !password.isEmpty
+        !userLoginFields.username.isEmpty && !userLoginFields.password.isEmpty
     }
     
-    // TODO: Create a function for what happens when the button is pressed, try logging in user
+    func login() async {
+        // Network request to get user information and set the token to Env
+        let baseUrl = Env.expressBaseURL
+        guard let encoded = try? JSONEncoder().encode(userLoginFields) else {
+            print("Failed to encode userLoginFields")
+            return
+        }
+        
+        //create the url
+        let url = URL(string: "\(baseUrl)/users/login")!
+        var request = URLRequest(url: url)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "POST"
+        
+        do {
+            let (data, res) = try await URLSession.shared.upload(for: request, from: encoded)
+            
+            // handle the result
+            if let httpResponse = res as? HTTPURLResponse {
+                if httpResponse.statusCode == 400 {
+                    let decodedNodeError = try JSONDecoder().decode(NodeError.self, from: data)
+                    errorMessage = decodedNodeError.message
+                    errorShow = true
+                    return
+                }
+            }
+            
+            let decodedUserResponse = try JSONDecoder().decode(UserResponse.self, from: data)
+            savedUser.user = decodedUserResponse.user
+            let token = decodedUserResponse.token
+            accessToken = token
+            isLoggedIn = true
+        } catch {
+            print("Failure: \(error.localizedDescription)")
+        }
+    }
 }
 
 #Preview {
-    LoginView()
+    LoginViewPreviewWrapper()
+}
+
+struct LoginViewPreviewWrapper: View {
+    @State private var isLoggedIn = false
+    
+    var body: some View {
+        LoginView(isLoggedIn: $isLoggedIn, savedUser: SavedUser())
+    }
 }

@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct ContentView: View {
+    @AppStorage("accessToken") private var accessToken: String?
+    @State private var savedUser = SavedUser()
     @State private var isLoading = true
     @State private var isLoggedIn = false
-    @State private var isNextView = false
     
     var body: some View {
         ZStack {
@@ -18,28 +19,31 @@ struct ContentView: View {
             if isLoading {
                 LoadingScreenView()
                     .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                            // TODO: Check if the user is logged in
-                            isLoading = false
-                            isNextView.toggle()
-                        }
-                        
+                        checkLoginStatus()
                     }
                     .transition(.opacity)
             } else {
-                if isNextView {
-                    if !isLoggedIn {
-                        LoginView()
-                            .transition(.opacity)
-                    }
-                    else {
-                        HomeView()
-                            .transition(.opacity)
-                    }
+                if !isLoggedIn {
+                    LoginView(isLoggedIn: $isLoggedIn, savedUser: savedUser)
+                        .transition(.opacity)
+                } else {
+                    HomeView(isLoggedIn: $isLoggedIn, savedUser: savedUser)
+                        .transition(.opacity)
                 }
             }
         }
-        .animation(.linear(duration: 1), value: isNextView)
+        .animation(.linear(duration: 1), value: isLoading)
+        .animation(.linear(duration: 1), value: isLoggedIn)
+    }
+    
+    private func checkLoginStatus() {
+        // Checks if the value in accessToken is not nil with a delay
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            if let _ = accessToken {
+                isLoggedIn = true
+            }
+            isLoading = false
+        }
     }
 }
 

@@ -3,3 +3,4 @@ backend/node_modules/
 *.env
 stats_api/venv/
 *.DS_Store
+*Env.plist
