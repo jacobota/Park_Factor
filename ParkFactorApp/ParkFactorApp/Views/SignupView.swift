@@ -216,10 +216,48 @@ struct SignupView: View {
                 }
             }
             
-            // If the result of the http response goes through successfully, decode the response to a codable UserResponse
+            // If the result of the http response goes through successfully, decode the response to a codable UserRegisterResponse
             let decodedUserRegisterResponse = try JSONDecoder().decode(UserRegisterResponse.self, from: data)
-            savedUser.user = decodedUserRegisterResponse.user
-            isRegistered = true
+           
+            userLoginFields.username = decodedUserRegisterResponse.user.username
+            userLoginFields.password = confirmPassword
+            
+            // Now login the user so they have permissions to add favorite teams and players
+            guard let encoded = try? JSONEncoder().encode(userLoginFields) else {
+                print("Failed to encode userLoginFields")
+                return
+            }
+            
+            //create the url
+            let loginUrl = URL(string: "\(baseUrl)/users/login")!
+            request = URLRequest(url: loginUrl)
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.httpMethod = "POST"
+            
+            do {
+                let (data, res) = try await URLSession.shared.upload(for: request, from: encoded)
+                
+                // handle the result
+                if let httpResponse = res as? HTTPURLResponse {
+                    // If the result of the http response is a 400 then the message of what went wrong will be returned and placed in errorMessage
+                    if httpResponse.statusCode == 400 {
+                        let decodedNodeError = try JSONDecoder().decode(NodeError.self, from: data)
+                        errorMessage = decodedNodeError.message
+                        errorShow = true
+                        return
+                    }
+                }
+                
+                // If the result of the http response goes through successfully, decode the response to a codable UserResponse
+                let decodedUserLoginResponse = try JSONDecoder().decode(UserLoginResponse.self, from: data)
+                savedUser.user = decodedUserLoginResponse.user
+                let token = decodedUserLoginResponse.token
+                accessToken = token
+                isRegistered = true
+            } catch {
+                errorMessage = error.localizedDescription
+                errorShow = true
+            }
         } catch {
             errorMessage = error.localizedDescription
             errorShow = true

@@ -33,6 +33,7 @@ struct ContentView: View {
                     }
                 }
             }
+            .navigationBarBackButtonHidden(true)
         }
         .animation(.linear(duration: 1), value: isLoading)
         .animation(.linear(duration: 1), value: isLoggedIn)

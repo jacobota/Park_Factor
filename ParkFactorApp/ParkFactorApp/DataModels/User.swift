@@ -22,20 +22,20 @@ struct UserSignupFields : Codable {
 
 // Codable struct for user response when calling http login
 struct UserLoginResponse: Codable {
-    let user: User
-    let token: String
+    var user: User
+    var token: String
 }
 
 // Codable Struct of a User object
 struct User: Codable {
-    let password: String
-    let admin: Bool
-    let favoritePlayers: [String]
-    let profilePicture: String
-    let username: String
-    let email: String
-    let favoriteTeams: [String]
-    let verified: Bool
+    var password: String
+    var admin: Bool
+    var favoritePlayers: [String]
+    var profilePicture: String
+    var username: String
+    var email: String
+    var favoriteTeams: [String]
+    var verified: Bool
 }
 
 // Codable struct for user response when calling the http register
