@@ -162,7 +162,7 @@ struct LoginView: View {
             // handle the result
             if let httpResponse = res as? HTTPURLResponse {
                 // If the result of the http response is a 400 then the message of what went wrong will be returned and placed in errorMessage
-                if httpResponse.statusCode == 400 {
+                if httpResponse.statusCode != 200 {
                     let decodedNodeError = try JSONDecoder().decode(NodeError.self, from: data)
                     errorMessage = decodedNodeError.message
                     errorShow = true
