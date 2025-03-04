@@ -27,7 +27,7 @@ struct SignupView: View {
     
     var body: some View {
         if isRegistered {
-            FavoriteTeamsView()
+            FavoriteTeamsView(isLoggedIn: $isLoggedIn, savedUser: savedUser)
                 .transition(.opacity)
                 .animation(.linear(duration: 1), value: isRegistered)
         } else {
