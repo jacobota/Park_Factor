@@ -141,6 +141,7 @@ struct FavoriteTeamsView: View {
                         }
                     }
                 }
+                .padding()
             }
         }
     }

@@ -30,10 +30,10 @@ struct ContentView: View {
                     } else {
                         HomeView(isLoggedIn: $isLoggedIn, savedUser: savedUser)
                             .transition(.opacity)
+                            .navigationBarBackButtonHidden(true)
                     }
                 }
             }
-            .navigationBarBackButtonHidden(true)
         }
         .animation(.linear(duration: 1), value: isLoading)
         .animation(.linear(duration: 1), value: isLoggedIn)
