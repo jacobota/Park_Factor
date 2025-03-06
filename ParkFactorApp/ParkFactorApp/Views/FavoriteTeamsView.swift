@@ -25,7 +25,7 @@ struct TeamCard: View {
                 .background(Color.gray.opacity(0.75))
             
             Text(teamName)
-                .font(.parkFactorFontSubtitle)
+                .font(.parkFactorFontSubtitleArchivo)
                 .foregroundColor(.black)
                 .multilineTextAlignment(.center)
                 .padding()
@@ -98,7 +98,7 @@ struct FavoriteTeamsView: View {
                             .fontWeight(.bold)
                             .foregroundStyle(.white)
                     }
-                    .padding(.bottom, 40)
+                    .padding(.bottom, 30)
                     
                     Text("\(errorMessage)")
                         .font(.parkFactorFontText)
@@ -168,7 +168,8 @@ struct FavoriteTeamsView: View {
         // call the network request to save teams to database
         let baseUrl = Env.expressBaseURL
         guard let encoded = try? JSONEncoder().encode(favoriteTeamsRequest) else {
-            print("Failed to encode userLoginFields")
+            errorMessage = "Failed to encode favoriteTeams"
+            errorShow = true
             return
         }
         

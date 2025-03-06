@@ -55,7 +55,7 @@ struct SignupView: View {
                             VStack(alignment: .leading) {
                                 Text("Username")
                                     .foregroundColor(focus == .username ? Color.parkFactorPrimary : Color.white)
-                                    .font(.parkFactorFontSubtitle)
+                                    .font(.parkFactorFontSubtitleArchivo)
                                     .opacity(focus == .username ? 1 : 0.6)
                                 TextField("", text: $userSignupFields.username)
                                     .keyboardType(.default)
@@ -75,7 +75,7 @@ struct SignupView: View {
                             VStack(alignment: .leading) {
                                 Text("Email")
                                     .foregroundColor(focus == .email ? Color.parkFactorPrimary : Color.white)
-                                    .font(.parkFactorFontSubtitle)
+                                    .font(.parkFactorFontSubtitleArchivo)
                                     .opacity(focus == .email ? 1 : 0.6)
                                 TextField("", text: $userSignupFields.email)
                                     .keyboardType(.default)
@@ -96,7 +96,7 @@ struct SignupView: View {
                             VStack(alignment: .leading) {
                                 Text("Password")
                                     .foregroundColor(focus == .password ? Color.parkFactorPrimary : Color.white)
-                                    .font(.parkFactorFontSubtitle)
+                                    .font(.parkFactorFontSubtitleArchivo)
                                     .opacity(focus == .password ? 1 : 0.6)
                                 SecureField("", text: $userSignupFields.password)
                                     .keyboardType(.default)
@@ -117,7 +117,7 @@ struct SignupView: View {
                             VStack(alignment: .leading) {
                                 Text("Confirm Password")
                                     .foregroundColor(focus == .confirmPassword ? Color.parkFactorPrimary : Color.white)
-                                    .font(.parkFactorFontSubtitle)
+                                    .font(.parkFactorFontSubtitleArchivo)
                                     .opacity(focus == .confirmPassword ? 1 : 0.6)
                                 SecureField("", text: $confirmPassword)
                                     .keyboardType(.default)
@@ -153,7 +153,7 @@ struct SignupView: View {
                             }
                         }) {
                             Text("Sign up")
-                                .font(.parkFactorFontSubtitle)
+                                .font(.parkFactorFontSubtitleArchivo)
                                 .foregroundColor(isFormValid ? Color.parkFactorSecondary : .gray)
                                 .containerRelativeFrame(.horizontal) { size, axis in
                                     size * 0.4

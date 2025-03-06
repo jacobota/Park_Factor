@@ -50,7 +50,7 @@ struct LoginView: View {
                             VStack(alignment: .leading) {
                                 Text("Username")
                                     .foregroundColor(focus == .username ? Color.parkFactorPrimary : Color.white)
-                                    .font(.parkFactorFontSubtitle)
+                                    .font(.parkFactorFontSubtitleArchivo)
                                     .opacity(focus == .username ? 1 : 0.6)
                                 TextField("", text: $userLoginFields.username)
                                     .keyboardType(.default)
@@ -69,7 +69,7 @@ struct LoginView: View {
                             VStack(alignment: .leading) {
                                 Text("Password")
                                     .foregroundColor(focus == .password ? Color.parkFactorPrimary : Color.white)
-                                    .font(.parkFactorFontSubtitle)
+                                    .font(.parkFactorFontSubtitleArchivo)
                                     .opacity(focus == .password ? 1 : 0.6)
                                 SecureField("", text: $userLoginFields.password)
                                     .keyboardType(.default)
@@ -100,7 +100,7 @@ struct LoginView: View {
                             }
                         }) {
                             Text("Login")
-                                .font(.parkFactorFontSubtitle)
+                                .font(.parkFactorFontSubtitleArchivo)
                                 .foregroundColor(isFormValid ? Color.parkFactorSecondary : .gray)
                                 .containerRelativeFrame(.horizontal) { size, axis in
                                     size * 0.4

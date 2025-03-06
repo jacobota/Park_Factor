@@ -28,7 +28,7 @@ struct PlayerCard: View {
                 .background(Color.gray.opacity(0.75))
             
             Text("\(player.fullName)")
-                .font(.parkFactorFontSubtitle)
+                .font(.parkFactorFontSubtitleArchivo)
                 .foregroundColor(.black)
                 .multilineTextAlignment(.center)
                 .padding()
@@ -46,17 +46,49 @@ struct PlayerCard: View {
 
 struct FavoritePlayersView: View {
     @Binding var isLoggedIn: Bool
+    @AppStorage("accessToken") private var accessToken: String?
     @State private var didSelectPlayers: Bool = false
     @State private var errorMessage: String = ""
     @State private var errorShow: Bool = false
     @State private var players: [Player] = []
-    @State private var selectedPlayers: [UUID] = []
+    @State private var selectedPlayers: [Player] = []
+    @State private var searchText: String = ""
+    @State private var searchIsFocused: Bool = false
     
     var savedUser: SavedUser
     
-    //    let top30PlayerNames: [String] = [
-    //        // Add the names of the top 30 players
-    //    ]
+    let trendingPlayers: [String] = [
+        "Shohei Ohtani",
+        "Aaron Judge",
+        "Bobby Witt",
+        "Juan Soto",
+        "Mookie Betts",
+        "Francisco Lindor",
+        "Yordan Álvarez",
+        "Freddie Freeman",
+        "José Ramírez",
+        "Gunnar Henderson",
+        "Tarik Skubal",
+        "Bryce Harper",
+        "Vladimir Guerrero",
+        "Kyle Tucker",
+        "Paul Skenes",
+        "Ronald Acuña",
+        "Corey Seager",
+        "Ketel Marte",
+        "Zack Wheeler",
+        "Chris Sale",
+        "Rafael Devers",
+        "Fernando Tatís",
+        "Julio Rodríguez",
+        "Jackson Merrill",
+        "Corbin Burnes",
+        "Gerrit Cole",
+        "Jarren Duran",
+        "William Contreras",
+        "Manny Machado",
+        "José Altuve"
+    ]
     
     var body: some View {
         if didSelectPlayers {
@@ -72,7 +104,7 @@ struct FavoritePlayersView: View {
                             .fontWeight(.bold)
                             .foregroundStyle(.white)
                     }
-                    .padding(.bottom, 40)
+                    .padding(.bottom, 30)
                     
                     Text("\(errorMessage)")
                         .font(.parkFactorFontText)
@@ -80,18 +112,34 @@ struct FavoritePlayersView: View {
                         .multilineTextAlignment(.center)
                         .opacity(errorShow ? 1 : 0)
                     
-                    playersListView
+                    PlayerSearchBarView(searchText: $searchText, searchIsFocused: $searchIsFocused)
+                    
+                    Section {
+                        ScrollView {
+                            if searchIsFocused {
+                                searchFilteredPlayersListView
+                            } else {
+                                if !selectedPlayers.isEmpty {
+                                    selectedPlayersListView
+                                }
+                                
+                                trendingPlayersListView
+                            }
+                        }
+                        .padding(.top, 20)
+                    }
                     
                     Section {
                         Button(action: {
                             Task {
-                                
+                                await saveFavoritePlayers()
                             }
                         }) {
                             Text("Next")
                                 .font(.parkFactorFontTitle)
                                 .foregroundColor(Color.parkFactorPrimary)
                         }
+                        .padding(.top, 20)
                     }
                 }
                 .padding()
@@ -100,18 +148,87 @@ struct FavoritePlayersView: View {
         }
     }
     
-    private var playersListView: some View {
+    private var searchFilteredPlayersListView: some View {
         Section {
+            Section {
+                Text("Search Results")
+                    .font(.parkFactorFontSubtitleNorwester)
+                    .foregroundStyle(Color.white)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.white)
+            }
             ScrollView {
                 LazyVStack(spacing: 10) {
-                    ForEach(players) { player in
+                    if !searchText.isEmpty {
+                        ForEach((players.filter { $0.fullName.hasPrefix(searchText.capitalized) })) { player in
+                            let isSelected = selectedPlayers.contains(where: { $0.id == player.id })
+                            PlayerCard(
+                                player: player,
+                                isSelected: isSelected,
+                                onSelect: {
+                                    togglePlayerSelection(player: player)
+                                }
+                            )
+                            .animation(.linear(duration: 0.25), value: isSelected)
+                        }
+                    }
+                }
+                .padding()
+            }
+        }
+        .padding()
+    }
+    
+    private var selectedPlayersListView: some View {
+        Section {
+            Section {
+                Text("Selected Players")
+                    .font(.parkFactorFontSubtitleNorwester)
+                    .foregroundStyle(Color.white)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.white)
+            }
+            ScrollView {
+                LazyVStack(spacing: 10) {
+                    ForEach(selectedPlayers) { player in
+                        let isSelected = selectedPlayers.contains(where: { $0.id == player.id })
                         PlayerCard(
                             player: player,
-                            isSelected: selectedPlayers.contains(player.id),
+                            isSelected: isSelected,
                             onSelect: {
                                 togglePlayerSelection(player: player)
                             }
                         )
+                        .animation(.linear(duration: 0.25), value: isSelected)
+                    }
+                }
+                .padding()
+            }
+        }
+        .padding()
+    }
+    
+    private var trendingPlayersListView: some View {
+        Section {
+            Section {
+                Text("Top 30 Right Now")
+                    .font(.parkFactorFontSubtitleNorwester)
+                    .foregroundStyle(Color.white)
+                    .fontWeight(.bold)
+                    .foregroundStyle(.white)
+            }
+            ScrollView {
+                LazyVStack(spacing: 10) {
+                    ForEach(players.filter { trendingPlayers.contains($0.fullName) }) { player in
+                        let isSelected = selectedPlayers.contains(where: { $0.id == player.id })
+                        PlayerCard(
+                            player: player,
+                            isSelected: isSelected,
+                            onSelect: {
+                                togglePlayerSelection(player: player)
+                            }
+                        )
+                        .animation(.linear(duration: 0.25), value: isSelected)
                     }
                 }
                 .padding()
@@ -167,7 +284,7 @@ struct FavoritePlayersView: View {
             do {
                 let decodedPlayers = try JSONDecoder().decode([Player].self, from: data)
                 DispatchQueue.main.async {
-                   self.players = decodedPlayers
+                   players = decodedPlayers
                 }
             } catch let error {
                 DispatchQueue.main.async {
@@ -181,10 +298,53 @@ struct FavoritePlayersView: View {
     }
     
     func togglePlayerSelection(player: Player) {
-        if let index = selectedPlayers.firstIndex(of: player.id) {
+        if let index = selectedPlayers.firstIndex(where: { $0.id == player.id }) {
             selectedPlayers.remove(at: index)
         } else {
-            selectedPlayers.append(player.id)
+            selectedPlayers.append(player)
+        }
+    }
+    
+    func saveFavoritePlayers() async {
+        // save the players to UserDefaults
+        savedUser.user.favoritePlayers = selectedPlayers
+        
+        // save the players to a Codable to be used by request
+        var favoritePlayersRequest: FavoritePlayersStruct = FavoritePlayersStruct()
+        favoritePlayersRequest.favoritePlayers = selectedPlayers
+        
+        // call the network request to save players to database
+        let baseUrl = Env.expressBaseURL
+        guard let encoded = try? JSONEncoder().encode(favoritePlayersRequest) else {
+            errorMessage = "Failed to encode Favorite Players"
+            errorShow = true
+            return
+        }
+        
+        //create the url
+        let url = URL(string: "\(baseUrl)/users/update/favoritePlayers")!
+        var request = URLRequest(url: url)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(accessToken!)", forHTTPHeaderField: "Authorization")
+        request.httpMethod = "PUT"
+        
+        do {
+            let (data, res) = try await URLSession.shared.upload(for: request, from: encoded)
+            
+            // handle the result if bad
+            if let httpResponse = res as? HTTPURLResponse {
+                // If the result of the http response is a 400 then the message of what went wrong will be returned and placed in errorMessage
+                if httpResponse.statusCode != 201 {
+                    let decodedNodeError = try JSONDecoder().decode(NodeError.self, from: data)
+                    errorMessage = decodedNodeError.message
+                    errorShow = true
+                    return
+                }
+            }
+            didSelectPlayers = true
+        } catch {
+            errorMessage = error.localizedDescription
+            errorShow = true
         }
     }
 }

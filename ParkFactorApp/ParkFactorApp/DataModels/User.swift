@@ -30,7 +30,7 @@ struct UserLoginResponse: Codable {
 struct User: Codable {
     var password: String
     var admin: Bool
-    var favoritePlayers: [String]
+    var favoritePlayers: [Player]
     var profilePicture: String
     var username: String
     var email: String
