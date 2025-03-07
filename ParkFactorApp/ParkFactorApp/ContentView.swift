@@ -14,29 +14,22 @@ struct ContentView: View {
     @State private var isLoggedIn = false
     
     var body: some View {
-        NavigationStack {
-            ZStack {
-                Color.parkFactorSecondary.ignoresSafeArea()
-                if isLoading {
-                    LoadingScreenView()
-                        .onAppear {
-                            checkLoginStatus()
-                        }
-                        .transition(.opacity)
-                } else {
-                    if !isLoggedIn {
-                        LoginView(isLoggedIn: $isLoggedIn, savedUser: savedUser)
-                            .transition(.opacity)
-                    } else {
-                        HomeView(isLoggedIn: $isLoggedIn, savedUser: savedUser)
-                            .transition(.opacity)
-                            .navigationBarBackButtonHidden(true)
+        ZStack {
+            Color.parkFactorSecondary.ignoresSafeArea()
+            if isLoading {
+                LoadingScreenView()
+                    .onAppear {
+                        checkLoginStatus()
                     }
+            } else {
+                if !isLoggedIn {
+                    LoginView(isLoggedIn: $isLoggedIn, savedUser: savedUser)
+                } else {
+                    TabBarView(isLoggedIn: $isLoggedIn, savedUser: savedUser)
+                        .navigationBarBackButtonHidden(true)
                 }
             }
         }
-        .animation(.linear(duration: 1), value: isLoading)
-        .animation(.linear(duration: 1), value: isLoggedIn)
     }
     
     private func checkLoginStatus() {

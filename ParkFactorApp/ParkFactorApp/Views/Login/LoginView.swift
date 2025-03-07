@@ -23,7 +23,8 @@ struct LoginView: View {
     }
     
     var body: some View {
-        ZStack {
+        NavigationView {
+            ZStack {
                 Color.parkFactorSecondary.ignoresSafeArea()
                 VStack {
                     Section {
@@ -133,6 +134,7 @@ struct LoginView: View {
                     }
                     .padding(.top, 30)
                 }
+            }
             .navigationTitle("Login")
             .navigationBarHidden(true)
         }
