@@ -11,7 +11,7 @@ struct NewsView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Color.black.ignoresSafeArea()
+                Color.parkFactorSecondary.ignoresSafeArea()
                 VStack {
                     ScrollView {
                         Text("News Page")

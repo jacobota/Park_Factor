@@ -19,7 +19,7 @@ struct PlayerSearchBarView: View {
                 .font(.parkFactorFontText)
                 .background(
                     RoundedRectangle(cornerRadius: 30)
-                        .fill(Color.black)
+                        .fill(Color.parkFactorSecondary)
                 )
                 .overlay(
                     RoundedRectangle(cornerRadius: 30)

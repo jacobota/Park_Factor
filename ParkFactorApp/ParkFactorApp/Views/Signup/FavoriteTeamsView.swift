@@ -26,7 +26,7 @@ struct TeamCard: View {
             
             Text(teamName)
                 .font(.parkFactorFontSubtitleArchivo)
-                .foregroundColor(.black)
+                .foregroundColor(Color.parkFactorSecondary)
                 .multilineTextAlignment(.center)
                 .padding()
                 .frame(maxWidth: .infinity, alignment: .center)

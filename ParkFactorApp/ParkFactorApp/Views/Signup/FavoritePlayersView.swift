@@ -29,7 +29,7 @@ struct PlayerCard: View {
             
             Text("\(player.fullName)")
                 .font(.parkFactorFontSubtitleArchivo)
-                .foregroundColor(.black)
+                .foregroundColor(.parkFactorSecondary)
                 .multilineTextAlignment(.center)
                 .padding()
                 .frame(maxWidth: .infinity, alignment: .center)
