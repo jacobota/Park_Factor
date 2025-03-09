@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct MainPageView: View {
-    @Binding var isLoggedIn: Bool
     @AppStorage("accessToken") private var accessToken: String?
     
     var savedUser: SavedUser
@@ -19,28 +18,12 @@ struct MainPageView: View {
                 Color.parkFactorSecondary.ignoresSafeArea()
                 VStack {
                     ScrollView {
-                        Text("\(savedUser.user.username)")
-                            .font(.largeTitle)
-                            .foregroundColor(.parkFactorPrimary)
                         
-                        Button(action: {
-                            // Log out and clear the token
-                            accessToken = nil
-                            isLoggedIn = false
-                        }) {
-                            Text("Logout")
-                                .font(.headline)
-                                .padding()
-                                .background(Color.red)
-                                .foregroundColor(.white)
-                                .cornerRadius(5)
-                        }
                     }
                     .frame(maxWidth: .infinity)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.gray)
-                .transition(.opacity)
+                .background(Color.parkFactorAppPageBackground)
                 .padding(.vertical)
             }
             .navigationTitle("Park Factor")
@@ -62,13 +45,5 @@ struct MainPageView: View {
 }
 
 #Preview {
-    MainPageViewPreviewWrapper()
-}
-
-struct MainPageViewPreviewWrapper: View {
-    @State private var isLoggedIn = true
-    
-    var body: some View {
-        MainPageView(isLoggedIn: $isLoggedIn, savedUser: SavedUser())
-    }
+    MainPageView(savedUser: SavedUser())
 }

@@ -20,7 +20,6 @@ struct StatsView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.gray)
-                .transition(.opacity)
                 .padding(.vertical)
             }
             .toolbar {

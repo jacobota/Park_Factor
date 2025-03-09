@@ -1,5 +1,5 @@
 //
-//  FollowingView.swift
+//  NewsView.swift
 //  ParkFactorApp
 //
 //  Created by Jacob Ota on 3/6/25.
@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct FollowingView: View {
-    @State private var selectedTab: String = "Teams"
+struct NewsView: View {
+    @State private var selectedTab: String = "Around the League"
     
-    let subTabs = ["Teams", "Players"]
+    let subTabs = ["Around the League", "The Concourse"]
     
     var body: some View {
         NavigationView {
@@ -47,10 +47,10 @@ struct FollowingView: View {
                     
                     Spacer()
                     
-                    if selectedTab == "Teams" {
-                        TeamsFollowingView()
-                    } else if selectedTab == "Players" {
-                        PlayersFollowingView()
+                    if selectedTab == "Around the League" {
+                        LeagueNewsView()
+                    } else if selectedTab == "The Concourse" {
+                        ConcourseView()
                     }
                     
                     Spacer()
@@ -68,7 +68,7 @@ struct FollowingView: View {
                         Image("ParkFactorLogo")
                             .resizable()
                             .frame(width: 60, height: 60)
-                        Text("Following")
+                        Text("News")
                             .font(Font.parkFactorFontTitle)
                             .foregroundColor(.parkFactorPrimary)
                     }
@@ -79,5 +79,5 @@ struct FollowingView: View {
 }
 
 #Preview {
-    FollowingView()
+    NewsView()
 }

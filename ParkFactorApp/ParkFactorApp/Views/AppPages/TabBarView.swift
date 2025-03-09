@@ -25,7 +25,7 @@ struct TabBarView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             Tab("Park Factor", systemImage: "baseball.diamond.bases", value: .mainView) {
-                MainPageView(isLoggedIn: $isLoggedIn, savedUser: savedUser)
+                MainPageView(savedUser: savedUser)
             }
             Tab("News", systemImage: "newspaper", value: .news) {
                 NewsView()
@@ -37,7 +37,7 @@ struct TabBarView: View {
                 FollowingView()
             }
             Tab("Account", systemImage: "person", value: .account) {
-                AccountView()
+                AccountView(isLoggedIn: $isLoggedIn, savedUser: savedUser)
             }
         }
         .accentColor(Color.parkFactorPrimary)
