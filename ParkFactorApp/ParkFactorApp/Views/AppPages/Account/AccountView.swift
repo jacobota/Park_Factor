@@ -20,50 +20,45 @@ struct AccountView: View {
             ZStack {
                 Color.parkFactorSecondary.ignoresSafeArea()
                 VStack {
-                    ZStack {
-                        Color.parkFactorSecondary
-                        VStack {
-                            ScrollView(.horizontal) {
-                                HStack {
-                                    ForEach(subTabs, id: \.self) { subTab in
-                                        Button(action: {
-                                            selectedTab = subTab
-                                        }) {
-                                            Text(subTab)
-                                                .font(Font.parkFactorFontTextNorwester)
-                                                .foregroundColor(selectedTab == subTab ? Color.parkFactorSecondary : Color.parkFactorPrimary)
-                                                .padding()
-                                                .background(selectedTab == subTab ? Color.parkFactorPrimary : Color.clear)
-                                                .cornerRadius(10)
-                                        }
+                    VStack {
+                        ScrollView(.horizontal) {
+                            HStack {
+                                ForEach(subTabs, id: \.self) { subTab in
+                                    Button(action: {
+                                        selectedTab = subTab
+                                    }) {
+                                        Text(subTab)
+                                            .font(Font.parkFactorFontTextNorwester)
+                                            .foregroundColor(selectedTab == subTab ? Color.parkFactorSecondary : Color.parkFactorPrimary)
+                                            .padding()
+                                            .background(selectedTab == subTab ? Color.parkFactorPrimary : Color.clear)
+                                            .cornerRadius(10)
                                     }
                                 }
-                                .padding()
-                                .background(Color.parkFactorSecondary)
-                                .cornerRadius(8)
                             }
-                            .defaultScrollAnchor(.center) 
-                            .scrollDisabled(true)
+                            .background(Color.parkFactorSecondary)
+                            .cornerRadius(8)
                         }
+                        .scrollDisabled(true)
+                        .frame(width: .infinity, height: 70)
+                        .padding()
                     }
-                    .frame(width: .infinity, height: 75)
-                    
-                    Spacer()
+                    .background(Color.parkFactorSecondary)
                     
                     if selectedTab == "Account" {
                         AccountPageView()
+                            .ignoresSafeArea()
                     } else if selectedTab == "Settings" {
                         AccountSettingsView(isLoggedIn: $isLoggedIn, savedUser: savedUser)
                     }
                     
                     Spacer()
-
-                    .padding()
-                
+                    
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .background(Color.parkFactorAppPageBackground)
-                .padding(.vertical)
+                .padding(.bottom)
+                .padding(.top, 10)
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
