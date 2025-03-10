@@ -306,9 +306,6 @@ struct FavoritePlayersView: View {
     }
     
     func saveFavoritePlayers() async {
-        // save the players to UserDefaults
-        savedUser.user.favoritePlayers = selectedPlayers
-        
         // save the players to a Codable to be used by request
         var favoritePlayersRequest: FavoritePlayersStruct = FavoritePlayersStruct()
         favoritePlayersRequest.favoritePlayers = selectedPlayers
@@ -341,6 +338,8 @@ struct FavoritePlayersView: View {
                     return
                 }
             }
+            // save the players to UserDefaults
+            savedUser.user.favoritePlayers = selectedPlayers
             didSelectPlayers = true
         } catch {
             errorMessage = error.localizedDescription

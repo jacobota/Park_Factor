@@ -40,14 +40,13 @@ struct AccountView: View {
                             .cornerRadius(8)
                         }
                         .scrollDisabled(true)
-                        .frame(width: .infinity, height: 70)
+                        .frame(height: 70)
                         .padding()
                     }
                     .background(Color.parkFactorSecondary)
                     
                     if selectedTab == "Account" {
                         AccountPageView()
-                            .ignoresSafeArea()
                     } else if selectedTab == "Settings" {
                         AccountSettingsView(isLoggedIn: $isLoggedIn, savedUser: savedUser)
                     }

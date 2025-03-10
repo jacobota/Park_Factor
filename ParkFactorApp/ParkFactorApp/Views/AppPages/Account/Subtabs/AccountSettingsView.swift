@@ -19,23 +19,25 @@ struct AccountSettingsView: View {
         VStack {
             List {
                 Section {
-                    NavigationLink(destination: ChangeEmailView()) {
+                    NavigationLink(destination: ChangeEmailView(savedUser: savedUser)) {
                         Text("Change Email")
                             .font(Font.parkFactorFontSubtitleNorwester)
                             .foregroundStyle(Color.parkFactorPrimary)
                             .frame(maxWidth: .infinity, alignment: .center)
                     }
+                    .listRowSeparator(.hidden)
                     .listRowBackground(
                         Capsule()
                             .fill(Color.parkFactorSecondary)
                             .padding(5))
                     
-                    NavigationLink(destination: ChangePasswordView()) {
+                    NavigationLink(destination: ChangePasswordView(savedUser: savedUser)) {
                         Text("Change Password")
                             .font(Font.parkFactorFontSubtitleNorwester)
                             .foregroundStyle(Color.parkFactorPrimary)
                             .frame(maxWidth: .infinity, alignment: .center)
                     }
+                    .listRowSeparator(.hidden)
                     .listRowBackground(
                         Capsule()
                             .fill(Color.parkFactorSecondary)
@@ -47,6 +49,7 @@ struct AccountSettingsView: View {
                             .foregroundStyle(Color.parkFactorPrimary)
                             .frame(maxWidth: .infinity, alignment: .center)
                     }
+                    .listRowSeparator(.hidden)
                     .listRowBackground(
                         Capsule()
                             .fill(Color.parkFactorSecondary)
@@ -62,6 +65,7 @@ struct AccountSettingsView: View {
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity, alignment: .center)
                     }
+                    .listRowSeparator(.hidden)
                     .listRowBackground(
                         Capsule()
                             .fill(Color.red)
@@ -87,6 +91,7 @@ struct AccountSettingsView: View {
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity, alignment: .center)
                     }
+                    .listRowSeparator(.hidden)
                     .listRowBackground(
                         Capsule()
                             .fill(Color.red)

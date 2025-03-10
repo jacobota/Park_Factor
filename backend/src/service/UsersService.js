@@ -153,7 +153,7 @@ async function updateUserPassword(username, newPassword) {
         if (await userExists(username)) {
             const encryptedPassword = await encrypt.encryptPassword(newPassword);
             await usersDao.updatePassword(username, encryptedPassword);
-            return newPassword;
+            return encryptedPassword;
         }
         throw new Error("Username not found");
     } catch (err) {
