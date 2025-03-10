@@ -101,7 +101,9 @@ struct AccountSettingsView: View {
                             title: Text("Delete Account"),
                             message: Text("Are you sure you want to delete your ParkFactor account? \n\nThis action cannot is permanent."),
                             primaryButton: .destructive(Text("Delete")) {
-                                // Handle the delete account action
+                                Task {
+                                    await deleteAccount()
+                                }
                             },
                             secondaryButton: .cancel()
                         )
@@ -113,6 +115,35 @@ struct AccountSettingsView: View {
             .scrollDisabled(true)
             .scrollContentBackground(.hidden)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+    }
+    
+    func deleteAccount() async {
+        // call the network request to delete the user
+        let baseUrl = Env.expressBaseURL
+        
+        //create the url
+        let url = URL(string: "\(baseUrl)/users/delete")!
+        var request = URLRequest(url: url)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(accessToken!)", forHTTPHeaderField: "Authorization")
+        request.httpMethod = "DELETE"
+        
+        do {
+            let (_, res) = try await URLSession.shared.data(for: request)
+            
+            // handle the result if bad
+            if let httpResponse = res as? HTTPURLResponse {
+                // If the result of the http response is a 400 then the message of what went wrong will be returned and placed in errorMessage
+                if httpResponse.statusCode != 200 {
+                     return
+                }
+                
+                accessToken = nil
+                isLoggedIn = false
+            }
+        } catch {
+            return
         }
     }
 }

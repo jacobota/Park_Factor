@@ -135,7 +135,7 @@ struct FavoritePlayersView: View {
                                 await saveFavoritePlayers()
                             }
                         }) {
-                            Text("Next")
+                            Text(selectedPlayers.isEmpty ? "Skip" : "Next")
                                 .font(.parkFactorFontTitle)
                                 .foregroundColor(Color.parkFactorPrimary)
                         }
