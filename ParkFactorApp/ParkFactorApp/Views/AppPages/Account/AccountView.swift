@@ -46,7 +46,7 @@ struct AccountView: View {
                     .background(Color.parkFactorSecondary)
                     
                     if selectedTab == "Account" {
-                        AccountPageView()
+                        AccountPageView(savedUser: savedUser)
                     } else if selectedTab == "Settings" {
                         AccountSettingsView(isLoggedIn: $isLoggedIn, savedUser: savedUser)
                     }

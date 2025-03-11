@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		CEC1BEFA2D7EE9180081CEDF /* AWSS3 in Frameworks */ = {isa = PBXBuildFile; productRef = CEC1BEF92D7EE9180081CEDF /* AWSS3 */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		CE123FAD2D72E68F0044B888 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -65,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CEC1BEFA2D7EE9180081CEDF /* AWSS3 in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +130,7 @@
 			);
 			name = ParkFactorApp;
 			packageProductDependencies = (
+				CEC1BEF92D7EE9180081CEDF /* AWSS3 */,
 			);
 			productName = ParkFactorApp;
 			productReference = CE123F9C2D72E68D0044B888 /* ParkFactorApp.app */;
@@ -208,6 +214,9 @@
 			);
 			mainGroup = CE123F932D72E68D0044B888;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				CEC1BEF82D7EE9180081CEDF /* XCRemoteSwiftPackageReference "aws-sdk-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = CE123F9D2D72E68D0044B888 /* Products */;
 			projectDirPath = "";
@@ -581,6 +590,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		CEC1BEF82D7EE9180081CEDF /* XCRemoteSwiftPackageReference "aws-sdk-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/awslabs/aws-sdk-swift";
+			requirement = {
+				kind = upToNextMinorVersion;
+				minimumVersion = 1.2.34;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		CEC1BEF92D7EE9180081CEDF /* AWSS3 */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CEC1BEF82D7EE9180081CEDF /* XCRemoteSwiftPackageReference "aws-sdk-swift" */;
+			productName = AWSS3;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = CE123F942D72E68D0044B888 /* Project object */;
 }

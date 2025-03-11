@@ -10,7 +10,7 @@ import SwiftUI
 extension Color {
     static let parkFactorPrimary = Color(red: 0, green: 0.996, blue: 0.773)
     static let parkFactorSecondary = Color(.black)
-    static let parkFactorAppPageBackground = Color(red: 0, green: 0.996, blue: 0.773, opacity: 0.75)
+    static let parkFactorAppPageBackground = Color(red: 0.117, green: 0.115, blue: 0.115)
 }
 
 extension Font {

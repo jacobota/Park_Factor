@@ -24,102 +24,100 @@ struct ChangeEmailView: View {
     }
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                Color.parkFactorSecondary.ignoresSafeArea()
-                VStack {
-                    Section {
-                        Text("Change Email")
-                            .font(.parkFactorFontTitle)
-                            .foregroundStyle(Color.white)
-                            .fontWeight(.bold)
-                            .foregroundStyle(.white)
-                        
-                    }
-                    .padding(.bottom, 20)
+        ZStack {
+            Color.parkFactorSecondary.ignoresSafeArea()
+            VStack {
+                Section {
+                    Text("Change Email")
+                        .font(.parkFactorFontTitle)
+                        .foregroundStyle(Color.white)
+                        .fontWeight(.bold)
+                        .foregroundStyle(.white)
                     
-                    Section {
-                        Text("\(resultMessage)")
-                            .font(.parkFactorFontText)
-                            .foregroundStyle(resultShow ? Color.red : Color.parkFactorPrimary)
-                            .multilineTextAlignment(.center)
-                            .opacity(resultShow || successShow ? 1 : 0)
-                        
-                        VStack {
-                            VStack(alignment: .leading) {
-                                Text("New Email")
-                                    .foregroundColor(focus == .newEmail ? Color.parkFactorPrimary : Color.white)
-                                    .font(.parkFactorFontSubtitleArchivo)
-                                    .opacity(focus == .newEmail ? 1 : 0.6)
-                                TextField("", text: $updateEmail.email)
-                                    .keyboardType(.default)
-                                    .padding()
-                                    .background(Color.parkFactorSecondary)
-                                    .foregroundColor(focus == .newEmail ? Color.parkFactorPrimary : Color.white)
-                                    .font(.parkFactorFontText)
-                                    .border(focus == .newEmail ? Color.parkFactorPrimary : Color.white, width: 2)
-                                    .cornerRadius(5)
-                                    .frame(height: 35)
-                                    .padding(.bottom)
-                                    .textInputAutocapitalization(.never)
-                                    .focused($focus, equals: .newEmail)
-                            }
-                            .padding(.top, 20)
-                            
-                            VStack(alignment: .leading) {
-                                Text("Confirm Email")
-                                    .foregroundColor(focus == .confirmEmail ? Color.parkFactorPrimary : Color.white)
-                                    .font(.parkFactorFontSubtitleArchivo)
-                                    .opacity(focus == .confirmEmail ? 1 : 0.6)
-                                TextField("", text: $confirmEmail)
-                                    .keyboardType(.default)
-                                    .padding()
-                                    .background(Color.parkFactorSecondary)
-                                    .foregroundColor(focus == .confirmEmail ? Color.parkFactorPrimary : Color.white)
-                                    .font(.parkFactorFontText)
-                                    .border(focus == .confirmEmail ? Color.parkFactorPrimary : Color.white, width: 2)
-                                    .cornerRadius(5)
-                                    .frame(height: 35)
-                                    .padding(.bottom)
-                                    .textInputAutocapitalization(.never)
-                                    .focused($focus, equals: .confirmEmail)
-                            }
-                            .padding(.top, 20)
-                        }
-                        .onSubmit {
-                            if focus == .newEmail {
-                                focus = .confirmEmail
-                            }else {
-                                focus = nil
-                            }
-                        }
-                        
-                        Button(action: {
-                            Task {
-                                await updateEmailFunc()
-                            }
-                        }) {
-                            Text("Update Email")
+                }
+                .padding(.bottom, 20)
+                
+                Section {
+                    Text("\(resultMessage)")
+                        .font(.parkFactorFontText)
+                        .foregroundStyle(resultShow ? Color.red : Color.parkFactorPrimary)
+                        .multilineTextAlignment(.center)
+                        .opacity(resultShow || successShow ? 1 : 0)
+                    
+                    VStack {
+                        VStack(alignment: .leading) {
+                            Text("New Email")
+                                .foregroundColor(focus == .newEmail ? Color.parkFactorPrimary : Color.white)
                                 .font(.parkFactorFontSubtitleArchivo)
-                                .foregroundColor(isFormValid ? Color.parkFactorSecondary : .gray)
-                                .containerRelativeFrame(.horizontal) { size, axis in
-                                    size * 0.6
-                                }
+                                .opacity(focus == .newEmail ? 1 : 0.6)
+                            TextField("", text: $updateEmail.email)
+                                .keyboardType(.default)
                                 .padding()
-                                .background(isFormValid ? Color.parkFactorPrimary : Color.clear)
+                                .background(Color.parkFactorSecondary)
+                                .foregroundColor(focus == .newEmail ? Color.parkFactorPrimary : Color.white)
+                                .font(.parkFactorFontText)
+                                .border(focus == .newEmail ? Color.parkFactorPrimary : Color.white, width: 2)
                                 .cornerRadius(5)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 5)
-                                        .stroke(Color.white, lineWidth: 2)
-                                )
+                                .frame(height: 35)
+                                .padding(.bottom)
+                                .textInputAutocapitalization(.never)
+                                .focused($focus, equals: .newEmail)
                         }
-                        .disabled(!isFormValid)
-                        .padding(.top, 30)
+                        .padding(.top, 20)
+                        
+                        VStack(alignment: .leading) {
+                            Text("Confirm Email")
+                                .foregroundColor(focus == .confirmEmail ? Color.parkFactorPrimary : Color.white)
+                                .font(.parkFactorFontSubtitleArchivo)
+                                .opacity(focus == .confirmEmail ? 1 : 0.6)
+                            TextField("", text: $confirmEmail)
+                                .keyboardType(.default)
+                                .padding()
+                                .background(Color.parkFactorSecondary)
+                                .foregroundColor(focus == .confirmEmail ? Color.parkFactorPrimary : Color.white)
+                                .font(.parkFactorFontText)
+                                .border(focus == .confirmEmail ? Color.parkFactorPrimary : Color.white, width: 2)
+                                .cornerRadius(5)
+                                .frame(height: 35)
+                                .padding(.bottom)
+                                .textInputAutocapitalization(.never)
+                                .focused($focus, equals: .confirmEmail)
+                        }
+                        .padding(.top, 20)
                     }
+                    .onSubmit {
+                        if focus == .newEmail {
+                            focus = .confirmEmail
+                        }else {
+                            focus = nil
+                        }
+                    }
+                    
+                    Button(action: {
+                        Task {
+                            await updateEmailFunc()
+                        }
+                    }) {
+                        Text("Update Email")
+                            .font(.parkFactorFontSubtitleArchivo)
+                            .foregroundColor(isFormValid ? Color.parkFactorSecondary : .gray)
+                            .containerRelativeFrame(.horizontal) { size, axis in
+                                size * 0.6
+                            }
+                            .padding()
+                            .background(isFormValid ? Color.parkFactorPrimary : Color.clear)
+                            .cornerRadius(5)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 5)
+                                    .stroke(Color.white, lineWidth: 2)
+                            )
+                    }
+                    .disabled(!isFormValid)
+                    .padding(.top, 30)
                 }
-                .containerRelativeFrame(.horizontal) { size, axis in
-                    size * 0.8
-                }
+            }
+            .containerRelativeFrame(.horizontal) { size, axis in
+                size * 0.8
             }
         }
     }

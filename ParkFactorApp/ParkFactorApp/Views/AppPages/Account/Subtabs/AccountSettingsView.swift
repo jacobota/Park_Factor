@@ -24,6 +24,7 @@ struct AccountSettingsView: View {
                             .font(Font.parkFactorFontSubtitleNorwester)
                             .foregroundStyle(Color.parkFactorPrimary)
                             .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(15)
                     }
                     .listRowSeparator(.hidden)
                     .listRowBackground(
@@ -36,6 +37,7 @@ struct AccountSettingsView: View {
                             .font(Font.parkFactorFontSubtitleNorwester)
                             .foregroundStyle(Color.parkFactorPrimary)
                             .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(15)
                     }
                     .listRowSeparator(.hidden)
                     .listRowBackground(
@@ -43,11 +45,12 @@ struct AccountSettingsView: View {
                             .fill(Color.parkFactorSecondary)
                             .padding(5))
                     
-                    NavigationLink(destination: ChangeProfilePictureView()) {
+                    NavigationLink(destination: ChangeProfilePictureView(savedUser: savedUser)) {
                         Text("Change Profile Picture")
                             .font(Font.parkFactorFontSubtitleNorwester)
                             .foregroundStyle(Color.parkFactorPrimary)
                             .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(15)
                     }
                     .listRowSeparator(.hidden)
                     .listRowBackground(
@@ -64,6 +67,7 @@ struct AccountSettingsView: View {
                             .font(Font.parkFactorFontSubtitleNorwester)
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(15)
                     }
                     .listRowSeparator(.hidden)
                     .listRowBackground(
@@ -90,6 +94,7 @@ struct AccountSettingsView: View {
                             .font(Font.parkFactorFontSubtitleNorwester)
                             .foregroundColor(.white)
                             .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(15)
                     }
                     .listRowSeparator(.hidden)
                     .listRowBackground(
@@ -112,9 +117,10 @@ struct AccountSettingsView: View {
             }
             .environment(\.defaultMinListRowHeight, 60)
             .listStyle(GroupedListStyle())
-            .scrollDisabled(true)
             .scrollContentBackground(.hidden)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .containerRelativeFrame(.horizontal) { size, axis in
+                size * 0.9
+            }
         }
     }
     
