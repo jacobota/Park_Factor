@@ -27,7 +27,7 @@ struct SignupView: View {
     
     var body: some View {
         if isRegistered {
-            FavoriteTeamsView(isLoggedIn: $isLoggedIn, savedUser: savedUser)
+            FollowingTeamsView(isLoggedIn: $isLoggedIn, savedUser: savedUser)
                 .navigationBarBackButtonHidden(true)
                 .transition(.opacity)
                 .animation(.linear(duration: 1), value: isRegistered)

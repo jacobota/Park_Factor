@@ -1,5 +1,5 @@
 //
-//  FavoriteTeamsView.swift
+//  FollowingTeamsView.swift
 //  ParkFactorApp
 //
 //  Created by Jacob Ota on 3/2/25.
@@ -41,7 +41,7 @@ struct TeamCard: View {
     }
 }
 
-struct FavoriteTeamsView: View {
+struct FollowingTeamsView: View {
     @Binding var isLoggedIn: Bool
     @AppStorage("accessToken") private var accessToken: String?
     @State private var selectedTeams: [String] = []
@@ -86,13 +86,13 @@ struct FavoriteTeamsView: View {
     
     var body: some View {
         if didSelectTeams {
-            FavoritePlayersView(isLoggedIn: $isLoggedIn, savedUser: savedUser)
+            FollowingPlayersView(isLoggedIn: $isLoggedIn, savedUser: savedUser)
         } else {
             ZStack {
                 Color.parkFactorSecondary.ignoresSafeArea()
                 VStack {
                     Section {
-                        Text("Select Favorite Teams")
+                        Text("Select Following Teams")
                             .font(.parkFactorFontTitle)
                             .foregroundStyle(Color.white)
                             .fontWeight(.bold)
@@ -132,7 +132,7 @@ struct FavoriteTeamsView: View {
                     Section {
                         Button(action: {
                             Task {
-                                await saveFavoriteTeams()
+                                await saveFollowingTeams()
                             }
                         }) {
                             Text(selectedTeams.isEmpty ? "Skip" : "Next")
@@ -157,24 +157,24 @@ struct FavoriteTeamsView: View {
         selectedTeams.sort()
     }
     
-    func saveFavoriteTeams() async {
+    func saveFollowingTeams() async {
         // save the teams to UserDefaults
-        savedUser.user.favoriteTeams = selectedTeams
+        savedUser.user.followingTeams = selectedTeams
         
         // save the teams to a Codable to be used by request
-        var favoriteTeamsRequest: FavoriteTeamsStruct = FavoriteTeamsStruct()
-        favoriteTeamsRequest.favoriteTeams = selectedTeams
+        var followingTeamsRequest: FollowingTeamsStruct = FollowingTeamsStruct()
+        followingTeamsRequest.followingTeams = selectedTeams
         
         // call the network request to save teams to database
         let baseUrl = Env.expressBaseURL
-        guard let encoded = try? JSONEncoder().encode(favoriteTeamsRequest) else {
-            errorMessage = "Failed to encode favoriteTeams"
+        guard let encoded = try? JSONEncoder().encode(followingTeamsRequest) else {
+            errorMessage = "Failed to encode followingTeams"
             errorShow = true
             return
         }
         
         //create the url
-        let url = URL(string: "\(baseUrl)/users/update/favoriteTeams")!
+        let url = URL(string: "\(baseUrl)/users/update/followingTeams")!
         var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(accessToken!)", forHTTPHeaderField: "Authorization")
@@ -202,14 +202,14 @@ struct FavoriteTeamsView: View {
 }
 
 #Preview {
-    FavoriteTeamsViewPreviewWrapper()
+    FollowingTeamsViewPreviewWrapper()
 }
 
-struct FavoriteTeamsViewPreviewWrapper: View {
+struct FollowingTeamsViewPreviewWrapper: View {
     @State private var isLoggedIn = false
     @State private var isRegistered = true
     
     var body: some View {
-        FavoriteTeamsView(isLoggedIn: $isLoggedIn, savedUser: SavedUser())
+        FollowingTeamsView(isLoggedIn: $isLoggedIn, savedUser: SavedUser())
     }
 }

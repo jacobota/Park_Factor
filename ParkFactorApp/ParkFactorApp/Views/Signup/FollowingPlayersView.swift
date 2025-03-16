@@ -1,5 +1,5 @@
 //
-//  FavoritePlayersView.swift
+//  FollowingPlayersView.swift
 //  ParkFactorApp
 //
 //  Created by Jacob Ota on 3/3/25.
@@ -44,7 +44,7 @@ struct PlayerCard: View {
     }
 }
 
-struct FavoritePlayersView: View {
+struct FollowingPlayersView: View {
     @Binding var isLoggedIn: Bool
     @AppStorage("accessToken") private var accessToken: String?
     @State private var didSelectPlayers: Bool = false
@@ -98,7 +98,7 @@ struct FavoritePlayersView: View {
                 Color.parkFactorSecondary.ignoresSafeArea()
                 VStack {
                     Section {
-                        Text("Select Favorite Players")
+                        Text("Select Following Players")
                             .font(.parkFactorFontTitle)
                             .foregroundStyle(Color.white)
                             .fontWeight(.bold)
@@ -132,7 +132,7 @@ struct FavoritePlayersView: View {
                     Section {
                         Button(action: {
                             Task {
-                                await saveFavoritePlayers()
+                                await saveFollowingPlayers()
                             }
                         }) {
                             Text(selectedPlayers.isEmpty ? "Skip" : "Next")
@@ -305,21 +305,21 @@ struct FavoritePlayersView: View {
         }
     }
     
-    func saveFavoritePlayers() async {
+    func saveFollowingPlayers() async {
         // save the players to a Codable to be used by request
-        var favoritePlayersRequest: FavoritePlayersStruct = FavoritePlayersStruct()
-        favoritePlayersRequest.favoritePlayers = selectedPlayers
+        var followingPlayersRequest: FollowingPlayersStruct = FollowingPlayersStruct()
+        followingPlayersRequest.followingPlayers = selectedPlayers
         
         // call the network request to save players to database
         let baseUrl = Env.expressBaseURL
-        guard let encoded = try? JSONEncoder().encode(favoritePlayersRequest) else {
-            errorMessage = "Failed to encode Favorite Players"
+        guard let encoded = try? JSONEncoder().encode(followingPlayersRequest) else {
+            errorMessage = "Failed to encode Following Players"
             errorShow = true
             return
         }
         
         //create the url
-        let url = URL(string: "\(baseUrl)/users/update/favoritePlayers")!
+        let url = URL(string: "\(baseUrl)/users/update/followingPlayers")!
         var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(accessToken!)", forHTTPHeaderField: "Authorization")
@@ -339,7 +339,7 @@ struct FavoritePlayersView: View {
                 }
             }
             // save the players to UserDefaults
-            savedUser.user.favoritePlayers = selectedPlayers
+            savedUser.user.followingPlayers = selectedPlayers
             didSelectPlayers = true
         } catch {
             errorMessage = error.localizedDescription
@@ -349,13 +349,13 @@ struct FavoritePlayersView: View {
 }
 
 #Preview {
-    FavoritePlayersViewPreviewWrapper()
+    FollowingPlayersViewPreviewWrapper()
 }
 
-struct FavoritePlayersViewPreviewWrapper: View {
+struct FollowingPlayersViewPreviewWrapper: View {
     @State private var isLoggedIn = false
     
     var body: some View {
-        FavoritePlayersView(isLoggedIn: $isLoggedIn, savedUser: SavedUser())
+        FollowingPlayersView(isLoggedIn: $isLoggedIn, savedUser: SavedUser())
     }
 }

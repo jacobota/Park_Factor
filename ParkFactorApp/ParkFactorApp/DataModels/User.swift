@@ -28,13 +28,18 @@ struct UserLoginResponse: Codable {
 
 // Codable Struct of a User object
 struct User: Codable {
-    var password: String
-    var admin: Bool
-    var favoritePlayers: [Player]
-    var profilePicture: String?
     var username: String
+    var admin: Bool
     var email: String
-    var favoriteTeams: [String]
+    var favoritePlayer: String?
+    var favoriteTeam: String?
+    var followingPlayers: [Player]
+    var followingTeams: [String]
+    var password: String
+    var profilePicture: String?
+    var userBiography: String?
+    var userLikedPosts: [String]
+    var userTag: String?
     var verified: Bool
 }
 
@@ -61,7 +66,7 @@ class SavedUser {
             self.user = decodedUser
         } else {
             // Initialize with default or empty user
-            self.user = User(password: "", admin: false, favoritePlayers: [], profilePicture: "", username: "", email: "", favoriteTeams: [], verified: false)
+            self.user = User(username: "", admin: false, email: "", favoritePlayer: "", favoriteTeam: "", followingPlayers: [], followingTeams: [],  password: "", profilePicture: "", userBiography: "", userLikedPosts: [], userTag: "", verified: false)
         }
     }
 }
