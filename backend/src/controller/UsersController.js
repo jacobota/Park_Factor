@@ -95,23 +95,78 @@ router.put('/update/profilePicture', authenticateToken, async (req, res) => {
     }
 });
 
-// Update own User Favorite Team(s) (Need authenticate token middleware)
-router.put('/update/favoriteTeams', authenticateToken, async (req, res) => {
+// Update own User Following Team(s) (Need authenticate token middleware)
+router.put('/update/followingTeams', authenticateToken, async (req, res) => {
     try {
-        // Call the service to update the user favorite team
-        const favoriteTeams = await usersService.updateFavoriteTeams(req.user.username, req.body.favoriteTeams);
-        res.status(201).json({message: 'Favorite Team(s) Updated', favoriteTeams: favoriteTeams});
+        // Call the service to update the user following team
+        const followingTeams = await usersService.updateFollowingTeams(req.user.username, req.body.followingTeams);
+        res.status(201).json({message: 'Following Team(s) Updated', followingTeams: followingTeams});
     } catch (err) {
         res.status(400).json({message: err.message});
     }
 });
 
-// Update own User Favorite Player(s) (Need authenticate token middleware)
-router.put('/update/favoritePlayers', authenticateToken, async (req, res) => {
+// Update own User Following Player(s) (Need authenticate token middleware)
+router.put('/update/followingPlayers', authenticateToken, async (req, res) => {
     try {
-        // Call the service to update the user favorite players
-        const favoritePlayers = await usersService.updateFavoritePlayers(req.user.username, req.body.favoritePlayers);
-        res.status(201).json({message: 'Favorite Player(s) Updated', favoritePlayers: favoritePlayers});
+        // Call the service to update the user following players
+        const followingPlayers = await usersService.updateFollowingPlayers(req.user.username, req.body.followingPlayers);
+        res.status(201).json({message: 'Following Player(s) Updated', followingPlayers: followingPlayers});
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
+
+// Update own User information Favorite Team (Need authenticate token middleware)
+router.put('/update/favoriteTeam', authenticateToken, async (req, res) => {
+    try {
+        // Call the service to update the user favorite team
+        const updatedFavoriteTeam = await usersService.updateFavoriteTeam(req.user.username, req.body.favoriteTeam);
+        res.status(201).json({message: 'Favorite Team Updated', favoriteTeam: updatedFavoriteTeam});
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
+
+// Update own User information Favorite Player (Need authenticate token middleware)
+router.put('/update/favoritePlayer', authenticateToken, async (req, res) => {
+    try {
+        // Call the service to update the user favorite player
+        const updatedFavoritePlayer = await usersService.updateFavoritePlayer(req.user.username, req.body.favoritePlayer);
+        res.status(201).json({message: 'Favorite Player Updated', favoritePlayer: updatedFavoritePlayer});
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
+
+// Update own User information tag (Need authenticate token middleware)
+router.put('/update/userTag', authenticateToken, async (req, res) => {
+    try {
+        // Call the service to update the user tag
+        const updatedUserTag = await usersService.updateUserTag(req.user.username, req.body.userTag);
+        res.status(201).json({message: 'User Tag Updated', userTag: updatedUserTag});
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
+
+// Update own User information Biography (Need authenticate token middleware)
+router.put('/update/userBiography', authenticateToken, async (req, res) => {
+    try {
+        // Call the service to update the user biography
+        const updatedUserBiography = await usersService.updateUserBiography(req.user.username, req.body.userBiography);
+        res.status(201).json({message: 'Biography Updated', profilePic: updatedUserBiography});
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
+
+// Update own User information Liked Posts (Need authenticate token middleware)
+router.put('/update/userLikedPosts', authenticateToken, async (req, res) => {
+    try {
+        // Call the service to update the user liked posts
+        const updatedLikedPosts = await usersService.updateLikedPosts(req.user.username, req.body.likedPosts);
+        res.status(201).json({message: 'Liked Posts Updated', profilePic: updatedLikedPosts});
     } catch (err) {
         res.status(400).json({message: err.message});
     }

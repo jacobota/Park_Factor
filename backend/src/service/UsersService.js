@@ -35,8 +35,13 @@ async function createUser(body) {
                 username: body.username,
                 admin: false,
                 email: body.email,
-                favoritePlayers: [],
-                favoriteTeams: [],
+                followingPlayers: [],
+                followingTeams: [],
+                favoritePlayer: "",
+                favoriteTeam: "",
+                userTag: "",
+                userBiography: "",
+                userLikedPosts: [],
                 password: encryptedPassword,
                 profilePicture: "",
                 verified: false,
@@ -184,20 +189,20 @@ async function updateProfilePicture(username, profilePicture) {
 }
 
 /**
- * updateFavoriteTeams will bridge the gap between the controller and the DAO to update a users favorite teams,
- * this function will check if the user exists in the database and then update their favorite teams.
+ * updateFollowingTeams will bridge the gap between the controller and the DAO to update a users following teams,
+ * this function will check if the user exists in the database and then update their following teams.
  * 
- * @param {String} username username to update favorite teams
- * @param {Array} favoriteTeams array of favorite teams
- * @returns favorite teams
+ * @param {String} username username to update following teams
+ * @param {Array} followingTeams array of following teams
+ * @returns following teams
  * @throws error if username not found or database error
  */
-async function updateFavoriteTeams(username, favoriteTeams) {
+async function updateFollowingTeams(username, followingTeams) {
     try {
-        // Check if the user exists and update favorite teams
+        // Check if the user exists and update following teams
         if (await userExists(username)) {
-            await usersDao.updateUsersFavoriteTeams(username, favoriteTeams);
-            return favoriteTeams;
+            await usersDao.updateUsersFollowingTeams(username, followingTeams);
+            return followingTeams;
         }
         throw new Error("Username not found");
     } catch (err) {
@@ -206,20 +211,130 @@ async function updateFavoriteTeams(username, favoriteTeams) {
 }
 
 /**
- * updateFavoritePlayers will bridge the gap between the controller and the DAO to update a users favorite players,
- * this function will check if the user exists in the database and then update their favorite players.
+ * updateFollowingPlayers will bridge the gap between the controller and the DAO to update a users following players,
+ * this function will check if the user exists in the database and then update their following players.
  * 
- * @param {String} username username to update favorite players
- * @param {Array} favoritePlayers array of favorite players
- * @returns favorite players
+ * @param {String} username username to update following players
+ * @param {Array} followingPlayers array of following players
+ * @returns following players
  * @throws error if username not found or database error
  */
-async function updateFavoritePlayers(username, favoritePlayers) {
+async function updateFollowingPlayers(username, followingPlayers) {
     try {
-        // Check if the user exists and update favorite players
+        // Check if the user exists and update following players
         if (await userExists(username)) {
-            await usersDao.updateUsersFavoritePlayers(username, favoritePlayers);
-            return favoritePlayers;
+            await usersDao.updateUsersFollowingPlayers(username, followingPlayers);
+            return followingPlayers;
+        }
+        throw new Error("Username not found");
+    } catch (err) {
+        throw new Error(err.message);
+    }
+}
+
+/**
+ * updateFavoriteTeam will bridge the gap between the controller and the DAO to update a users favorite team,
+ * this function will check if the user exists in the database and then update their favorite team.
+ * 
+ * @param {String} username username to update favorite team
+ * @param {Array} favoriteTeam array of favorite team
+ * @returns favorite team
+ * @throws error if username not found or database error
+ */
+async function updateFavoriteTeam(username, favoriteTeam) {
+    try {
+        // Check if the user exists and update following players
+        if (await userExists(username)) {
+            await usersDao.updateUsersFavoriteTeam(username, favoriteTeam);
+            return favoriteTeam;
+        }
+        throw new Error("Username not found");
+    } catch (err) {
+        throw new Error(err.message);
+    }
+}
+
+/**
+ * UpdateFavoritePlayer will bridge the gap between the controller and the DAO to update a users favorite player,
+ * this function will check if the user exists in the database and then update their favorite player.
+ * 
+ * @param {String} username username to update favorite player
+ * @param {Array} favoritePlayer array of favorite player
+ * @returns favorite player
+ * @throws error if username not found or database error
+ */
+async function updateFavoritePlayer(username, favoritePlayer) {
+    try {
+        // Check if the user exists and update favorite player
+        if (await userExists(username)) {
+            await usersDao.updateUsersFavoritePlayer(username, favoritePlayer);
+            return favoritePlayer;
+        }
+        throw new Error("Username not found");
+    } catch (err) {
+        throw new Error(err.message);
+    }
+}
+
+/**
+ * updateUserTag will bridge the gap between the controller and the DAO to update a users user tag,
+ * this function will check if the user exists in the database and then update their user tag.
+ * 
+ * @param {String} username username to update user tag
+ * @param {Array} userTag array of user tag
+ * @returns user tag
+ * @throws error if username not found or database error
+ */
+async function updateUserTag(username, userTag) {
+    try {
+        // Check if the user exists and update user tag
+        if (await userExists(username)) {
+            await usersDao.updateUsersUserTag(username, userTag);
+            return userTag;
+        }
+        throw new Error("Username not found");
+    } catch (err) {
+        throw new Error(err.message);
+    }
+}
+
+/**
+ * updateUserBiography will bridge the gap between the controller and the DAO to update a users user biography,
+ * this function will check if the user exists in the database and then update their user biography.
+ * 
+ * @param {String} username username to update user biography
+ * @param {Array} userBiography array of user biography
+ * @returns user biography
+ * @throws error if username not found or database error
+ */
+async function updateUserBiography(username, userBiography) {
+    try {
+        // Check if the user exists and update user biography
+        if (await userExists(username)) {
+            await usersDao.updateUsersUserBiography(username, userBiography);
+            return userBiography;
+        }
+        throw new Error("Username not found");
+    } catch (err) {
+        throw new Error(err.message);
+    }
+}
+
+/**
+ * updateLikedPosts will bridge the gap between the controller and the DAO to update a users liked posts,
+ * this function will check if the user exists in the database and then update their liked posts.
+ * 
+ * @param {String} username username to update liked posts
+ * @param {Array} likedPosts array of liked posts
+ * @returns liked posts
+ * @throws error if username not found or database error
+ */
+async function updateLikedPosts(username, likedPosts) {
+    try {
+        // Check if the user exists and update liked posts
+        if (await userExists(username)) {
+            await usersDao.updateUsersLikedPosts(username, likedPosts);
+            return likedPosts;
         }
         throw new Error("Username not found");
     } catch (err) {
@@ -397,8 +512,13 @@ module.exports = {
     updateUserEmail,
     updateUserPassword,
     updateProfilePicture,
-    updateFavoriteTeams,
-    updateFavoritePlayers,
+    updateFollowingTeams,
+    updateFollowingPlayers,
+    updateFavoriteTeam,
+    updateFavoritePlayer,
+    updateUserTag,
+    updateUserBiography,
+    updateLikedPosts,
     toggleAdmin,
     toggleVerified,
     deleteUser,

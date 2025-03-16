@@ -155,24 +155,24 @@ async function updateUserProfilePicture(username, profilePicture) {
 }
 
 /**
- * updateUsersFavoriteTeams will UPDATE the users favorite teams in the table
+ * updateUsersFollowingTeams will UPDATE the users following teams in the table
  * 
- * @param {String} username username to update favorite teams
- * @param {Array} favoriteTeams array of favorite teams
+ * @param {String} username username to update following teams
+ * @param {Array} followingTeams array of following teams
  * @returns on success
  * @throws database error
  */
-async function updateUsersFavoriteTeams(username, favoriteTeams) {
-    // Create the UpdateCommand to update the user's favorite teams
+async function updateUsersFollowingTeams(username, followingTeams) {
+    // Create the UpdateCommand to update the user's following teams
     const command = new UpdateCommand({
         TableName,
         Key: {username: username},
-        UpdateExpression: 'SET #favoriteTeams = :favoriteTeams',
+        UpdateExpression: 'SET #followingTeams = :followingTeams',
         ExpressionAttributeNames: {
-            '#favoriteTeams': 'favoriteTeams'
+            '#followingTeams': 'followingTeams'
         },
         ExpressionAttributeValues: {
-            ':favoriteTeams': favoriteTeams
+            ':followingTeams': followingTeams
         }
     });
 
@@ -185,24 +185,174 @@ async function updateUsersFavoriteTeams(username, favoriteTeams) {
 }
 
 /**
- * updateUsersFavoritePlayers will UPDATE the users favorite players in the table
+ * updateUsersFollowingPlayers will UPDATE the users following players in the table
  * 
- * @param {String} username username to update favorite players
- * @param {Array} favoritePlayers array of favorite players
+ * @param {String} username username to update following players
+ * @param {Array} followingPlayers array of following players
  * @returns on success
  * @throws database error
  */
-async function updateUsersFavoritePlayers(username, favoritePlayers) {
-    // Create the UpdateCommand to update the user's favorite players
+async function updateUsersFollowingPlayers(username, followingPlayers) {
+    // Create the UpdateCommand to update the user's following players
     const command = new UpdateCommand({
         TableName,
         Key: {username: username},
-        UpdateExpression: 'SET #favoritePlayers = :favoritePlayers',
+        UpdateExpression: 'SET #followingPlayers = :followingPlayers',
         ExpressionAttributeNames: {
-            '#favoritePlayers': 'favoritePlayers'
+            '#followingPlayers': 'followingPlayers'
         },
         ExpressionAttributeValues: {
-            ':favoritePlayers': favoritePlayers
+            ':followingPlayers': followingPlayers
+        }
+    });
+
+    try {
+        await documentClient.send(command);
+        return;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+/**
+ * updateUsersFavoriteTeam will UPDATE the users favorite team in the table
+ * 
+ * @param {String} username username to update favorite team
+ * @param {Array} favoriteTeam array of favorite team
+ * @returns on success
+ * @throws database error
+ */
+async function updateUsersFavoriteTeam(username, favoriteTeam) {
+    // Create the UpdateCommand to update the user's favorite team
+    const command = new UpdateCommand({
+        TableName,
+        Key: {username: username},
+        UpdateExpression: 'SET #favoriteTeam = :favoriteTeam',
+        ExpressionAttributeNames: {
+            '#favoriteTeam': 'favoriteTeam'
+        },
+        ExpressionAttributeValues: {
+            ':favoriteTeam': favoriteTeam
+        }
+    });
+
+    try {
+        await documentClient.send(command);
+        return;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+/**
+ * updateUsersFavoritePlayer will UPDATE the users favorite player in the table
+ * 
+ * @param {String} username username to update favorite player
+ * @param {Array} favoritePlayer array of favorite player
+ * @returns on success
+ * @throws database error
+ */
+async function updateUsersFavoritePlayer(username, favoritePlayer) {
+    // Create the UpdateCommand to update the user's favorite player
+    const command = new UpdateCommand({
+        TableName,
+        Key: {username: username},
+        UpdateExpression: 'SET #favoritePlayer = :favoritePlayer',
+        ExpressionAttributeNames: {
+            '#favoritePlayer': 'favoritePlayer'
+        },
+        ExpressionAttributeValues: {
+            ':favoritePlayer': favoritePlayer
+        }
+    });
+
+    try {
+        await documentClient.send(command);
+        return;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+/**
+ * updateUsersUserTag will UPDATE the users user tag in the table
+ * 
+ * @param {String} username username to update user tag
+ * @param {Array} userTag array of user tag
+ * @returns on success
+ * @throws database error
+ */
+async function updateUsersUserTag(username, userTag) {
+    // Create the UpdateCommand to update the user's user tag
+    const command = new UpdateCommand({
+        TableName,
+        Key: {username: username},
+        UpdateExpression: 'SET #userTag = :userTag',
+        ExpressionAttributeNames: {
+            '#userTag': 'userTag'
+        },
+        ExpressionAttributeValues: {
+            ':userTag': userTag
+        }
+    });
+
+    try {
+        await documentClient.send(command);
+        return;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+/**
+ * updateUsersUserBiography will UPDATE the users user biography in the table
+ * 
+ * @param {String} username username to update user biography
+ * @param {Array} userBiography array of user biography
+ * @returns on success
+ * @throws database error
+ */
+async function updateUsersUserBiography(username, userBiography) {
+    // Create the UpdateCommand to update the user's user biography
+    const command = new UpdateCommand({
+        TableName,
+        Key: {username: username},
+        UpdateExpression: 'SET #userBiography = :userBiography',
+        ExpressionAttributeNames: {
+            '#userBiography': 'userBiography'
+        },
+        ExpressionAttributeValues: {
+            ':userBiography': userBiography
+        }
+    });
+
+    try {
+        await documentClient.send(command);
+        return;
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+/**
+ * updateUsersLikedPosts will UPDATE the users liked posts in the table
+ * 
+ * @param {String} username username to update liked posts
+ * @param {Array} userLikedPosts array of liked posts
+ * @returns on success
+ * @throws database error
+ */
+async function updateUsersLikedPosts(username, userLikedPosts) {
+    // Create the UpdateCommand to update the user's liked posts
+    const command = new UpdateCommand({
+        TableName,
+        Key: {username: username},
+        UpdateExpression: 'SET #userLikedPosts = :userLikedPosts',
+        ExpressionAttributeNames: {
+            '#userLikedPosts': 'userLikedPosts'
+        },
+        ExpressionAttributeValues: {
+            ':userLikedPosts': userLikedPosts
         }
     });
 
@@ -329,8 +479,13 @@ module.exports = {
     updateEmail,
     updatePassword,
     updateUserProfilePicture,
-    updateUsersFavoriteTeams,
-    updateUsersFavoritePlayers,
+    updateUsersFollowingTeams,
+    updateUsersFollowingPlayers,
+    updateUsersFavoriteTeam,
+    updateUsersFavoritePlayer,
+    updateUsersUserTag,
+    updateUsersUserBiography,
+    updateUsersLikedPosts,
     toggleUserAdmin,
     toggleUserVerified,
     deleteUserAccount
