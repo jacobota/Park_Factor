@@ -39,7 +39,7 @@ struct User: Codable {
     var profilePicture: String?
     var userBiography: String?
     var userLikedPosts: [String]
-    var userTag: String?
+    var userTag: String
     var verified: Bool
 }
 
