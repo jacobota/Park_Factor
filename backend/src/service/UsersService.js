@@ -489,8 +489,8 @@ function validateUsername(username) {
         }
     }
 
-    // Username must be between 5 and 20 characters
-    return username.length >= 5 && username.length <= 20;
+    // Username must be between 5 and 15 characters
+    return username.length >= 5 && username.length <= 15;
 }
 
 /**
