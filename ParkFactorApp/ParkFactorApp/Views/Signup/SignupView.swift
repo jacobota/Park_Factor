@@ -39,9 +39,7 @@ struct SignupView: View {
                         Text("Sign up to Park Factor")
                             .font(.parkFactorFontTitle)
                             .foregroundStyle(Color.white)
-                            .fontWeight(.bold)
-                            .foregroundStyle(.white)
-                    }
+                            .fontWeight(.bold)                    }
                     .padding(.bottom, 20)
                     
                     Section {

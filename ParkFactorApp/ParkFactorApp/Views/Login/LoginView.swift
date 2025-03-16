@@ -32,7 +32,6 @@ struct LoginView: View {
                             .font(.parkFactorFontTitle)
                             .foregroundStyle(Color.white)
                             .fontWeight(.bold)
-                            .foregroundStyle(.white)
                         
                         Image("ParkFactorLogo")
                             .resizable()
