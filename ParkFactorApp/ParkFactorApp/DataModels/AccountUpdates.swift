@@ -16,3 +16,8 @@ struct UpdatePassword: Codable {
 struct UpdateEmail: Codable {
     var email: String = ""
 }
+
+// Profile picture update
+struct UpdateProfilePicture: Codable {
+    var profilePicture: String = ""
+}

@@ -10,14 +10,12 @@ import PhotosUI
 
 struct ChangeProfilePictureView: View {
     @AppStorage("accessToken") private var accessToken: String?
-    @State private var confirmEmail: String = ""
-    @State private var resultMessage: String = ""
-    @State private var resultShow: Bool = false
-    @State private var successShow: Bool = false
     @State private var hideSaveImageButton = false
     @State private var profilePicture: PhotosPickerItem?
     @State private var selectedImage: UIImage?
     @State private var uploadStatus: String?
+    @State private var updateProfilePicture = UpdateProfilePicture()
+    @State private var profilePicSaved = false
     
     var savedUser: SavedUser
     
@@ -80,6 +78,8 @@ struct ChangeProfilePictureView: View {
                                     if let data = try? await newImage?.loadTransferable(type: Data.self) {
                                         if let uiImage = UIImage(data: data) {
                                             selectedImage = uiImage
+                                            uploadStatus = ""
+                                            profilePicSaved = false
                                         }
                                     }
                                 }
@@ -115,16 +115,47 @@ struct ChangeProfilePictureView: View {
             let fileName = "\(savedUser.user.username)-profilepic.jpg"
             let s3Url = await s3UploadImage(imageData: imageJpegData, fileName: fileName)
             
-            updateUserProfilePicture(s3Url)
-            uploadStatus = "Profile Picture Updated Successfully!"
-            hideSaveImageButton.toggle()
+            await updateUserProfilePicture(s3Url)
         } else {
             uploadStatus = "Failed to upload image"
         }
     }
     
-    private func updateUserProfilePicture(_ url: String) {
-        savedUser.user.profilePicture = url
+    private func updateUserProfilePicture(_ profilePictureUrl: String) async {
+        updateProfilePicture.profilePicture = profilePictureUrl
+        
+        // call the network request to save new password
+        let baseUrl = Env.expressBaseURL
+        guard let encoded = try? JSONEncoder().encode(updateProfilePicture) else {
+            uploadStatus = "Failed to encode New Profile Picture"
+            return
+        }
+        
+        //create the url
+        let url = URL(string: "\(baseUrl)/users/update/profilePicture")!
+        var request = URLRequest(url: url)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(accessToken!)", forHTTPHeaderField: "Authorization")
+        request.httpMethod = "PUT"
+        
+        do {
+            let (_, res) = try await URLSession.shared.upload(for: request, from: encoded)
+            
+            // handle the result if bad
+            if let httpResponse = res as? HTTPURLResponse {
+                // If the result of the http response is a 400 then the message of what went wrong will be returned and placed in errorMessage
+                if httpResponse.statusCode != 201 {
+                    uploadStatus = "Failed to save profile picture"
+                    return
+                }
+                
+                uploadStatus = "Profile Picture Updated Successfully!"
+                hideSaveImageButton.toggle()
+                savedUser.user.profilePicture = profilePictureUrl
+            }
+        } catch {
+            uploadStatus = "Failed to save profile picture"
+        }
     }
 }
 
