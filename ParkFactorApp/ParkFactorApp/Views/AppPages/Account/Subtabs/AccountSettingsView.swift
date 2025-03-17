@@ -18,7 +18,71 @@ struct AccountSettingsView: View {
     var body: some View {
         VStack {
             List {
-                Section {
+                Section(header: Text("Update Profile Overview")
+                    .font(Font.parkFactorFontTextNorwester)
+                    .foregroundStyle(Color.parkFactorPrimary)
+                    .padding(.bottom, 10)
+                ){
+                    NavigationLink(destination: ChangeFavoriteTeamView()) {
+                        Text("Favorite Team")
+                            .font(Font.parkFactorFontSubtitleNorwester)
+                            .foregroundStyle(Color.parkFactorPrimary)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(15)
+                    }
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(
+                        Capsule()
+                            .fill(Color.parkFactorSecondary)
+                            .padding(5))
+                    
+                    NavigationLink(destination: ChangeFavoritePlayerView()) {
+                        Text("Favorite Player")
+                            .font(Font.parkFactorFontSubtitleNorwester)
+                            .foregroundStyle(Color.parkFactorPrimary)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(15)
+                    }
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(
+                        Capsule()
+                            .fill(Color.parkFactorSecondary)
+                            .padding(5))
+                    
+                    NavigationLink(destination: ChangeUserTagView(savedUser: savedUser)) {
+                        Text("User Tag")
+                            .font(Font.parkFactorFontSubtitleNorwester)
+                            .foregroundStyle(Color.parkFactorPrimary)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(15)
+                    }
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(
+                        Capsule()
+                            .fill(Color.parkFactorSecondary)
+                            .padding(5))
+                    
+                    if !savedUser.user.verified {
+                        NavigationLink(destination: ChangeUserBioView()) {
+                            Text("User Bio")
+                                .font(Font.parkFactorFontSubtitleNorwester)
+                                .foregroundStyle(Color.parkFactorPrimary)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .padding(15)
+                        }
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(
+                            Capsule()
+                                .fill(Color.parkFactorSecondary)
+                                .padding(5))
+                    }
+                }
+                
+                Section(header: Text("Update Account Information")
+                    .font(Font.parkFactorFontTextNorwester)
+                    .foregroundStyle(Color.parkFactorPrimary)
+                    .padding(.bottom, 10)
+                ){
                     NavigationLink(destination: ChangeEmailView(savedUser: savedUser)) {
                         Text("Change Email")
                             .font(Font.parkFactorFontSubtitleNorwester)
@@ -118,6 +182,7 @@ struct AccountSettingsView: View {
             .environment(\.defaultMinListRowHeight, 60)
             .listStyle(GroupedListStyle())
             .scrollContentBackground(.hidden)
+            .scrollIndicators(.hidden)
             .containerRelativeFrame(.horizontal) { size, axis in
                 size * 0.9
             }

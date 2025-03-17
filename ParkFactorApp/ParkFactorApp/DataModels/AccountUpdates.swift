@@ -21,3 +21,7 @@ struct UpdateEmail: Codable {
 struct UpdateProfilePicture: Codable {
     var profilePicture: String = ""
 }
+
+struct UpdateUserTag: Codable {
+    var userTag: String = ""
+}

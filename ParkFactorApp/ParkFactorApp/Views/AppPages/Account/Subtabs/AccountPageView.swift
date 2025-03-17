@@ -15,6 +15,10 @@ struct AccountPageView: View {
             VStack {
                 Section {
                     VStack {
+                        Text("Profile Overview")
+                                .font(.parkFactorFontSubtitleNorwester)
+                                .foregroundStyle(Color.parkFactorPrimary)
+                                .padding(.bottom, 15)
                         HStack {
                             if let profilePictureURL = savedUser.user.profilePicture, let url = URL(string: profilePictureURL) {
                                 AsyncImage(url: url) { image in
@@ -40,7 +44,7 @@ struct AccountPageView: View {
                             }
                             VStack(alignment: .leading) {
                                 Text("\(savedUser.user.username)")
-                                    .font(.parkFactorFontSubtitleNorwester)
+                                    .font(.parkFactorFontUsername)
                                     .foregroundStyle(Color.white)
                                     .padding(.top, 10)
                                     .lineLimit(1)
@@ -48,14 +52,14 @@ struct AccountPageView: View {
                                 
                                 Spacer()
                                 
-                                Text("Rookie")
-                                    .font(.parkFactorFontText)
+                                Text("\(savedUser.user.userTag)")
+                                    .font(.parkFactorFontTextNorwester)
                                     .foregroundStyle(Color.white)
+                                    .opacity(0.5)
                                 
                                 Spacer()
                             }
                             .padding(.horizontal, 10)
-                            Spacer()
                         }
                         .padding(.bottom, 20)
                         Divider()
