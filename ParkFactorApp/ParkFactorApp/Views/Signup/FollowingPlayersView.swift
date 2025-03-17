@@ -21,7 +21,7 @@ struct PlayerCard: View {
             } placeholder: {
                 ProgressView()
             }
-            .frame(width: 100, height: 100)
+            .frame(width: 75, height: 75)
             .padding()
             
             Divider()
@@ -29,15 +29,20 @@ struct PlayerCard: View {
             
             Text("\(player.fullName)")
                 .font(.parkFactorFontSubtitleArchivo)
-                .foregroundColor(.parkFactorSecondary)
+                .foregroundColor(isSelected ? Color.parkFactorSecondary : Color.parkFactorPrimary)
                 .multilineTextAlignment(.center)
                 .padding()
                 .frame(maxWidth: .infinity, alignment: .center)
                 .cornerRadius(5)
         }
-        .frame(width: 350, height: 150)
-        .background(isSelected ? Color.parkFactorPrimary : Color.white)
+        .frame(width: 335, height: 135)
+        .background(isSelected ? Color.parkFactorPrimary : Color.black)
         .cornerRadius(20)
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.parkFactorPrimary, lineWidth: isSelected ? 0 : 2)
+        )
+        .padding(5)
         .onTapGesture {
             onSelect()
         }
@@ -119,10 +124,6 @@ struct FollowingPlayersView: View {
                             if searchIsFocused {
                                 searchFilteredPlayersListView
                             } else {
-                                if !selectedPlayers.isEmpty {
-                                    selectedPlayersListView
-                                }
-                                
                                 trendingPlayersListView
                             }
                         }
@@ -171,35 +172,6 @@ struct FollowingPlayersView: View {
                             )
                             .animation(.linear(duration: 0.25), value: isSelected)
                         }
-                    }
-                }
-                .padding()
-            }
-        }
-        .padding()
-    }
-    
-    private var selectedPlayersListView: some View {
-        Section {
-            Section {
-                Text("Selected Players")
-                    .font(.parkFactorFontSubtitleNorwester)
-                    .foregroundStyle(Color.white)
-                    .fontWeight(.bold)
-                    .foregroundStyle(.white)
-            }
-            ScrollView {
-                LazyVStack(spacing: 10) {
-                    ForEach(selectedPlayers) { player in
-                        let isSelected = selectedPlayers.contains(where: { $0.id == player.id })
-                        PlayerCard(
-                            player: player,
-                            isSelected: isSelected,
-                            onSelect: {
-                                togglePlayerSelection(player: player)
-                            }
-                        )
-                        .animation(.linear(duration: 0.25), value: isSelected)
                     }
                 }
                 .padding()

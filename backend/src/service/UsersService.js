@@ -37,7 +37,7 @@ async function createUser(body) {
                 email: body.email,
                 followingPlayers: [],
                 followingTeams: [],
-                favoritePlayer: "",
+                favoritePlayer: null,
                 favoriteTeam: "",
                 userTag: "Rookie",
                 userBiography: "",

@@ -36,7 +36,7 @@ struct AccountSettingsView: View {
                             .fill(Color.parkFactorSecondary)
                             .padding(5))
                     
-                    NavigationLink(destination: ChangeFavoritePlayerView()) {
+                    NavigationLink(destination: ChangeFavoritePlayerView(savedUser: savedUser)) {
                         Text("Favorite Player")
                             .font(Font.parkFactorFontSubtitleNorwester)
                             .foregroundStyle(Color.parkFactorPrimary)

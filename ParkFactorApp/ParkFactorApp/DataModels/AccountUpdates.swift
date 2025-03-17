@@ -22,6 +22,12 @@ struct UpdateProfilePicture: Codable {
     var profilePicture: String = ""
 }
 
+struct UpdateFavoritePlayer: Codable {
+    var favoritePlayer: Player?
+}
+
+struct UpdateNullFavoritePlayer: Codable { }
+
 struct UpdateUserTag: Codable {
     var userTag: String = ""
 }

@@ -65,8 +65,50 @@ struct AccountPageView: View {
                         Divider()
                             .background(Color.white.opacity(0.9))
                         HStack {
-                            
+                            Spacer()
+                            VStack {
+                                Text("Favorite Team")
+                                    .font(.parkFactorFontTextNorwester)
+                                    .foregroundStyle(Color.white)
+                                    .opacity(0.5)
+                            }
+                            Spacer()
+                            VStack {
+                                Text("Favorite Player")
+                                    .font(.parkFactorFontTextNorwester)
+                                    .foregroundStyle(Color.white)
+                                    .opacity(0.5)
+                                if let favoritePlayer = savedUser.user.favoritePlayer {
+                                    AsyncImage(url: URL(string: "https://img.mlbstatic.com/mlb-photos/image/upload/w_180,d_people:generic:headshot:silo:current.png,q_auto:best,f_auto/v1/people/\(favoritePlayer.keyMlbam)/headshot/silo/current"), scale: 3) { image in
+                                        image
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 75, height: 75)
+                                            .clipShape(Circle())
+                                            .overlay(
+                                                Circle().stroke(Color.parkFactorPrimary, lineWidth: 3)
+                                            )
+                                    } placeholder: {
+                                        ProgressView()
+                                    }
+                                    .frame(width: 75, height: 75)
+                                    .padding(.top)
+                                    
+                                    Text("\(favoritePlayer.fullName)")
+                                        .font(.parkFactorFontTextNorwester)
+                                        .foregroundStyle(Color.white)
+                                        .opacity(0.8)
+                                        .padding(.top)
+                                } else {
+                                    Text("N/A")
+                                        .font(.parkFactorFontTextNorwester)
+                                        .foregroundStyle(Color.white)
+                                        .opacity(0.8)
+                                }
+                            }
+                            Spacer()
                         }
+                        .padding(.top)
                     }
                     .padding(30)
                     .background(Color.parkFactorSecondary)
