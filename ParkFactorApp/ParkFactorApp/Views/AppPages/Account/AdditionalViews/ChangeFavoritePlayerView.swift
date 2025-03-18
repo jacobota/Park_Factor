@@ -74,7 +74,7 @@ struct ChangeFavoritePlayerView: View {
         var updateFavoritePlayerRequest = UpdateFavoritePlayer()
         updateFavoritePlayerRequest.favoritePlayer = selectedPlayer
         guard let encoded = try? JSONEncoder().encode(updateFavoritePlayerRequest) else {
-            resultMessage = "Failed to encode New Tag"
+            resultMessage = "Failed to encode Favorite Player"
             resultShow = true
             return
         }
@@ -99,7 +99,7 @@ struct ChangeFavoritePlayerView: View {
                     return
                 }
                 
-                // Update the tag in the savedUser for UserDefaults and selectedTag
+                // Update the favorite player in the savedUser for UserDefaults 
                 savedUser.user.favoritePlayer = selectedPlayer
             }
         } catch {

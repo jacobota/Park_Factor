@@ -23,7 +23,7 @@ struct AccountSettingsView: View {
                     .foregroundStyle(Color.parkFactorPrimary)
                     .padding(.bottom, 10)
                 ){
-                    NavigationLink(destination: ChangeFavoriteTeamView()) {
+                    NavigationLink(destination: ChangeFavoriteTeamView(savedUser: savedUser)) {
                         Text("Favorite Team")
                             .font(Font.parkFactorFontSubtitleNorwester)
                             .foregroundStyle(Color.parkFactorPrimary)

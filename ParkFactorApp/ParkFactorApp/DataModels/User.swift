@@ -32,7 +32,7 @@ struct User: Codable {
     var admin: Bool
     var email: String
     var favoritePlayer: Player?
-    var favoriteTeam: String?
+    var favoriteTeam: Team?
     var followingPlayers: [Player]
     var followingTeams: [Team]
     var password: String
@@ -66,7 +66,7 @@ class SavedUser {
             self.user = decodedUser
         } else {
             // Initialize with default or empty user
-            self.user = User(username: "", admin: false, email: "", favoritePlayer: nil, favoriteTeam: "", followingPlayers: [], followingTeams: [],  password: "", profilePicture: "", userBiography: "", userLikedPosts: [], userTag: "", verified: false)
+            self.user = User(username: "", admin: false, email: "", favoritePlayer: nil, favoriteTeam: nil, followingPlayers: [], followingTeams: [],  password: "", profilePicture: "", userBiography: "", userLikedPosts: [], userTag: "", verified: false)
         }
     }
 }

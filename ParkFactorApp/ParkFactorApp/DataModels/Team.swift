@@ -83,4 +83,71 @@ struct Team: Identifiable, Codable {
             return "Unknown Team"
         }
     }
+    
+    var teamMascot: String {
+        switch teamIDBR {
+        case "LAA":
+            return "Angels"
+        case "SEA":
+            return "Mariners"
+        case "TEX":
+            return "Rangers"
+        case "HOU":
+            return "Astros"
+        case "OAK":
+            return "Athletics"
+        case "CHW":
+            return "White Sox"
+        case "MIN":
+            return "Twins"
+        case "KCR":
+            return "Royals"
+        case "DET":
+            return "Tigers"
+        case "CLE":
+            return "Guardians"
+        case "NYY":
+            return "Yankees"
+        case "BOS":
+            return "Red Sox"
+        case "TBR":
+            return "Rays"
+        case "TOR":
+            return "Blue Jays"
+        case "BAL":
+            return "Orioles"
+        case "SFG":
+            return "Giants"
+        case "LAD":
+            return "Dodgers"
+        case "SDP":
+            return "Padres"
+        case "ARI":
+            return "Diamondbacks"
+        case "COL":
+            return "Rockies"
+        case "CHC":
+            return "Cubs"
+        case "CIN":
+            return "Reds"
+        case "PIT":
+            return "Pirates"
+        case "MIL":
+            return "Brewers"
+        case "STL":
+            return "Cardinals"
+        case "NYM":
+            return "Mets"
+        case "WSN":
+            return "Nationals"
+        case "MIA":
+            return "Marlins"
+        case "ATL":
+            return "Braves"
+        case "PHI":
+            return "Phillies"
+        default:
+            return "Unknown Team"
+        }
+    }
 }

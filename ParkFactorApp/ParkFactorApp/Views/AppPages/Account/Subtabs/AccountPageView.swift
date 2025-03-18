@@ -20,7 +20,7 @@ struct AccountPageView: View {
                                 AsyncImage(url: url) { image in
                                     image.resizable()
                                         .scaledToFill()
-                                        .frame(width: 100, height: 100)
+                                        .frame(width: 110, height: 110)
                                         .clipShape(Circle())
                                         .overlay(
                                             Circle().stroke(Color.parkFactorPrimary, lineWidth: 2)
@@ -32,7 +32,7 @@ struct AccountPageView: View {
                                 Image("ParkFactorLogo")
                                     .resizable()
                                     .scaledToFill()
-                                    .frame(width: 100, height: 100)
+                                    .frame(width: 110, height: 110)
                                     .clipShape(Circle())
                                     .overlay(
                                         Circle().stroke(Color.parkFactorPrimary, lineWidth: 2)
@@ -56,6 +56,7 @@ struct AccountPageView: View {
                                 Spacer()
                             }
                             .padding(.horizontal, 10)
+                            Spacer()
                         }
                         .padding(.bottom, 20)
                         Divider()
@@ -69,14 +70,15 @@ struct AccountPageView: View {
                                     .opacity(0.5)
                                 
                                 if let favoriteTeam = savedUser.user.favoriteTeam {
-                                    AsyncImage(url: URL(string: "https://img.mlbstatic.com/mlb-photos/image/upload/w_180,d_people:generic:headshot:silo:current.png,q_auto:best,f_auto/v1/people/headshot/silo/current"), scale: 3) { image in
+                                    AsyncImage(url: URL(string: "https://cdn.ssref.net/req/202502211/tlogo/br/\(favoriteTeam.franchID).png"), scale: 3) { image in
                                         image
                                             .resizable()
                                             .scaledToFit()
                                             .frame(width: 50, height: 50)
+                                            .background(Color.white)
                                             .clipShape(Circle())
                                             .overlay(
-                                                Circle().stroke(Color.parkFactorPrimary, lineWidth: 2)
+                                                Circle().stroke(Color.parkFactorPrimary, lineWidth: 3)
                                             )
                                     } placeholder: {
                                         ProgressView()
@@ -84,20 +86,22 @@ struct AccountPageView: View {
                                     .frame(width: 50, height: 50)
                                     .padding(.top, 5)
                                     
-                                    Text("")
+                                    Text("\(favoriteTeam.teamMascot)")
                                         .font(.parkFactorFontSmallTextNorwester)
                                         .foregroundStyle(Color.white)
                                         .opacity(0.8)
                                         .padding(.top, 5)
                                 } else {
-                                    Image("ParkFactorLogo")
+                                    Image("mlbLogo")
                                         .resizable()
-                                        .scaledToFill()
+                                        .scaledToFit()
                                         .frame(width: 50, height: 50)
+                                        .background(Color.black)
                                         .clipShape(Circle())
                                         .overlay(
-                                            Circle().stroke(Color.parkFactorPrimary, lineWidth: 2)
+                                            Circle().stroke(Color.parkFactorPrimary, lineWidth: 3)
                                         )
+                                        .padding(.top, 5)
                                     
                                     Text("N/A")
                                         .font(.parkFactorFontSmallTextNorwester)
@@ -119,9 +123,10 @@ struct AccountPageView: View {
                                             .resizable()
                                             .scaledToFit()
                                             .frame(width: 50, height: 50)
+                                            .background(Color.white)
                                             .clipShape(Circle())
                                             .overlay(
-                                                Circle().stroke(Color.parkFactorPrimary, lineWidth: 2)
+                                                Circle().stroke(Color.parkFactorPrimary, lineWidth: 3)
                                             )
                                     } placeholder: {
                                         ProgressView()
@@ -135,14 +140,20 @@ struct AccountPageView: View {
                                         .opacity(0.8)
                                         .padding(.top, 5)
                                 } else {
-                                    Image("ParkFactorLogo")
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 50, height: 50)
-                                        .clipShape(Circle())
-                                        .overlay(
-                                            Circle().stroke(Color.parkFactorPrimary, lineWidth: 2)
-                                        )
+                                    AsyncImage(url: URL(string: "https://img.mlbstatic.com/mlb-photos/image/upload/w_180,d_people:generic:headshot:silo:current.png,q_auto:best,f_auto/v1/people/headshot/silo/current"), scale: 3) { image in
+                                        image
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 50, height: 50)
+                                            .clipShape(Circle())
+                                            .overlay(
+                                                Circle().stroke(Color.parkFactorPrimary, lineWidth: 2)
+                                            )
+                                    } placeholder: {
+                                        ProgressView()
+                                    }
+                                    .frame(width: 50, height: 50)
+                                    .padding(.top, 5)
                                     
                                     Text("N/A")
                                         .font(.parkFactorFontSmallTextNorwester)

@@ -26,7 +26,9 @@ struct UpdateFavoritePlayer: Codable {
     var favoritePlayer: Player?
 }
 
-struct UpdateNullFavoritePlayer: Codable { }
+struct UpdateFavoriteTeam: Codable {
+    var favoriteTeam: Team?
+}
 
 struct UpdateUserTag: Codable {
     var userTag: String = ""
