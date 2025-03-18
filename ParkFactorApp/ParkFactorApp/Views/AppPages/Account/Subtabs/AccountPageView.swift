@@ -15,10 +15,6 @@ struct AccountPageView: View {
             VStack {
                 Section {
                     VStack {
-                        Text("Profile Overview")
-                                .font(.parkFactorFontSubtitleNorwester)
-                                .foregroundStyle(Color.parkFactorPrimary)
-                                .padding(.bottom, 15)
                         HStack {
                             if let profilePictureURL = savedUser.user.profilePicture, let url = URL(string: profilePictureURL) {
                                 AsyncImage(url: url) { image in
@@ -27,7 +23,7 @@ struct AccountPageView: View {
                                         .frame(width: 100, height: 100)
                                         .clipShape(Circle())
                                         .overlay(
-                                            Circle().stroke(Color.parkFactorPrimary, lineWidth: 3)
+                                            Circle().stroke(Color.parkFactorPrimary, lineWidth: 2)
                                         )
                                 } placeholder: {
                                     ProgressView()
@@ -39,7 +35,7 @@ struct AccountPageView: View {
                                     .frame(width: 100, height: 100)
                                     .clipShape(Circle())
                                     .overlay(
-                                        Circle().stroke(Color.parkFactorPrimary, lineWidth: 3)
+                                        Circle().stroke(Color.parkFactorPrimary, lineWidth: 2)
                                     )
                             }
                             VStack(alignment: .leading) {
@@ -68,49 +64,98 @@ struct AccountPageView: View {
                             Spacer()
                             VStack {
                                 Text("Favorite Team")
-                                    .font(.parkFactorFontTextNorwester)
+                                    .font(.parkFactorFontSmallTextNorwester)
                                     .foregroundStyle(Color.white)
                                     .opacity(0.5)
+                                
+                                if let favoriteTeam = savedUser.user.favoriteTeam {
+                                    AsyncImage(url: URL(string: "https://img.mlbstatic.com/mlb-photos/image/upload/w_180,d_people:generic:headshot:silo:current.png,q_auto:best,f_auto/v1/people/headshot/silo/current"), scale: 3) { image in
+                                        image
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 50, height: 50)
+                                            .clipShape(Circle())
+                                            .overlay(
+                                                Circle().stroke(Color.parkFactorPrimary, lineWidth: 2)
+                                            )
+                                    } placeholder: {
+                                        ProgressView()
+                                    }
+                                    .frame(width: 50, height: 50)
+                                    .padding(.top, 5)
+                                    
+                                    Text("")
+                                        .font(.parkFactorFontSmallTextNorwester)
+                                        .foregroundStyle(Color.white)
+                                        .opacity(0.8)
+                                        .padding(.top, 5)
+                                } else {
+                                    Image("ParkFactorLogo")
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 50, height: 50)
+                                        .clipShape(Circle())
+                                        .overlay(
+                                            Circle().stroke(Color.parkFactorPrimary, lineWidth: 2)
+                                        )
+                                    
+                                    Text("N/A")
+                                        .font(.parkFactorFontSmallTextNorwester)
+                                        .foregroundStyle(Color.white)
+                                        .opacity(0.8)
+                                        .padding(.top, 5)
+                                }
                             }
                             Spacer()
                             VStack {
                                 Text("Favorite Player")
-                                    .font(.parkFactorFontTextNorwester)
+                                    .font(.parkFactorFontSmallTextNorwester)
                                     .foregroundStyle(Color.white)
                                     .opacity(0.5)
+                                
                                 if let favoritePlayer = savedUser.user.favoritePlayer {
                                     AsyncImage(url: URL(string: "https://img.mlbstatic.com/mlb-photos/image/upload/w_180,d_people:generic:headshot:silo:current.png,q_auto:best,f_auto/v1/people/\(favoritePlayer.keyMlbam)/headshot/silo/current"), scale: 3) { image in
                                         image
                                             .resizable()
                                             .scaledToFit()
-                                            .frame(width: 75, height: 75)
+                                            .frame(width: 50, height: 50)
                                             .clipShape(Circle())
                                             .overlay(
-                                                Circle().stroke(Color.parkFactorPrimary, lineWidth: 3)
+                                                Circle().stroke(Color.parkFactorPrimary, lineWidth: 2)
                                             )
                                     } placeholder: {
                                         ProgressView()
                                     }
-                                    .frame(width: 75, height: 75)
-                                    .padding(.top)
+                                    .frame(width: 50, height: 50)
+                                    .padding(.top, 5)
                                     
                                     Text("\(favoritePlayer.fullName)")
-                                        .font(.parkFactorFontTextNorwester)
+                                        .font(.parkFactorFontSmallTextNorwester)
                                         .foregroundStyle(Color.white)
                                         .opacity(0.8)
-                                        .padding(.top)
+                                        .padding(.top, 5)
                                 } else {
+                                    Image("ParkFactorLogo")
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 50, height: 50)
+                                        .clipShape(Circle())
+                                        .overlay(
+                                            Circle().stroke(Color.parkFactorPrimary, lineWidth: 2)
+                                        )
+                                    
                                     Text("N/A")
-                                        .font(.parkFactorFontTextNorwester)
+                                        .font(.parkFactorFontSmallTextNorwester)
                                         .foregroundStyle(Color.white)
                                         .opacity(0.8)
+                                        .padding(.top, 5)
                                 }
                             }
                             Spacer()
                         }
                         .padding(.top)
                     }
-                    .padding(30)
+                    .padding(20)
                     .background(Color.parkFactorSecondary)
                     .cornerRadius(20)
                 }
