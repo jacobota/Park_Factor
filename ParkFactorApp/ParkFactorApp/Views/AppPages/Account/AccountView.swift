@@ -29,9 +29,8 @@ struct AccountView: View {
                                     }) {
                                         Text(subTab)
                                             .font(Font.parkFactorFontTextNorwester)
-                                            .foregroundColor(selectedTab == subTab ? Color.parkFactorSecondary : Color.parkFactorPrimary)
+                                            .foregroundColor(selectedTab == subTab ? Color.parkFactorPrimary : Color.gray)
                                             .padding()
-                                            .background(selectedTab == subTab ? Color.parkFactorPrimary : Color.clear)
                                             .cornerRadius(10)
                                     }
                                 }

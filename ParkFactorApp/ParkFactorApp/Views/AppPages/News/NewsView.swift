@@ -26,9 +26,8 @@ struct NewsView: View {
                                     }) {
                                         Text(subTab)
                                             .font(Font.parkFactorFontTextNorwester)
-                                            .foregroundColor(selectedTab == subTab ? Color.parkFactorSecondary : Color.parkFactorPrimary)
+                                            .foregroundColor(selectedTab == subTab ? Color.parkFactorPrimary : Color.gray)
                                             .padding()
-                                            .background(selectedTab == subTab ? Color.parkFactorPrimary : Color.clear)
                                             .cornerRadius(10)
                                     }
                                 }
@@ -37,7 +36,7 @@ struct NewsView: View {
                             .cornerRadius(8)
                         }
                         .scrollDisabled(true)
-                        .frame(width: .infinity, height: 70)
+                        .frame(height: 40)
                         .padding()
                     }
                     .background(Color.parkFactorSecondary)
