@@ -1,0 +1,86 @@
+//
+//  Team.swift
+//  ParkFactorApp
+//
+//  Created by Jacob Ota on 3/17/25.
+//
+
+import Foundation
+
+struct Team: Identifiable, Codable {
+    let id: UUID = UUID()
+    let franchID: String
+    let lgID: String
+    let teamID: String
+    let teamIDBR: String
+    let teamIDfg: Int
+    let teamIDretro: String
+    let yearID: Int
+    
+    var teamName: String {
+        switch teamIDBR {
+        case "LAA":
+            return "Los Angeles Angels"
+        case "SEA":
+            return "Seattle Mariners"
+        case "TEX":
+            return "Texas Rangers"
+        case "HOU":
+            return "Houston Astros"
+        case "OAK":
+            return "Oakland Athletics"
+        case "CHW":
+            return "Chicago White Sox"
+        case "MIN":
+            return "Minnesota Twins"
+        case "KCR":
+            return "Kansas City Royals"
+        case "DET":
+            return "Detroit Tigers"
+        case "CLE":
+            return "Cleveland Guardians"
+        case "NYY":
+            return "New York Yankees"
+        case "BOS":
+            return "Boston Red Sox"
+        case "TBR":
+            return "Tampa Bay Rays"
+        case "TOR":
+            return "Toronto Blue Jays"
+        case "BAL":
+            return "Baltimore Orioles"
+        case "SFG":
+            return "San Francisco Giants"
+        case "LAD":
+            return "Los Angeles Dodgers"
+        case "SDP":
+            return "San Diego Padres"
+        case "ARI":
+            return "Arizona Diamondbacks"
+        case "COL":
+            return "Colorado Rockies"
+        case "CHC":
+            return "Chicago Cubs"
+        case "CIN":
+            return "Cincinatti Reds"
+        case "PIT":
+            return "Pittsburgh Pirates"
+        case "MIL":
+            return "Milwaukee Brewers"
+        case "STL":
+            return "St. Louis Cardinals"
+        case "NYM":
+            return "New York Mets"
+        case "WSN":
+            return "Washington Nationals"
+        case "MIA":
+            return "Miami Marlins"
+        case "ATL":
+            return "Atlanta Braves"
+        case "PHI":
+            return "Philadelphia Phillies"
+        default:
+            return "Unknown Team"
+        }
+    }
+}

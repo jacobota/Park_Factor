@@ -21,14 +21,12 @@ struct PlayerCard: View {
             } placeholder: {
                 ProgressView()
             }
-            .frame(width: 75, height: 75)
+            .frame(width: .infinity, height: .infinity)
             .padding()
-            
-            Divider()
-                .background(Color.gray.opacity(0.75))
+            .background(Color.white)
             
             Text("\(player.fullName)")
-                .font(.parkFactorFontSubtitleArchivo)
+                .font(.parkFactorFontBigTextNorwester)
                 .foregroundColor(isSelected ? Color.parkFactorSecondary : Color.parkFactorPrimary)
                 .multilineTextAlignment(.center)
                 .padding()
@@ -37,12 +35,12 @@ struct PlayerCard: View {
         }
         .frame(width: 335, height: 135)
         .background(isSelected ? Color.parkFactorPrimary : Color.black)
-        .cornerRadius(20)
+        .cornerRadius(10)
         .overlay(
             RoundedRectangle(cornerRadius: 10)
-                .stroke(Color.parkFactorPrimary, lineWidth: isSelected ? 0 : 2)
+                .stroke(Color.parkFactorPrimary, lineWidth: 5)
         )
-        .padding(5)
+        .padding(15)
         .onTapGesture {
             onSelect()
         }
@@ -174,8 +172,8 @@ struct FollowingPlayersView: View {
                         }
                     }
                 }
-                .padding()
             }
+            .scrollIndicators(.hidden)
         }
         .padding()
     }
@@ -203,8 +201,8 @@ struct FollowingPlayersView: View {
                         .animation(.linear(duration: 0.25), value: isSelected)
                     }
                 }
-                .padding()
             }
+            .scrollIndicators(.hidden)
         }
         .padding()
     }

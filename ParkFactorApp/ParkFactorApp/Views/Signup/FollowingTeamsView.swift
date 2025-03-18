@@ -8,33 +8,39 @@
 import SwiftUI
 
 struct TeamCard: View {
-    let teamName: String
-    let teamLogo: String
+    let team: Team
     let isSelected: Bool
     let onSelect: () -> Void
     
     var body: some View {
         HStack {
-            Image(teamLogo)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 100, height: 100)
-                .padding()
+            AsyncImage(url: URL(string: "https://cdn.ssref.net/req/202502211/tlogo/br/\(team.franchID).png"), scale: 3) { image in
+                image
+                    .resizable()
+                    .scaledToFit()
+            } placeholder: {
+                ProgressView()
+            }
+            .frame(width: .infinity, height: .infinity)
+            .padding()
+            .background(Color.white)
             
-            Divider()
-                .background(Color.gray.opacity(0.75))
-            
-            Text(teamName)
-                .font(.parkFactorFontSubtitleArchivo)
-                .foregroundColor(Color.parkFactorSecondary)
+            Text(team.teamName)
+                .font(.parkFactorFontBigTextNorwester)
+                .foregroundColor(isSelected ? Color.parkFactorSecondary : Color.parkFactorPrimary)
                 .multilineTextAlignment(.center)
                 .padding()
                 .frame(maxWidth: .infinity, alignment: .center)
                 .cornerRadius(5)
         }
-        .frame(width: 350, height: 175)
-        .background(isSelected ? Color.parkFactorPrimary : Color.white)
-        .cornerRadius(20)
+        .frame(width: 335, height: 135)
+        .background(isSelected ? Color.parkFactorPrimary : Color.black)
+        .cornerRadius(10)
+        .overlay(
+            RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.parkFactorPrimary, lineWidth: 5)
+        )
+        .padding(15)
         .onTapGesture {
             onSelect()
         }
@@ -44,45 +50,13 @@ struct TeamCard: View {
 struct FollowingTeamsView: View {
     @Binding var isLoggedIn: Bool
     @AppStorage("accessToken") private var accessToken: String?
-    @State private var selectedTeams: [String] = []
     @State private var didSelectTeams: Bool = false
     @State private var errorMessage: String = ""
     @State private var errorShow: Bool = false
+    @State private var teams: [Team] = []
+    @State private var selectedTeams: [Team] = []
     
     var savedUser: SavedUser
-    
-    let teams: [String: String] = [
-        "Los Angeles Angels": "AngelsLogo",
-        "Seattle Mariners": "MarinersLogo",
-        "Texas Rangers": "RangersLogo",
-        "Houston Astros": "AstrosLogo",
-        "Oakland A's": "AthleticsLogo",
-        "Chicago White Sox": "WhiteSoxLogo",
-        "Minnesota Twins": "TwinsLogo",
-        "Kansas City Royals": "RoyalsLogo",
-        "Detroit Tigers": "TigersLogo",
-        "Cleveland Guardians": "GuardiansLogo",
-        "New York Yankees": "YankeesLogo",
-        "Boston Red Sox": "RedSoxLogo",
-        "Tampa Bay Rays": "RaysLogo",
-        "Toronto Blue Jays": "BlueJaysLogo",
-        "Baltimore Orioles": "OriolesLogo",
-        "San Francisco Giants": "GiantsLogo",
-        "Los Angeles Dodgers": "DodgersLogo",
-        "San Diego Padres": "PadresLogo",
-        "Arizona Diamondbacks": "DiamondbacksLogo",
-        "Colorado Rockies": "RockiesLogo",
-        "Chicago Cubs": "CubsLogo",
-        "Cincinnati Reds": "RedsLogo",
-        "Pittsburgh Pirates": "PiratesLogo",
-        "Milwaukee Brewers": "BrewersLogo",
-        "St. Louis Cardinals": "CardinalsLogo",
-        "New York Mets": "MetsLogo",
-        "Washington Nationals": "NationalsLogo",
-        "Miami Marlins": "MarlinsLogo",
-        "Atlanta Braves": "BravesLogo",
-        "Philadelphia Phillies": "PhilliesLogo",
-    ]
     
     var body: some View {
         if didSelectTeams {
@@ -111,21 +85,20 @@ struct FollowingTeamsView: View {
                             LazyVStack(spacing: 30) {
                                 // ForEach loop looks at the dictionary of teams and creates a team
                                 // card that displays the teams with their logos and allows for selection
-                                ForEach(teams.keys.sorted(), id: \.self) { teamName in
-                                    let teamLogo = teams[teamName] ?? "DefaultTeamLogo"
-                                    let isSelected = selectedTeams.contains(teamName)
+                                ForEach(teams) { team in
+                                    let isSelected = selectedTeams.contains { $0.id == team.id }
                                     TeamCard(
-                                        teamName: teamName,
-                                        teamLogo: teamLogo,
+                                        team: team,
                                         isSelected: isSelected,
                                         onSelect: {
-                                            toggleTeamSelection(teamName: teamName)
+                                            toggleTeamSelection(team: team)
                                         }
                                     )
                                     .animation(.linear(duration: 0.25), value: isSelected)
                                 }
                             }
                         }
+                        .scrollIndicators(.hidden)
                     }
                     .padding()
                     
@@ -142,25 +115,84 @@ struct FollowingTeamsView: View {
                     }
                 }
                 .padding()
+                .onAppear {
+                    fetchTeams()
+                }
             }
         }
     }
     
-    func toggleTeamSelection(teamName: String) {
+    func fetchTeams() {
+        // call the network request to retrieve teams
+        let baseUrl = Env.expressBaseURL
+        guard let url = URL(string: "\(baseUrl)/teams/mlb-teams") else {
+            errorMessage = "Missing URL"
+            errorShow = true
+            return
+        }
+        
+        let urlRequest = URLRequest(url: url)
+        
+        let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+            if let error = error {
+                DispatchQueue.main.async {
+                    errorMessage = error.localizedDescription
+                    errorShow = true
+                }
+                return
+            }
+            
+            guard let response = response as? HTTPURLResponse else {
+                DispatchQueue.main.async {
+                    errorMessage = "Invalid response"
+                    errorShow = true
+                }
+                return
+            }
+            
+            if response.statusCode != 200 {
+                DispatchQueue.main.async {
+                    errorMessage = "Failed to fetch data: \(response.statusCode)"
+                    errorShow = true
+                }
+                return
+            }
+            
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    errorMessage = "No data received"
+                    errorShow = true
+                }
+                return
+            }
+            
+            do {
+                let decodedTeams = try JSONDecoder().decode([Team].self, from: data)
+                DispatchQueue.main.async {
+                   teams = decodedTeams
+                }
+            } catch let error {
+                DispatchQueue.main.async {
+                    errorMessage = "Failed to decode data: \(error.localizedDescription)"
+                    errorShow = true
+                }
+            }
+        }
+        
+        dataTask.resume()
+    }
+    
+    func toggleTeamSelection(team: Team) {
         // Check if the team is selected if it is then remove it from the selectedTeams array
         // Else append it and sort it so the teams are in order
-        if let index = selectedTeams.firstIndex(of: teamName) {
+        if let index = selectedTeams.firstIndex(where: { $0.teamName == team.teamName }) {
             selectedTeams.remove(at: index)
         } else {
-            selectedTeams.append(teamName)
+            selectedTeams.append(team)
         }
-        selectedTeams.sort()
     }
     
     func saveFollowingTeams() async {
-        // save the teams to UserDefaults
-        savedUser.user.followingTeams = selectedTeams
-        
         // save the teams to a Codable to be used by request
         var followingTeamsRequest: FollowingTeamsStruct = FollowingTeamsStruct()
         followingTeamsRequest.followingTeams = selectedTeams
@@ -193,6 +225,8 @@ struct FollowingTeamsView: View {
                     return
                 }
             }
+            // save the teams to UserDefaults
+            savedUser.user.followingTeams = selectedTeams
             didSelectTeams = true
         } catch {
             errorMessage = error.localizedDescription

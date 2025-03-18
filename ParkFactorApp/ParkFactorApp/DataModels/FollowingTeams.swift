@@ -9,5 +9,5 @@ import Foundation
 
 // Codable struct to hold following teams
 struct FollowingTeamsStruct : Codable {
-    var followingTeams: [String] = []
+    var followingTeams: [Team] = []
 }

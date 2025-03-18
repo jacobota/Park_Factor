@@ -34,7 +34,7 @@ struct User: Codable {
     var favoritePlayer: Player?
     var favoriteTeam: String?
     var followingPlayers: [Player]
-    var followingTeams: [String]
+    var followingTeams: [Team]
     var password: String
     var profilePicture: String?
     var userBiography: String?
