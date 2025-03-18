@@ -23,7 +23,7 @@ struct ChangeFavoriteTeamView: View {
             VStack {
                 Text("Select Your Favorite Team")
                     .font(.parkFactorFontSubtitleNorwester)
-                    .foregroundStyle(Color.parkFactorPrimary)
+                    .foregroundStyle(Color.white)
                     .padding(.bottom, 10)
                 
                 List {

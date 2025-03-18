@@ -27,7 +27,6 @@ struct ChangeProfilePictureView: View {
                     Text("Change Profile Picture")
                         .font(.parkFactorFontTitle)
                         .foregroundStyle(Color.white)
-                        .foregroundStyle(.white)
                     
                 }
                 .padding(.bottom, 20)

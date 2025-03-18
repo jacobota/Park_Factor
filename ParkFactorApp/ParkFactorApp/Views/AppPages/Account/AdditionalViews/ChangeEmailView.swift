@@ -31,8 +31,6 @@ struct ChangeEmailView: View {
                     Text("Change Email")
                         .font(.parkFactorFontTitle)
                         .foregroundStyle(Color.white)
-                        .fontWeight(.bold)
-                        .foregroundStyle(.white)
                     
                 }
                 .padding(.bottom, 20)

@@ -28,7 +28,7 @@ struct ChangeUserTagView: View {
             VStack {
                 Text("Select Your Tag")
                     .font(.parkFactorFontSubtitleNorwester)
-                    .foregroundStyle(Color.parkFactorPrimary)
+                    .foregroundStyle(Color.white)
                     .padding(.bottom, 10)
                 
                 List {
