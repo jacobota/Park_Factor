@@ -23,6 +23,32 @@ struct AccountSettingsView: View {
                     .foregroundStyle(Color.parkFactorPrimary)
                     .padding(.bottom, 10)
                 ){
+                    NavigationLink(destination: ChangeProfilePictureView(savedUser: savedUser)) {
+                        Text("Change Profile Picture")
+                            .font(Font.parkFactorFontSubtitleNorwester)
+                            .foregroundStyle(Color.parkFactorPrimary)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(15)
+                    }
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(
+                        Capsule()
+                            .fill(Color.parkFactorSecondary)
+                            .padding(5))
+                    
+                    NavigationLink(destination: ChangeUserTagView(savedUser: savedUser)) {
+                        Text("User Tag")
+                            .font(Font.parkFactorFontSubtitleNorwester)
+                            .foregroundStyle(Color.parkFactorPrimary)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(15)
+                    }
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(
+                        Capsule()
+                            .fill(Color.parkFactorSecondary)
+                            .padding(5))
+                    
                     NavigationLink(destination: ChangeFavoriteTeamView(savedUser: savedUser)) {
                         Text("Favorite Team")
                             .font(Font.parkFactorFontSubtitleNorwester)
@@ -48,34 +74,6 @@ struct AccountSettingsView: View {
                         Capsule()
                             .fill(Color.parkFactorSecondary)
                             .padding(5))
-                    
-                    NavigationLink(destination: ChangeUserTagView(savedUser: savedUser)) {
-                        Text("User Tag")
-                            .font(Font.parkFactorFontSubtitleNorwester)
-                            .foregroundStyle(Color.parkFactorPrimary)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .padding(15)
-                    }
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(
-                        Capsule()
-                            .fill(Color.parkFactorSecondary)
-                            .padding(5))
-                    
-                    if !savedUser.user.verified {
-                        NavigationLink(destination: ChangeUserBioView()) {
-                            Text("User Bio")
-                                .font(Font.parkFactorFontSubtitleNorwester)
-                                .foregroundStyle(Color.parkFactorPrimary)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .padding(15)
-                        }
-                        .listRowSeparator(.hidden)
-                        .listRowBackground(
-                            Capsule()
-                                .fill(Color.parkFactorSecondary)
-                                .padding(5))
-                    }
                 }
                 
                 Section(header: Text("Update Account Information")
@@ -98,19 +96,6 @@ struct AccountSettingsView: View {
                     
                     NavigationLink(destination: ChangePasswordView(savedUser: savedUser)) {
                         Text("Change Password")
-                            .font(Font.parkFactorFontSubtitleNorwester)
-                            .foregroundStyle(Color.parkFactorPrimary)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .padding(15)
-                    }
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(
-                        Capsule()
-                            .fill(Color.parkFactorSecondary)
-                            .padding(5))
-                    
-                    NavigationLink(destination: ChangeProfilePictureView(savedUser: savedUser)) {
-                        Text("Change Profile Picture")
                             .font(Font.parkFactorFontSubtitleNorwester)
                             .foregroundStyle(Color.parkFactorPrimary)
                             .frame(maxWidth: .infinity, alignment: .center)

@@ -13,9 +13,11 @@ struct ChangeProfilePictureView: View {
     @State private var hideSaveImageButton = false
     @State private var profilePicture: PhotosPickerItem?
     @State private var selectedImage: UIImage?
-    @State private var uploadStatus: String?
     @State private var updateProfilePicture = UpdateProfilePicture()
     @State private var profilePicSaved = false
+    @State private var resultMessage: String = ""
+    @State private var resultShow: Bool = false
+    @State private var successShow: Bool = false
     
     var savedUser: SavedUser
     
@@ -32,6 +34,12 @@ struct ChangeProfilePictureView: View {
                 .padding(.bottom, 20)
                 
                 Section {
+                    Text("\(resultMessage)")
+                        .font(.parkFactorFontText)
+                        .foregroundStyle(resultShow ? Color.red : Color.parkFactorPrimary)
+                        .multilineTextAlignment(.center)
+                        .opacity(resultShow || successShow ? 1 : 0)
+                    
                     VStack {
                         if let selectedImage = selectedImage {
                             Image(uiImage: selectedImage)
@@ -77,7 +85,9 @@ struct ChangeProfilePictureView: View {
                                     if let data = try? await newImage?.loadTransferable(type: Data.self) {
                                         if let uiImage = UIImage(data: data) {
                                             selectedImage = uiImage
-                                            uploadStatus = ""
+                                            resultMessage = ""
+                                            resultShow = false
+                                            successShow = false
                                             profilePicSaved = false
                                         }
                                     }
@@ -94,14 +104,6 @@ struct ChangeProfilePictureView: View {
                             .foregroundStyle(Color.parkFactorPrimary)
                             .padding(.top, 20)
                         }
-                        
-
-                        if let uploadStatus = uploadStatus {
-                            Text(uploadStatus)
-                                .foregroundStyle(Color.parkFactorPrimary)
-                                .font(.parkFactorFontSubtitleArchivo)
-                                .padding(.top, 20)
-                        }
                     }
                 }
                 .padding(.top, 30)
@@ -116,7 +118,8 @@ struct ChangeProfilePictureView: View {
             
             await updateUserProfilePicture(s3Url)
         } else {
-            uploadStatus = "Failed to upload image"
+            resultMessage = "Failed to upload new profile picture"
+            resultShow = true
         }
     }
     
@@ -126,7 +129,8 @@ struct ChangeProfilePictureView: View {
         // call the network request to save new password
         let baseUrl = Env.expressBaseURL
         guard let encoded = try? JSONEncoder().encode(updateProfilePicture) else {
-            uploadStatus = "Failed to encode New Profile Picture"
+            resultMessage = "Failed to encode New Profile Picture"
+            resultShow = true
             return
         }
         
@@ -138,22 +142,27 @@ struct ChangeProfilePictureView: View {
         request.httpMethod = "PUT"
         
         do {
-            let (_, res) = try await URLSession.shared.upload(for: request, from: encoded)
+            let (data, res) = try await URLSession.shared.upload(for: request, from: encoded)
             
             // handle the result if bad
             if let httpResponse = res as? HTTPURLResponse {
                 // If the result of the http response is a 400 then the message of what went wrong will be returned and placed in errorMessage
                 if httpResponse.statusCode != 201 {
-                    uploadStatus = "Failed to save profile picture"
+                    let decodedNodeError = try JSONDecoder().decode(NodeError.self, from: data)
+                    resultMessage = decodedNodeError.message
+                    resultShow = true
                     return
                 }
                 
-                uploadStatus = "Profile Picture Updated Successfully!"
+                resultMessage = "Successsfully Changed Profile Picture"
+                resultShow = false
+                successShow = true
                 hideSaveImageButton.toggle()
                 savedUser.user.profilePicture = profilePictureUrl
             }
         } catch {
-            uploadStatus = "Failed to save profile picture"
+            resultMessage = error.localizedDescription
+            resultShow = true
         }
     }
 }
