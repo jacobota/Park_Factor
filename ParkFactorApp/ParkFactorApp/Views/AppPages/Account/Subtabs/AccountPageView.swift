@@ -18,9 +18,10 @@ struct AccountPageView: View {
                         HStack {
                             if let profilePictureURL = savedUser.user.profilePicture, let url = URL(string: profilePictureURL) {
                                 AsyncImage(url: url) { image in
-                                    image.resizable()
+                                    image
+                                        .resizable()
                                         .scaledToFill()
-                                        .frame(width: 110, height: 110)
+                                        .frame(width: 100, height: 100)
                                         .clipShape(Circle())
                                         .overlay(
                                             Circle().stroke(Color.parkFactorPrimary, lineWidth: 2)
@@ -83,7 +84,6 @@ struct AccountPageView: View {
                                     } placeholder: {
                                         ProgressView()
                                     }
-                                    .frame(width: 50, height: 50)
                                     .padding(.top, 5)
                                     
                                     Text("\(favoriteTeam.teamMascot)")
@@ -92,11 +92,11 @@ struct AccountPageView: View {
                                         .opacity(0.8)
                                         .padding(.top, 5)
                                 } else {
-                                    Image("mlbLogo")
+                                    Image("ParkFactorLogo")
                                         .resizable()
                                         .scaledToFit()
                                         .frame(width: 50, height: 50)
-                                        .background(Color.black)
+                                        .background(Color.white)
                                         .clipShape(Circle())
                                         .overlay(
                                             Circle().stroke(Color.parkFactorPrimary, lineWidth: 3)
@@ -131,7 +131,6 @@ struct AccountPageView: View {
                                     } placeholder: {
                                         ProgressView()
                                     }
-                                    .frame(width: 50, height: 50)
                                     .padding(.top, 5)
                                     
                                     Text("\(favoritePlayer.fullName)")
