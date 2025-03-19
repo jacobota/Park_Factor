@@ -30,6 +30,10 @@ struct UpdateFavoriteTeam: Codable {
     var favoriteTeam: Team?
 }
 
+struct UpdateUserBio: Codable {
+    var userBiography: String = ""
+}
+
 struct UpdateUserTag: Codable {
     var userTag: String = ""
 }

@@ -22,7 +22,7 @@ extension Font {
     static let parkFactorFontSmallTextNorwester = Font.custom("norwester", size: 16)
     
     // Archivo Narrow fonts
-    static let parkFactorFontUsername = Font.custom("ArchivoNarrow-Regular", size: 28)
+    static let parkFactorFontUsername = Font.custom("ArchivoNarrow-Regular", size: 24)
     static let parkFactorFontSubtitleArchivo = Font.custom("ArchivoNarrow-Regular", size: 26)
     static let parkFactorFontText = Font.custom("ArchivoNarrow-Regular", size: 22)
     static let parkFactorFontSmallText = Font.custom("ArchivoNarrow-Regular", size: 18)
