@@ -28,7 +28,7 @@ router.get("/", async (req, res) => {
 // Get News for a Specific Team
 router.get("/:team", (req, res) => {
     const team = req.params.team;
-    axios.get(`https://newsapi.org/v2/everything?q=mlb AND ${team}&sources=bleacher-report,espn&apiKey=${apiKey}`)
+    axios.get(`https://newsapi.org/v2/everything?q=mlb&${team}&sources=bleacher-report,espn&apiKey=${apiKey}`)
         .then(response => {
             const articles = response.data.articles;
             res.status(200).json(articles);

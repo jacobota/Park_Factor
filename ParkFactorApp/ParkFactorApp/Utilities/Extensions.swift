@@ -27,4 +27,5 @@ extension Font {
     static let parkFactorFontSubtitleArchivo = Font.custom("ArchivoNarrow-Regular", size: 26)
     static let parkFactorFontText = Font.custom("ArchivoNarrow-Regular", size: 22)
     static let parkFactorFontSmallText = Font.custom("ArchivoNarrow-Regular", size: 18)
+    static let parkFactorFontSubSectionText = Font.custom("ArchivoNarrow-Regular", size: 15)
 }
