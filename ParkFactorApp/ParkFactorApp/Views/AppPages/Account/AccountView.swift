@@ -19,7 +19,7 @@ struct AccountView: View {
         NavigationView {
             ZStack {
                 Color.parkFactorSecondary.ignoresSafeArea()
-                VStack {
+                VStack(spacing: 0) {
                     VStack {
                         ScrollView(.horizontal) {
                             HStack {
@@ -39,7 +39,7 @@ struct AccountView: View {
                             .cornerRadius(8)
                         }
                         .scrollDisabled(true)
-                        .frame(height: 70)
+                        .frame(height: 25)
                         .padding()
                     }
                     .background(Color.parkFactorSecondary)

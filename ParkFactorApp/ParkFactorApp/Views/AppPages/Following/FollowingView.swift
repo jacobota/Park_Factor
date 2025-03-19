@@ -16,7 +16,7 @@ struct FollowingView: View {
         NavigationView {
             ZStack {
                 Color.parkFactorSecondary.ignoresSafeArea()
-                VStack {
+                VStack(spacing: 0) {
                     VStack {
                         ScrollView(.horizontal) {
                             HStack {
@@ -36,7 +36,7 @@ struct FollowingView: View {
                             .cornerRadius(8)
                         }
                         .scrollDisabled(true)
-                        .frame(height: 40)
+                        .frame(height: 25)
                         .padding()
                     }
                     .background(Color.parkFactorSecondary)
