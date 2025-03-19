@@ -26,6 +26,12 @@ struct ChangeFavoritePlayerView: View {
                     .foregroundStyle(Color.white)
                     .padding(.bottom, 10)
                 
+                Text("\(resultMessage)")
+                    .font(.parkFactorFontText)
+                    .foregroundStyle(resultShow ? Color.red : Color.parkFactorPrimary)
+                    .multilineTextAlignment(.center)
+                    .opacity(resultShow || successShow ? 1 : 0)
+                
                 List {
                     ForEach(followingPlayers) { player in
                         PlayerCard(player: player, isSelected: selectedPlayer?.keyMlbam == player.keyMlbam) {
@@ -99,7 +105,10 @@ struct ChangeFavoritePlayerView: View {
                     return
                 }
                 
-                // Update the favorite player in the savedUser for UserDefaults 
+                resultMessage = "Selected \(player.fullName)"
+                resultShow = false
+                successShow = true
+                // Update the favorite player in the savedUser for UserDefaults
                 savedUser.user.favoritePlayer = selectedPlayer
             }
         } catch {

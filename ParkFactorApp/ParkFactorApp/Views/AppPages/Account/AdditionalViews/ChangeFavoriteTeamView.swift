@@ -26,6 +26,12 @@ struct ChangeFavoriteTeamView: View {
                     .foregroundStyle(Color.white)
                     .padding(.bottom, 10)
                 
+                Text("\(resultMessage)")
+                    .font(.parkFactorFontText)
+                    .foregroundStyle(resultShow ? Color.red : Color.parkFactorPrimary)
+                    .multilineTextAlignment(.center)
+                    .opacity(resultShow || successShow ? 1 : 0)
+                
                 List {
                     ForEach(followingTeams) { team in
                         TeamCard(team: team, isSelected: selectedTeam?.franchID == team.franchID) {
@@ -99,6 +105,9 @@ struct ChangeFavoriteTeamView: View {
                     return
                 }
                 
+                resultMessage = "Selected the \(team.teamMascot)"
+                resultShow = false
+                successShow = true
                 // Update the favorite team in the savedUser for UserDefaults
                 savedUser.user.favoriteTeam = selectedTeam
             }

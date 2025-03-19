@@ -31,6 +31,12 @@ struct ChangeUserTagView: View {
                     .foregroundStyle(Color.white)
                     .padding(.bottom, 10)
                 
+                Text("\(resultMessage)")
+                    .font(.parkFactorFontText)
+                    .foregroundStyle(resultShow ? Color.red : Color.parkFactorPrimary)
+                    .multilineTextAlignment(.center)
+                    .opacity(resultShow || successShow ? 1 : 0)
+                
                 List {
                     ForEach(tags, id: \.self) { tag in
                         Button(action: {
@@ -80,7 +86,7 @@ struct ChangeUserTagView: View {
         var updateUserTagRequest = UpdateUserTag()
         updateUserTagRequest.userTag = tag
         guard let encoded = try? JSONEncoder().encode(updateUserTagRequest) else {
-            resultMessage = "Failed to encode New Tag"
+            resultMessage = "Failed to encode User Tag"
             resultShow = true
             return
         }
@@ -105,7 +111,7 @@ struct ChangeUserTagView: View {
                     return
                 }
                 
-                resultMessage = "Successsfully Changed Email"
+                resultMessage = "Saved \(tag) Tag"
                 resultShow = false
                 successShow = true
                 
