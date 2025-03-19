@@ -27,7 +27,7 @@ struct TabBarView: View {
             Tab("Park Factor", systemImage: "baseball.diamond.bases", value: .mainView) {
                 MainPageView(savedUser: savedUser)
             }
-            Tab("News", systemImage: "newspaper", value: .news) {
+            Tab("Concourse", systemImage: "newspaper", value: .news) {
                 NewsView()
             }
             Tab("Stats", systemImage: "chart.bar.xaxis", value: .stats) {

@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct NewsView: View {
-    @State private var selectedTab: String = "Around the League"
+    @State private var selectedTab: String = "News"
     
-    let subTabs = ["Around the League", "The Concourse"]
+    let subTabs = ["News", "Community"]
     
     var body: some View {
         NavigationView {
@@ -41,9 +41,9 @@ struct NewsView: View {
                     }
                     .background(Color.parkFactorSecondary)
                     
-                    if selectedTab == "Around the League" {
+                    if selectedTab == "News" {
                         LeagueNewsView()
-                    } else if selectedTab == "The Concourse" {
+                    } else if selectedTab == "Community" {
                         ConcourseView()
                     }
                     
@@ -61,7 +61,7 @@ struct NewsView: View {
                         Image("ParkFactorLogo")
                             .resizable()
                             .frame(width: 60, height: 60)
-                        Text("News")
+                        Text("The Concourse")
                             .font(Font.parkFactorFontTitle)
                             .foregroundColor(.parkFactorPrimary)
                     }

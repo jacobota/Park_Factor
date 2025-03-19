@@ -48,12 +48,21 @@ struct AccountPageView: View {
                                     )
                             }
                             VStack(alignment: .leading) {
-                                Text("\(savedUser.user.username)")
-                                    .font(.parkFactorFontUsername)
-                                    .foregroundStyle(Color.white)
-                                    .padding(.top, 10)
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.5)
+                                HStack {
+                                    Text("\(savedUser.user.username)")
+                                        .font(.parkFactorFontUsernameNorwester)
+                                        .foregroundStyle(Color.white)
+                                        .lineLimit(1)
+                                        .minimumScaleFactor(0.5)
+                                    if savedUser.user.verified {
+                                        Image(systemName: "checkmark.diamond.fill")
+                                            .foregroundStyle(Color.parkFactorPrimary)
+                                            .opacity(1)
+                                            .font(.system(size: 18))
+                                            .padding(.horizontal, 5)
+                                    }
+                                }
+                                .padding(.top, 10)
                                 
                                 Spacer()
                                 
