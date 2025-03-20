@@ -28,7 +28,7 @@ struct TabBarView: View {
                 MainPageView(savedUser: savedUser)
             }
             Tab("Concourse", systemImage: "newspaper", value: .news) {
-                NewsView()
+                NewsView(savedUser: savedUser)
             }
             Tab("Stats", systemImage: "chart.bar.xaxis", value: .stats) {
                 StatsView()
