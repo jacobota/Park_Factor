@@ -54,7 +54,6 @@ struct AccountView: View {
                     
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.parkFactorAppPageBackground)
                 .padding(.bottom)
                 .padding(.top, 10)
             }

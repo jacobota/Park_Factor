@@ -11,34 +11,38 @@ struct NewsArticleCardView: View {
     let newsArticle: NewsArticle
 
     var body: some View {
-        VStack {
-            if let url = URL(string: newsArticle.urlToImage) {
-                AsyncImage(url: url) { image in
-                    image
-                        .resizable()
-                        .scaledToFit()
-                        .frame(maxWidth: .infinity, maxHeight: 200)
-                        .cornerRadius(15)
-                } placeholder: {
-                    ProgressView()
-                        .frame(maxWidth: .infinity, maxHeight: 200)
+        ZStack {
+            Color.parkFactorSecondary.ignoresSafeArea()
+                .cornerRadius(15)
+                .shadow(radius: 5)
+            VStack {
+                if let url = URL(string: newsArticle.urlToImage) {
+                    AsyncImage(url: url) { image in
+                        image
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: .infinity, maxHeight: 200)
+                            .cornerRadius(15)
+                    } placeholder: {
+                        ProgressView()
+                            .frame(maxWidth: .infinity, maxHeight: 200)
+                    }
+                }
+                Text(newsArticle.title)
+                    .font(.parkFactorFontBigTextNorwester)
+                    .foregroundStyle(Color.parkFactorPrimary)
+                    .multilineTextAlignment(.center)
+                    .padding(.top, 5)
+                VStack(alignment: .leading) {
+                    Text(newsArticle.description)
+                        .font(.parkFactorFontSmallText)
+                        .foregroundColor(.white)
+                        .padding(.top, 2)
                 }
             }
-            Text(newsArticle.title)
-                .font(.parkFactorFontBigTextNorwester)
-                .foregroundStyle(Color.parkFactorPrimary)
-                .multilineTextAlignment(.center)
-                .padding(.top, 5)
-            VStack(alignment: .leading) {
-                Text(newsArticle.description)
-                    .font(.parkFactorFontSubSectionText)
-                    .foregroundColor(.gray)
-                    .padding(.top, 2)
-            }
+            .padding()
         }
-        .padding()
-        .background(Color.white)
-        .cornerRadius(10)
+        .padding(20)
     }
 }
 #Preview {

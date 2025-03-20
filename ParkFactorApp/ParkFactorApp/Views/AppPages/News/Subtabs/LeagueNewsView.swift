@@ -12,22 +12,21 @@ struct LeagueNewsView: View {
     
     var body: some View {
         ZStack {
-            Color.black.ignoresSafeArea()
+            Color.parkFactorAppPageBackground.ignoresSafeArea()
             ScrollView {
                 VStack(spacing: 0) {
                     ForEach(newsArticles) { newsArticle in
                         NavigationLink(destination: NewsArticleDetailedPageView(newsArticle: newsArticle)) {
                             NewsArticleCardView(newsArticle: newsArticle)
-                                .padding(.horizontal)
                         }
                         .buttonStyle(.plain)
-                        Divider()
-                            .background(Color.parkFactorPrimary)
+                        Rectangle()
+                            .fill(Color.parkFactorPrimary)
+                            .frame(height: 4)
+                            .padding(.vertical, 10)
                     }
                 }
             }
-            .background(Color(UIColor.systemBackground))
-            .edgesIgnoringSafeArea(.all)
         }
     }
 }
