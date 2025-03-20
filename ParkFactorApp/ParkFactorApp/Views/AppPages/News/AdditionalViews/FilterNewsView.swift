@@ -18,44 +18,53 @@ struct FilterNewsView: View {
     var body: some View {
         ZStack {
             Color.black.ignoresSafeArea()
-            List {
-                ForEach(allMlbTeams, id: \.self) { team in
-                    Button(action: {
-                        if filterText == team {
-                            filterText = "All"
-                        } else {
-                            filterText = team
+            VStack {
+                Text("Filter by Team")
+                    .font(.parkFactorFontBigTextNorwester)
+                    .padding()
+                    .background(Color.parkFactorSecondary)
+                    .foregroundColor(Color.parkFactorPrimary)
+                List {
+                    ForEach(allMlbTeams, id: \.self) { team in
+                        Button(action: {
+                            if filterText == team {
+                                filterText = "All"
+                            } else {
+                                filterText = team
+                            }
+                        }) {
+                            HStack {
+                                Spacer()
+                                Text(team)
+                                    .font(.parkFactorFontBigTextNorwester)
+                                    .padding()
+                                    .background(filterText == team ? Color.parkFactorPrimary : Color.parkFactorSecondary)
+                                    .foregroundColor(filterText == team ? .parkFactorSecondary : Color.parkFactorPrimary)
+                                    .cornerRadius(10)
+                                Spacer()
+                            }
                         }
-                    }) {
-                        HStack {
-                            Spacer()
-                            Text(team)
-                                .font(.parkFactorFontBigTextNorwester)
-                                .padding()
-                                .background(filterText == team ? Color.parkFactorPrimary : Color.parkFactorSecondary)
-                                .foregroundColor(filterText == team ? .parkFactorSecondary : Color.parkFactorPrimary)
-                                .cornerRadius(10)
-                            Spacer()
-                        }
+                        .listRowBackground(
+                            Capsule()
+                                .stroke(Color.parkFactorPrimary, lineWidth: 4)
+                                .fill(filterText == team ? Color.parkFactorPrimary : Color.parkFactorSecondary)
+                                .padding(20)
+                        )
                     }
-                    .listRowBackground(
-                        Capsule()
-                            .stroke(Color.parkFactorPrimary, lineWidth: 4)
-                            .fill(filterText == team ? Color.parkFactorPrimary : Color.parkFactorSecondary)
-                            .padding(20)
-                    )
+                    .padding(10)
+                    .listRowSeparator(.hidden)
                 }
-                .padding(10)
-                .listRowSeparator(.hidden)
-            }
-            .environment(\.defaultMinListRowHeight, 60)
-            .listStyle(GroupedListStyle())
-            .scrollContentBackground(.hidden)
-            .scrollIndicators(.hidden)
-            .containerRelativeFrame(.horizontal) { size, axis in
-                size * 0.9
+                .environment(\.defaultMinListRowHeight, 60)
+                .listStyle(GroupedListStyle())
+                .scrollContentBackground(.hidden)
+                .scrollIndicators(.hidden)
+                .containerRelativeFrame(.horizontal) { size, axis in
+                    size * 0.9
+                }
             }
         }
+        .padding()
+        .background(Color.parkFactorSecondary)
     }
 }
 
