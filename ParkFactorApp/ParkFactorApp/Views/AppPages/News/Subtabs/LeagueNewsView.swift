@@ -14,7 +14,7 @@ struct LeagueNewsView: View {
         ZStack {
             Color.parkFactorAppPageBackground.ignoresSafeArea()
             ScrollView {
-                VStack(spacing: 0) {
+                LazyVStack(spacing: 0) {
                     ForEach(newsArticles) { newsArticle in
                         NavigationLink(destination: NewsArticleDetailedPageView(newsArticle: newsArticle)) {
                             NewsArticleCardView(newsArticle: newsArticle)

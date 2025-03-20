@@ -9,6 +9,7 @@ import SwiftUI
 
 struct NewsView: View {
     @State private var selectedTab: String = "News"
+    @State private var filterAdded: String = "All"
     
     let subTabs = ["News", "Community"]
     
