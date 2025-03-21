@@ -49,6 +49,25 @@ struct NewsArticleDetailedPageView: View {
                         .foregroundStyle(Color.white)
                         .padding(.top, 15)
                 }
+                if let url = URL(string: newsArticle.url ?? "") {
+                    HStack {
+                        Text("Read more: ")
+                            .font(.parkFactorFontSmallText)
+                            .foregroundColor(.white)
+                            .padding(.top, 15)
+                        Link("\(url)", destination: url)
+                            .font(.parkFactorFontSmallText)
+                            .foregroundColor(Color.parkFactorPrimary)
+                            .lineLimit(1)
+                            .padding(.top, 15)
+                    }
+                    .padding(.horizontal, 10)
+                } else {
+                    Text("Unavailable URL")
+                        .font(.parkFactorFontSmallText)
+                        .foregroundColor(.white)
+                        .padding(.top, 15)
+                }
             }
             .padding()
         }
