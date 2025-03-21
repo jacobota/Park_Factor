@@ -25,7 +25,7 @@ router.get("/", authenticateToken, async (req, res) => {
     try {
         // Call the service to get all verified posts
         const data = await verifiedPostsService.getAllVerifiedPosts();
-        res.status(200).json({posts: data.Items, count: data.Count});
+        res.status(200).json(data.Items);
     } catch (err) {
         res.status(400).json({message: err.message});
     }
@@ -36,7 +36,7 @@ router.get("/postId/:postId", authenticateToken, async (req, res) => {
     try {
         // Call the service to get a verified post by id
         const data = await verifiedPostsService.getVerifiedPostById(req.params.postId);
-        res.status(200).json({post: data.Item});
+        res.status(200).json(data.Item);
     } catch (err) {
         res.status(400).json({message: err.message});
     }
@@ -47,7 +47,7 @@ router.get("/author/:username", authenticateToken, async (req, res) => {
     try {
         // Call the service to get all verified posts by a user
         const data = await verifiedPostsService.getAllVerifiedPostsByAuthor(req.params.username);
-        res.status(200).json({posts: data.Items, count: data.Count});
+        res.status(200).json(data.Items);
     } catch (err) {
         res.status(400).json({message: err.message});
     }

@@ -34,6 +34,10 @@ struct UpdateUserBio: Codable {
     var userBiography: String = ""
 }
 
+struct UpdateUserLikedPosts: Codable {
+    var likedPosts: [String] = []
+}
+
 struct UpdateUserTag: Codable {
     var userTag: String = ""
 }

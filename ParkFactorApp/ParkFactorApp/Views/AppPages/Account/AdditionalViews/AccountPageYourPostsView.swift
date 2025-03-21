@@ -1,50 +1,57 @@
 //
-//  ConcourseView.swift
+//  AccountPageYourPostsView.swift
 //  ParkFactorApp
 //
-//  Created by Jacob Ota on 3/8/25.
+//  Created by Jacob Ota on 3/21/25.
 //
 
 import SwiftUI
 
-struct ConcourseView: View {
+struct AccountPageYourPostsView: View {
     @AppStorage("accessToken") private var accessToken: String?
     @State private var resultMessage: String = ""
     @State private var resultShow: Bool = false
     @State private var posts: [Post] = []
     
+    
     var savedUser: SavedUser
     
     var body: some View {
-        ZStack {
-            ScrollView {
-                Text("\(resultMessage)")
-                    .font(.parkFactorFontText)
-                    .foregroundStyle(resultShow ? Color.red : Color.parkFactorPrimary)
-                    .multilineTextAlignment(.center)
-                    .opacity(resultShow ? 1 : 0)
+        ScrollView {
+            Text("\(resultMessage)")
+                .font(.parkFactorFontText)
+                .foregroundStyle(resultShow ? Color.red : Color.parkFactorPrimary)
+                .multilineTextAlignment(.center)
+                .opacity(resultShow ? 1 : 0)
+            if posts.isEmpty {
+                Text("N/A")
+                    .font(.parkFactorFontBigTextNorwester)
+                    .foregroundStyle(Color.white)
+                    .padding(.vertical, 20)
+            } else {
                 LazyVStack(spacing: 0) {
                     ForEach(posts) { post in
                         let isSelected = savedUser.user.userLikedPosts.contains(where: { $0 == post.postId })
                         PostCardView(isSelected: isSelected, post: post, savedUser: savedUser)
                         Rectangle()
-                            .fill(Color.parkFactorPrimary)
+                            .fill(Color.white)
                             .frame(height: 2)
                             .padding(.vertical, 5)
                     }
                 }
             }
         }
+        .frame(maxHeight: 500)
         .onAppear {
             Task {
-                await retrievePosts()
+                await retrieveOwnPosts()
             }
         }
     }
     
-    private func retrievePosts() async {
+    private func retrieveOwnPosts() async {
         let baseUrl = Env.expressBaseURL
-        guard let url = URL(string: "\(baseUrl)/verifiedPosts/") else {
+        guard let url = URL(string: "\(baseUrl)/verifiedPosts/author/\(savedUser.user.username)") else {
             // Consider fatalError here if server is not active
             DispatchQueue.main.async {
                 resultMessage = "Incorrect URL"
@@ -53,7 +60,7 @@ struct ConcourseView: View {
             return
         }
         
-        var request = URLRequest(url: url)        
+        var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(accessToken ?? "")", forHTTPHeaderField: "Authorization")
         request.httpMethod = "GET"
@@ -110,5 +117,5 @@ struct ConcourseView: View {
 }
 
 #Preview {
-    ConcourseView(savedUser: SavedUser())
+    AccountPageYourPostsView(savedUser: SavedUser())
 }

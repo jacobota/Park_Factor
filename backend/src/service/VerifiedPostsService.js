@@ -39,7 +39,7 @@ async function createVerifiedPost(user, body) {
                 authorProfilePicture: user.profilePicture,
                 content: body.content,
                 postImage: body.postImage,
-                createdAt: new Date().toISOString()
+                createdAt: String(new Date().toISOString())
             }
             await verifiedPostDAO.createVerifiedPostDAO(verifiedPost);
 

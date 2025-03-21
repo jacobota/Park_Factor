@@ -10,7 +10,7 @@ import SwiftUI
 struct NewsView: View {
     @State private var selectedTab: String = "Community"
     
-    let subTabs = ["News", "Community"]
+    let subTabs = ["News", "Community", "Post"]
     
     var savedUser: SavedUser
     
@@ -23,14 +23,26 @@ struct NewsView: View {
                         ScrollView(.horizontal) {
                             HStack {
                                 ForEach(subTabs, id: \.self) { subTab in
-                                    Button(action: {
-                                        selectedTab = subTab
-                                    }) {
-                                        Text(subTab)
-                                            .font(Font.parkFactorFontTextNorwester)
-                                            .foregroundColor(selectedTab == subTab ? Color.parkFactorPrimary : Color.gray)
-                                            .padding()
-                                            .cornerRadius(10)
+                                    if subTab == "Post" && savedUser.user.verified {
+                                        Button(action: {
+                                            selectedTab = subTab
+                                        }) {
+                                            Text(subTab)
+                                                .font(Font.parkFactorFontTextNorwester)
+                                                .foregroundColor(selectedTab == subTab ? Color.parkFactorPrimary : Color.gray)
+                                                .padding()
+                                                .cornerRadius(10)
+                                        }
+                                    } else if subTab != "Post" {
+                                        Button(action: {
+                                            selectedTab = subTab
+                                        }) {
+                                            Text(subTab)
+                                                .font(Font.parkFactorFontTextNorwester)
+                                                .foregroundColor(selectedTab == subTab ? Color.parkFactorPrimary : Color.gray)
+                                                .padding()
+                                                .cornerRadius(10)
+                                        }
                                     }
                                 }
                             }
@@ -46,7 +58,7 @@ struct NewsView: View {
                     if selectedTab == "News" {
                         LeagueNewsView(savedUser: savedUser)
                     } else if selectedTab == "Community" {
-                        ConcourseView()
+                        ConcourseView(savedUser: savedUser)
                     }
                     
                     Spacer()

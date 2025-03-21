@@ -1,35 +1,36 @@
 //
-//  AccountPageView.swift
+//  AccountFromPostView.swift
 //  ParkFactorApp
 //
-//  Created by Jacob Ota on 3/8/25.
+//  Created by Jacob Ota on 3/20/25.
 //
 
 import SwiftUI
 
-struct AccountPageView: View {
+struct AccountFromPostView: View {
     @AppStorage("accessToken") private var accessToken: String?
     @State private var resultMessage: String = ""
     @State private var resultShow: Bool = false
     @State private var successShow: Bool = false
-    @State private var isEditingBio = false
-    @State private var userBio: String = ""
-    @State private var selectedPostTab: String = "Liked Posts"
     
-    var savedUser: SavedUser
-    
-    let postTabs = ["Liked Posts", "Your Posts"]
+    var author: String
+    @State var userAccount: User
     
     var body: some View {
         ZStack {
             Color.parkFactorAppPageBackground.ignoresSafeArea()
             ScrollView {
                 VStack {
+                    Text("\(resultMessage)")
+                        .font(.parkFactorFontText)
+                        .foregroundStyle(resultShow ? Color.red : Color.parkFactorPrimary)
+                        .multilineTextAlignment(.center)
+                        .opacity(resultShow ? 1 : 0)
                     // Account Overview: username, tag, profile pic, fav team and player
                     Section {
                         VStack {
                             HStack {
-                                if let profilePictureURL = savedUser.user.profilePicture, let url = URL(string: profilePictureURL) {
+                                if let profilePictureURL = userAccount.profilePicture, let url = URL(string: profilePictureURL) {
                                     AsyncImage(url: url) { image in
                                         image
                                             .resizable()
@@ -54,12 +55,12 @@ struct AccountPageView: View {
                                 }
                                 VStack(alignment: .leading) {
                                     HStack {
-                                        Text("\(savedUser.user.username)")
+                                        Text("\(userAccount.username)")
                                             .font(.parkFactorFontUsernameNorwester)
                                             .foregroundStyle(Color.white)
                                             .lineLimit(1)
                                             .minimumScaleFactor(0.5)
-                                        if savedUser.user.verified {
+                                        if userAccount.verified {
                                             Image(systemName: "checkmark.diamond.fill")
                                                 .foregroundStyle(Color.parkFactorPrimary)
                                                 .opacity(1)
@@ -71,7 +72,7 @@ struct AccountPageView: View {
                                     
                                     Spacer()
                                     
-                                    Text("\(savedUser.user.userTag)")
+                                    Text("\(userAccount.userTag)")
                                         .font(.parkFactorFontSmallTextNorwester)
                                         .foregroundStyle(Color.white)
                                         .opacity(0.5)
@@ -96,7 +97,7 @@ struct AccountPageView: View {
                                         .foregroundStyle(Color.white)
                                         .opacity(0.5)
                                     
-                                    if let favoriteTeam = savedUser.user.favoriteTeam {
+                                    if let favoriteTeam = userAccount.favoriteTeam {
                                         AsyncImage(url: URL(string: "https://cdn.ssref.net/req/202502211/tlogo/br/\(favoriteTeam.franchID).png"), scale: 3) { image in
                                             image
                                                 .resizable()
@@ -145,7 +146,7 @@ struct AccountPageView: View {
                                         .foregroundStyle(Color.white)
                                         .opacity(0.5)
                                     
-                                    if let favoritePlayer = savedUser.user.favoritePlayer {
+                                    if let favoritePlayer = userAccount.favoritePlayer {
                                         AsyncImage(url: URL(string: "https://img.mlbstatic.com/mlb-photos/image/upload/w_180,d_people:generic:headshot:silo:current.png,q_auto:best,f_auto/v1/people/\(favoritePlayer.keyMlbam)/headshot/silo/current"), scale: 3) { image in
                                             image
                                                 .resizable()
@@ -210,15 +211,6 @@ struct AccountPageView: View {
                                     .frame(maxWidth: .infinity, alignment: .leading)
                                 
                                 Spacer()
-                                
-                                Button(action: {
-                                    isEditingBio.toggle()
-                                }) {
-                                    Image(systemName: "pencil.circle")
-                                        .foregroundStyle(isEditingBio ? Color.parkFactorPrimary : Color.white)
-                                        .opacity(isEditingBio ? 1 : 0.8)
-                                        .font(.system(size: 24))
-                                }
                             }
                             
                             Rectangle()
@@ -226,59 +218,18 @@ struct AccountPageView: View {
                                 .frame(height: 2)
                                 .padding(.vertical, 10)
                             
-                            if isEditingBio {
-                                TextEditor(text: $userBio)
-                                    .font(.parkFactorFontText)
-                                    .foregroundColor(.black)
-                                    .padding()
-                                    .cornerRadius(8)
-                                    .frame(height: 150)
+                            
+                            if userAccount.userBiography.isEmpty {
+                                Text("N/A")
+                                    .font(.parkFactorFontTextNorwester)
+                                    .foregroundStyle(Color.white)
                                     .padding(.top, 20)
-                                
-                                HStack {
-                                    Spacer()
-                                    Spacer()
-                                    Spacer()
-                                    Button(action: {
-                                        Task {
-                                            await updateUserBioFunc()
-                                        }
-                                    }) {
-                                        Text("Save")
-                                            .padding()
-                                            .background(Color.parkFactorPrimary)
-                                            .foregroundColor(.parkFactorSecondary)
-                                            .cornerRadius(8)
-                                    }
-                                    .padding(.top, 10)
-                                    
-                                    Spacer()
-                                    
-                                    Text("\(userBio.count)/255")
-                                        .font(.parkFactorFontSmallTextNorwester)
-                                        .foregroundStyle(Color.parkFactorPrimary)
-                                        .padding(.horizontal, 20)
-                                }
-                                
-                                Text("\(resultMessage)")
-                                    .font(.parkFactorFontSmallText)
-                                    .foregroundStyle(resultShow ? Color.red : Color.parkFactorPrimary)
-                                    .multilineTextAlignment(.center)
-                                    .opacity(resultShow || successShow ? 1 : 0)
-                                
                             } else {
-                                if userBio.isEmpty {
-                                    Text("N/A")
-                                        .font(.parkFactorFontTextNorwester)
-                                        .foregroundStyle(Color.white)
-                                        .padding(.top, 20)
-                                } else {
-                                    Text(savedUser.user.userBiography)
-                                        .font(.parkFactorFontSmallText)
-                                        .foregroundStyle(Color.white)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                        .padding(.top, 10)
-                                }
+                                Text(userAccount.userBiography)
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundStyle(Color.white)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding(.top, 10)
                             }
                         }
                         .padding(20)
@@ -289,112 +240,103 @@ struct AccountPageView: View {
                     .padding(.horizontal)
                     
                     // User Liked Posts / Verified User Posts
-                    Section {
-                        VStack {
-                            HStack {
-                                ForEach(postTabs, id: \.self) { postTab in
-                                    if savedUser.user.verified && postTab == "Your Posts" {
-                                        Button(action: {
-                                            selectedPostTab = postTab
-                                        }) {
-                                            Text(postTab)
-                                                .font(Font.parkFactorFontTextNorwester)
-                                                .foregroundColor(selectedPostTab == postTab ? Color.parkFactorPrimary : Color.gray)
-                                                .padding()
-                                                .cornerRadius(10)
-                                        }
-                                    } else if postTab != "Your Posts"{
-                                        Button(action: {
-                                            selectedPostTab = postTab
-                                        }) {
-                                            Text(postTab)
-                                                .font(Font.parkFactorFontTextNorwester)
-                                                .foregroundColor(selectedPostTab == postTab ? Color.parkFactorPrimary : Color.gray)
-                                                .padding()
-                                                .cornerRadius(10)
-                                        }
-                                    }
-                                }
-                            }
-                            .background(Color.parkFactorSecondary)
-                            .cornerRadius(8)
-                            
-                            Rectangle()
-                                .fill(Color.white.opacity(0.9))
-                                .frame(height: 2)
-                                .padding(.vertical, 10)
-                            
-                            if selectedPostTab == "Liked Posts" {
-                                AccountPageLikedPostsView(savedUser: savedUser)
-                            } else if selectedPostTab == "Your Posts" {
-                                AccountPageYourPostsView(savedUser: savedUser)
-                            }
-                        }
-                        .padding(20)
-                        .background(Color.parkFactorSecondary)
-                        .cornerRadius(20)
-                    }
-                    .padding(.top)
-                    .padding(.horizontal)
+//                    Section {
+//                        VStack {
+//
+//                            
+//                            Rectangle()
+//                                .fill(Color.white.opacity(0.9))
+//                                .frame(height: 2)
+//                                .padding(.vertical, 10)
+//                            
+//                            if selectedPostTab == "Liked Posts" {
+//                                AccountPageLikedPostsView(savedUser: savedUser)
+//                            } else if selectedPostTab == "Your Posts" {
+//                                AccountPageYourPostsView(savedUser: savedUser)
+//                            }
+//                        }
+//                        .padding(20)
+//                        .background(Color.parkFactorSecondary)
+//                        .cornerRadius(20)
+//                    }
+//                    .padding(.top)
+//                    .padding(.horizontal)
                 }
             }
         }
         .onAppear {
-            setBiography()
+            Task {
+                await getUserAccountInformation()
+            }
         }
     }
     
-    private func setBiography() {
-        userBio = savedUser.user.userBiography
-    }
-    
-    private func updateUserBioFunc() async {
-        if userBio.count > 255 {
-            resultMessage = "Bio exceeds Character limit"
-            resultShow = true
-            return
-        }
-        // call the network request to send an update to the user bio
+    private func getUserAccountInformation() async {
+        // call the network request to retrieve user
         let baseUrl = Env.expressBaseURL
-        var updateUserBio = UpdateUserBio()
-        updateUserBio.userBiography = userBio
-        guard let encoded = try? JSONEncoder().encode(updateUserBio) else {
-            resultMessage = "Failed to encode bio"
-            resultShow = true
+        guard let url = URL(string: "\(baseUrl)/users/profile/\(author)") else {
+            // Consider fatalError here if server is not active
+            DispatchQueue.main.async {
+                resultMessage = "Error fetching data"
+                resultShow = true
+            }
             return
         }
         
-        //create the url
-        let url = URL(string: "\(baseUrl)/users/update/userBiography")!
         var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(accessToken!)", forHTTPHeaderField: "Authorization")
-        request.httpMethod = "PUT"
+        request.httpMethod = "GET"
         
-        do {
-            let (data, res) = try await URLSession.shared.upload(for: request, from: encoded)
-            
-            // handle the result if bad
-            if let httpResponse = res as? HTTPURLResponse {
-                // If the result of the http response is a 400 then return
-                if httpResponse.statusCode != 201 {
-                    let decodedNodeError = try JSONDecoder().decode(NodeError.self, from: data)
-                    resultMessage = decodedNodeError.message
+        let dataTask = URLSession.shared.dataTask(with: request) { (data, response, error) in
+            if error != nil {
+                DispatchQueue.main.async {
+                    resultMessage = "Error fetching data"
                     resultShow = true
-                    return
                 }
-                
-                savedUser.user.userBiography = userBio
-                isEditingBio = false
-                resultShow = false
+                return
             }
-        } catch {
-            resultMessage = error.localizedDescription
-            resultShow = true
+            
+            guard let response = response as? HTTPURLResponse else {
+                DispatchQueue.main.async {
+                    resultMessage = "Error fetching data"
+                    resultShow = true
+                }
+                return
+            }
+            
+            if response.statusCode != 200 {
+                DispatchQueue.main.async {
+                    resultMessage = "Error fetching data"
+                    resultShow = true
+                }
+                return
+            }
+            
+            guard let data = data else {
+                DispatchQueue.main.async {
+                    resultMessage = "Error fetching data"
+                    resultShow = true
+                }
+                return
+            }
+            
+            do {
+                let decodedUser = try JSONDecoder().decode(User.self, from: data)
+                DispatchQueue.main.async {
+                    userAccount = decodedUser
+                }
+            } catch {
+                resultMessage = "Error fetching data"
+                resultShow = true
+                return
+            }
         }
+        
+        dataTask.resume()
     }
 }
 
 #Preview {
-    AccountPageView(savedUser: SavedUser())
+    AccountFromPostView(author: "jacobota", userAccount: User(username: "", admin: false, email: "", favoritePlayer: nil, favoriteTeam: nil, followingPlayers: [], followingTeams: [], password: "", profilePicture: "", userBiography: "", userLikedPosts: [], userTag: "", verified: false))
 }
