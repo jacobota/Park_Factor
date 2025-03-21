@@ -21,8 +21,7 @@ function generateToken(userData) {
             email: userData.email,
             admin: userData.admin,
             verified: userData.verified,
-            favoriteTeams: userData.favoriteTeams,
-            favoritePlayers: userData.favoritePlayers
+            profilePicture: userData.profilePicture
         },
         secretKey,
         {
