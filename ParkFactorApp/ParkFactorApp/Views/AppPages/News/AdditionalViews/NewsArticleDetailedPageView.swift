@@ -14,7 +14,7 @@ struct NewsArticleDetailedPageView: View {
         ZStack {
             Color.parkFactorSecondary.ignoresSafeArea()
             ScrollView {
-                if let url = URL(string: newsArticle.urlToImage) {
+                if let url = URL(string: newsArticle.urlToImage!) {
                     AsyncImage(url: url) { image in
                         image
                             .resizable()
@@ -32,19 +32,19 @@ struct NewsArticleDetailedPageView: View {
                     .multilineTextAlignment(.center)
                     .padding(.top, 10)
                 VStack(alignment: .leading, spacing: 0) {
-                    Text(newsArticle.source.name)
+                    Text(newsArticle.source.name!)
                         .font(.parkFactorFontSmallText)
                         .foregroundColor(.gray)
                         .padding(.top, 10)
-                    Text("By \(newsArticle.author)")
+                    Text("By \(newsArticle.author ?? "Anonymous")")
                         .font(.parkFactorFontSmallText)
                         .foregroundColor(.gray)
                         .padding(.top, 3)
-                    Text(newsArticle.publishedAt, style: .date)
+                    Text(newsArticle.formattedPublishedDate ?? "")
                         .font(.parkFactorFontSmallText)
                         .foregroundColor(.gray)
                         .padding(.top, 3)
-                    Text(newsArticle.content)
+                    Text(newsArticle.cleanedContent)
                         .font(.parkFactorFontText)
                         .foregroundStyle(Color.white)
                         .padding(.top, 15)
@@ -64,7 +64,7 @@ struct NewsArticleDetailedPageView: View {
             description: "Commissioner Rob Manfred on Tuesday acknowledged the widespread concern over payroll disparity in MLB but said he blames the system, not the Dodgers.",
             url: "https://www.espn.com/mlb/story/_/id/43911888/mlb-manfred-blame-system-not-dodgers-payroll-disparity",
             urlToImage: "https://a1.espncdn.com/combiner/i?img=%2Fphoto%2F2024%2F0216%2Fr1291998_1296x729_16%2D9.jpg",
-            publishedAt: Date(),
+            publishedAt: "2025-03-05T03:14:05Z",
             content: "PHOENIX, Ariz. -- Major League Baseball commissioner Rob Manfred on Tuesday called payroll disparity a principal concern throughout the industry but would not necessarily commit to a salary cap as a … [+6149 chars]"
         )
     )

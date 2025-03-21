@@ -17,24 +17,24 @@ const router = express.Router();
 // Get News Around the League
 router.get("/", async (req, res) => {
     try {
-        const response = await axios.get(`https://newsapi.org/v2/everything?q=mlb&sources=bleacher-report,espn&apiKey=${apiKey}`);
+        const response = await axios.get(`https://newsapi.org/v2/everything?q=MLB&sources=bleacher-report,espn&apiKey=${apiKey}`);
         const articles = response.data.articles;
         res.status(200).json(articles);
     } catch (err) {
-        res.status(400).json(err.message);
+        res.status(400).json({message: err.message});
     }
 });
 
 // Get News for a Specific Team
 router.get("/:team", (req, res) => {
     const team = req.params.team;
-    axios.get(`https://newsapi.org/v2/everything?q=mlb&${team}&sources=bleacher-report,espn&apiKey=${apiKey}`)
+    axios.get(`https://newsapi.org/v2/everything?q=MLB%20AND%20${team}&sources=bleacher-report,espn&apiKey=${apiKey}`)
         .then(response => {
             const articles = response.data.articles;
             res.status(200).json(articles);
         })
         .catch(err => {
-            res.status(400).json(err.message);
+            res.status(400).json({message: err.message});
         });
 });
 
