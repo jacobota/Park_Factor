@@ -95,6 +95,7 @@ struct ConcourseView: View {
                 let decodedPosts = try JSONDecoder().decode([Post].self, from: data)
                 DispatchQueue.main.async {
                     posts = decodedPosts
+                    resultShow = false
                 }
             } catch {
                 DispatchQueue.main.async {

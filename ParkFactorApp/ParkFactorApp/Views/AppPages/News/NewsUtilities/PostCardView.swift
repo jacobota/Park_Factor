@@ -20,8 +20,8 @@ struct PostCardView: View {
                 .shadow(radius: 5)
             VStack {
                 VStack(alignment: .leading) {
-                    NavigationLink(destination: AccountFromPostView(author: post.author ?? "", userAccount: savedUser.user)) {
-                        HStack {
+                    HStack {
+                        NavigationLink(destination: AccountFromPostView(author: post.author ?? "", userAccount: savedUser.user)) {
                             if !post.authorProfilePicture!.isEmpty {
                                 AsyncImage(url: URL(string: post.authorProfilePicture!)) { image in
                                     image

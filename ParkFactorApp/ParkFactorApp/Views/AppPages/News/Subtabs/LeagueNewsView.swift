@@ -146,6 +146,7 @@ struct LeagueNewsView: View {
                 let decodedNewsArticles = try JSONDecoder().decode([NewsArticle].self, from: data)
                 DispatchQueue.main.async {
                     newsArticles = decodedNewsArticles
+                    resultShow = false
                 }
             } catch {
                 DispatchQueue.main.async {

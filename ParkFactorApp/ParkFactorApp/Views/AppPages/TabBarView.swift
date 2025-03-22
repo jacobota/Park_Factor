@@ -10,28 +10,28 @@ import SwiftUI
 struct TabBarView: View {
     @Binding var isLoggedIn: Bool
     @AppStorage("accessToken") private var accessToken: String?
-    @State private var selectedTab: Tabs = .mainView
+    @State private var selectedTab: Tabs = .stats
     
     var savedUser: SavedUser
     
     enum Tabs {
-        case mainView
-        case news
+        //case mainView
         case stats
+        case news
         case favorites
         case account
     }
     
     var body: some View {
         TabView(selection: $selectedTab) {
-            Tab("Park Factor", systemImage: "baseball.diamond.bases", value: .mainView) {
-                MainPageView(savedUser: savedUser)
+//            Tab("Park Factor", systemImage: "baseball.diamond.bases", value: .mainView) {
+//                MainPageView(savedUser: savedUser)
+//            }
+            Tab("Stats", systemImage: "chart.bar.xaxis", value: .stats) {
+                StatsView()
             }
             Tab("Concourse", systemImage: "newspaper", value: .news) {
                 NewsView(savedUser: savedUser)
-            }
-            Tab("Stats", systemImage: "chart.bar.xaxis", value: .stats) {
-                StatsView()
             }
             Tab("Following", systemImage: "flag", value: .favorites) {
                 FollowingView()

@@ -334,8 +334,7 @@ struct AccountPageView: View {
                         .background(Color.parkFactorSecondary)
                         .cornerRadius(20)
                     }
-                    .padding(.top)
-                    .padding(.horizontal)
+                    .padding()
                 }
             }
         }

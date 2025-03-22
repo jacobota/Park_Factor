@@ -41,6 +41,7 @@ struct AccountPageLikedPostsView: View {
                 }
             }
         }
+        .scrollIndicators(.hidden)
         .frame(maxHeight: 500)
         .onAppear {
             Task {
