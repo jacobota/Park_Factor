@@ -12,6 +12,7 @@ struct PostCardView: View {
     @State var isSelected: Bool
     let post: Post
     var savedUser: SavedUser
+    let isNavOn: Bool
     
     var body: some View {
         ZStack {
@@ -21,7 +22,33 @@ struct PostCardView: View {
             VStack {
                 VStack(alignment: .leading) {
                     HStack {
-                        NavigationLink(destination: AccountFromPostView(author: post.author ?? "", userAccount: savedUser.user)) {
+                        if isNavOn {
+                            NavigationLink(destination: AccountFromPostView(author: post.author ?? "", userAccount: savedUser.user, savedUser: savedUser)) {
+                                if !post.authorProfilePicture!.isEmpty {
+                                    AsyncImage(url: URL(string: post.authorProfilePicture!)) { image in
+                                        image
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 40, height: 40)
+                                            .clipShape(Circle())
+                                            .overlay(
+                                                Circle().stroke(Color.parkFactorPrimary, lineWidth: 2)
+                                            )
+                                    } placeholder: {
+                                        ProgressView()
+                                    }
+                                } else {
+                                    Image("ParkFactorLogo")
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(width: 40, height: 40)
+                                        .clipShape(Circle())
+                                        .overlay(
+                                            Circle().stroke(Color.parkFactorPrimary, lineWidth: 2)
+                                        )
+                                }
+                            }
+                        } else {
                             if !post.authorProfilePicture!.isEmpty {
                                 AsyncImage(url: URL(string: post.authorProfilePicture!)) { image in
                                     image
@@ -153,5 +180,5 @@ struct PostCardView: View {
         authorProfilePicture: "https://parkfactor-profilepictures.s3.us-west-1.amazonaws.com/jacobota-profilepic.jpg",
         createdAt: "2025-03-21T03:21:58.782Z",
         content: "I am testing",
-        postImage: ""), savedUser: SavedUser())
+        postImage: ""), savedUser: SavedUser(), isNavOn: true)
 }

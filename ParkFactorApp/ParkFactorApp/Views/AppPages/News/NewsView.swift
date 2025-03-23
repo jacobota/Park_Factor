@@ -59,6 +59,8 @@ struct NewsView: View {
                         LeagueNewsView(savedUser: savedUser)
                     } else if selectedTab == "Community" {
                         ConcourseView(savedUser: savedUser)
+                    } else if selectedTab == "Post" {
+                        PostTemplateView()
                     }
                     
                     Spacer()

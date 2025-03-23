@@ -15,6 +15,7 @@ struct AccountFromPostView: View {
     
     var author: String
     @State var userAccount: User
+    var savedUser: SavedUser
     
     var body: some View {
         ZStack {
@@ -257,7 +258,7 @@ struct AccountFromPostView: View {
                                 VStack {
                                     Text("Posts")
                                         .font(Font.parkFactorFontTextNorwester)
-                                        .foregroundColor(Color.parkFactorPrimary)
+                                        .foregroundColor(Color.white)
                                         .padding()
                                         .cornerRadius(10)
                                     
@@ -266,7 +267,7 @@ struct AccountFromPostView: View {
                                         .frame(height: 2)
                                         .padding(.vertical, 10)
                                     
-                                    //AccountPageYourPostsView(savedUser: userAccount)
+                                    OtherAccountPostsView(savedUser: savedUser, user: author)
                                 }
                                 .padding(20)
                                 .background(Color.parkFactorSecondary)
@@ -355,5 +356,5 @@ struct AccountFromPostView: View {
 }
 
 #Preview {
-    AccountFromPostView(author: "jacobota", userAccount: User(username: "", admin: false, email: "", favoritePlayer: nil, favoriteTeam: nil, followingPlayers: [], followingTeams: [], password: "", profilePicture: "", userBiography: "", userLikedPosts: [], userTag: "", verified: false))
+    AccountFromPostView(author: "jacobota", userAccount: User(username: "", admin: false, email: "", favoritePlayer: nil, favoriteTeam: nil, followingPlayers: [], followingTeams: [], password: "", profilePicture: "", userBiography: "", userLikedPosts: [], userTag: "", verified: false), savedUser: SavedUser())
 }

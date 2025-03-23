@@ -1,20 +1,20 @@
 //
-//  AccountPageYourPostsView.swift
+//  OtherAccountPostsView.swift
 //  ParkFactorApp
 //
-//  Created by Jacob Ota on 3/21/25.
+//  Created by Jacob Ota on 3/23/25.
 //
 
 import SwiftUI
 
-struct AccountPageYourPostsView: View {
+struct OtherAccountPostsView: View {
     @AppStorage("accessToken") private var accessToken: String?
     @State private var resultMessage: String = ""
     @State private var resultShow: Bool = false
     @State private var posts: [Post] = []
     
-    
     var savedUser: SavedUser
+    var user: String
     
     var body: some View {
         ScrollView {
@@ -51,7 +51,7 @@ struct AccountPageYourPostsView: View {
     
     private func retrieveOwnPosts() async {
         let baseUrl = Env.expressBaseURL
-        guard let url = URL(string: "\(baseUrl)/verifiedPosts/author/\(savedUser.user.username)") else {
+        guard let url = URL(string: "\(baseUrl)/verifiedPosts/author/\(user)") else {
             // Consider fatalError here if server is not active
             DispatchQueue.main.async {
                 resultMessage = "Incorrect URL"
@@ -117,5 +117,5 @@ struct AccountPageYourPostsView: View {
 }
 
 #Preview {
-    AccountPageYourPostsView(savedUser: SavedUser())
+    OtherAccountPostsView(savedUser: SavedUser(), user: "jacobota")
 }

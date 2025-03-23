@@ -26,7 +26,7 @@ struct ConcourseView: View {
                 LazyVStack(spacing: 0) {
                     ForEach(posts) { post in
                         let isSelected = savedUser.user.userLikedPosts.contains(where: { $0 == post.postId })
-                        PostCardView(isSelected: isSelected, post: post, savedUser: savedUser)
+                        PostCardView(isSelected: isSelected, post: post, savedUser: savedUser, isNavOn: true)
                         Rectangle()
                             .fill(Color.parkFactorPrimary)
                             .frame(height: 2)
