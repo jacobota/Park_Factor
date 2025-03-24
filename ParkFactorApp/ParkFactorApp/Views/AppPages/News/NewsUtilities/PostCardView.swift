@@ -88,6 +88,20 @@ struct PostCardView: View {
                             }
                         }
                         Spacer()
+                        if savedUser.user.username == post.author {
+                            NavigationLink(destination: EditPostsView(post: post)) {
+                                Image(systemName: "pencil.circle")
+                                    .foregroundStyle(Color.parkFactorPrimary)
+                                    .opacity(1)
+                                    .font(.system(size: 20))
+                                    .padding(.horizontal, 10)
+                            }
+                            Image(systemName: "trash")
+                                .foregroundStyle(Color.red)
+                                .opacity(1)
+                                .font(.system(size: 20))
+                                .padding(.top, 3)
+                        }
                     }
                     Text(post.content!)
                         .font(.parkFactorFontSmallText)

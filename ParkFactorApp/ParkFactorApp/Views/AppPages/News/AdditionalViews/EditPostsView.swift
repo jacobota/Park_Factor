@@ -1,5 +1,5 @@
 //
-//  PostTemplateView.swift
+//  EditPostsView.swift
 //  ParkFactorApp
 //
 //  Created by Jacob Ota on 3/23/25.
@@ -8,8 +8,9 @@
 import SwiftUI
 import PhotosUI
 
-struct PostTemplateView: View {
+struct EditPostsView: View {
     @AppStorage("accessToken") private var accessToken: String?
+    @State private var checkChangeContent: String = ""
     @State private var postContent: String = ""
     @State private var postImage: String = ""
     @State private var profilePicture: PhotosPickerItem?
@@ -18,6 +19,7 @@ struct PostTemplateView: View {
     @State private var resultMessage: String = ""
     @State private var resultShow: Bool = false
     @State private var successShow: Bool = false
+    @State private var isPictureUpdated: Bool = false
     @FocusState private var focus: FocusedChangeEmailField?
     
     // enum to focus on change email fields
@@ -25,13 +27,15 @@ struct PostTemplateView: View {
         case content
     }
     
+    var post: Post
+    
     var body: some View {
         ZStack {
-            Color.parkFactorAppPageBackground.ignoresSafeArea()
+            Color.parkFactorSecondary.ignoresSafeArea()
             ScrollView {
                 Section {
                     VStack {
-                        Text("Post to the Concourse")
+                        Text("Edit Post")
                             .font(.parkFactorFontSubtitleNorwester)
                             .foregroundStyle(Color.white)
                             .padding(.top, 20)
@@ -78,6 +82,17 @@ struct PostTemplateView: View {
                                                 .frame(width: 120, height: 120)
                                                 .clipShape(RoundedRectangle(cornerRadius: 20))
                                                 .padding()
+                                        } else if !postImage.isEmpty {
+                                            AsyncImage(url: URL(string: postImage)) { image in
+                                                image.resizable()
+                                                    .resizable()
+                                                    .scaledToFill()
+                                                    .frame(width: 120, height: 120)
+                                                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                                                    .padding()
+                                            } placeholder: {
+                                                ProgressView()
+                                            }
                                         }
                                         HStack {
                                             Spacer()
@@ -95,18 +110,20 @@ struct PostTemplateView: View {
                                                                 resultShow = false
                                                                 successShow = false
                                                                 profilePicSaved = false
+                                                                isPictureUpdated = true
                                                             }
                                                         }
                                                     }
                                                 }
                                             Spacer()
                                         }
-                                        if selectedImage != nil {
+                                        if !postImage.isEmpty || selectedImage != nil {
                                             HStack {
                                                 Spacer()
                                                 Button(action: {
                                                     postImage = ""
                                                     selectedImage = nil
+                                                    isPictureUpdated = true
                                                 }) {
                                                     Text("Remove Image")
                                                         .font(.parkFactorFontSubtitleArchivo)
@@ -129,21 +146,21 @@ struct PostTemplateView: View {
                                 await postVerifiedUserPost()
                             }
                         }) {
-                            Text("Post")
+                            Text("Edit")
                                 .font(.parkFactorFontBigTextArchivo)
-                                .foregroundColor(postContent.isEmpty ? .gray : Color.parkFactorSecondary)
+                                .foregroundColor(postContent != checkChangeContent || isPictureUpdated ? Color.parkFactorSecondary : .gray)
                                 .containerRelativeFrame(.horizontal) { size, axis in
                                     size * 0.5
                                 }
                                 .padding()
-                                .background(postContent.isEmpty ? Color.clear : Color.parkFactorPrimary)
+                                .background(postContent != checkChangeContent || isPictureUpdated ?  Color.parkFactorPrimary : Color.clear)
                                 .cornerRadius(5)
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 5)
                                         .stroke(Color.white, lineWidth: 2)
                                 )
                         }
-                        .disabled(postContent.isEmpty)
+                        .disabled(postContent == checkChangeContent && !isPictureUpdated)
                         .padding(30)
                     }
                     .padding(20)
@@ -153,16 +170,16 @@ struct PostTemplateView: View {
                 .padding()
             }
             .scrollIndicators(.hidden)
-            .alert("Success", isPresented: $successShow) {
+            .alert("Result", isPresented: $resultShow) {
                 Button("OK", role: .cancel) { }
             } message: {
                 Text(resultMessage)
             }
-            .alert("Error", isPresented: $resultShow) {
-                Button("OK", role: .cancel) { }
-            } message: {
-                Text(resultMessage)
-            }
+        }
+        .onAppear {
+            checkChangeContent = post.content ?? ""
+            postContent = post.content ?? ""
+            postImage = post.postImage ?? ""
         }
     }
     
@@ -173,7 +190,7 @@ struct PostTemplateView: View {
 
             return s3Url
         } else {
-            resultMessage = "Failed to upload new profile picture"
+            resultMessage = "Failed to upload image"
             resultShow = true
             return ""
         }
@@ -183,6 +200,13 @@ struct PostTemplateView: View {
         var verifiedUserPost = VerifiedUserPost()
         verifiedUserPost.content = postContent
         
+        // Check if the image was updated and update the pic
+        if isPictureUpdated && selectedImage != nil {
+            verifiedUserPost.postImage = await uploadImageToS3(selectedImage: selectedImage, uuid: post.postId)
+        } else {
+            verifiedUserPost.postImage = ""
+        }
+
         // call the network request to save verified user post
         let baseUrl = Env.expressBaseURL
         guard let encoded = try? JSONEncoder().encode(verifiedUserPost) else {
@@ -192,11 +216,11 @@ struct PostTemplateView: View {
         }
         
         //create the url
-        let url = URL(string: "\(baseUrl)/verifiedPosts/create")!
+        let url = URL(string: "\(baseUrl)/verifiedPosts/update/\(post.postId)")!
         var request = URLRequest(url: url)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("Bearer \(accessToken!)", forHTTPHeaderField: "Authorization")
-        request.httpMethod = "POST"
+        request.httpMethod = "PUT"
         
         do {
             let (data, res) = try await URLSession.shared.upload(for: request, from: encoded)
@@ -210,55 +234,10 @@ struct PostTemplateView: View {
                     resultShow = true
                     return
                 }
-                
-                if selectedImage != nil {
-                    // Decode response to get postId if there is an image to get UUID for image
-                    let decodedResponse = try JSONDecoder().decode(VerifiedUserPostResponse.self, from: data)
-                    let postId = decodedResponse.postId
-                    
-                    //call the method to store the image
-                    let postImageUrl = await uploadImageToS3(selectedImage: selectedImage, uuid: postId)
-                    
-                    // call the network request to save image as well with UUID from post just created
-                    verifiedUserPost.content = postContent
-                    verifiedUserPost.postImage = postImageUrl
-                    let baseUrl = Env.expressBaseURL
-                    guard let encoded = try? JSONEncoder().encode(verifiedUserPost) else {
-                        resultMessage = "Failed to encode Post"
-                        resultShow = true
-                        return
-                    }
-                    
-                    //create the url
-                    let url = URL(string: "\(baseUrl)/verifiedPosts/update/\(postId)")!
-                    var request = URLRequest(url: url)
-                    request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-                    request.setValue("Bearer \(accessToken!)", forHTTPHeaderField: "Authorization")
-                    request.httpMethod = "PUT"
-                    
-                    do {
-                        let (data, res) = try await URLSession.shared.upload(for: request, from: encoded)
-                        
-                        // handle the result if bad
-                        if let httpResponse = res as? HTTPURLResponse {
-                            // If the result of the http response is a 400 then the message of what went wrong will be returned and placed in errorMessage
-                            if httpResponse.statusCode != 200 {
-                                let decodedNodeError = try JSONDecoder().decode(NodeError.self, from: data)
-                                resultMessage = decodedNodeError.message
-                                resultShow = true
-                                return
-                            }
-                        }
-                    } catch {
-                        resultMessage = error.localizedDescription
-                        resultShow = true
-                        return
-                    }
-                }
             }
-            resultMessage = "Successsfully Created Post"
-            resultShow = false
-            successShow = true
+
+            resultMessage = "Successsfully Updated Post"
+            resultShow = true
         } catch {
             resultMessage = error.localizedDescription
             resultShow = true
@@ -267,5 +246,5 @@ struct PostTemplateView: View {
 }
 
 #Preview {
-    PostTemplateView()
+    EditPostsView(post: Post(postId: "6dcff1c8-f4ed-4199-9392-aac4ac814c37", author: "jacobota", authorProfilePicture: "https://parkfactor-profilepictures.s3.us-west-1.amazonaws.com/jacobota-profilepic.jpg", createdAt: "", content: "Testing without a picture.", postImage: "https://parkfactor-postimages.s3.us-west-1.amazonaws.com/aa38a961-45d9-4e76-b171-b78a23b352a2-postimage.jpg"))
 }
