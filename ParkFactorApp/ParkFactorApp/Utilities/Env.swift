@@ -21,8 +21,12 @@ struct Env {
         return getValue("AWS_SECRET_ACCESS_KEY")
     }
     
-    static var s3BucketName: String {
-        return getValue("S3_BUCKET_NAME")
+    static var s3BucketNameProfilePic: String {
+        return getValue("S3_BUCKET_NAME_PROFILE_PIC")
+    }
+    
+    static var s3BucketNamePostImages: String {
+        return getValue("S3_BUCKET_NAME_POST_IMAGE")
     }
     
     static var s3BucketRegion: String {

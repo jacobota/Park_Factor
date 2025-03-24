@@ -93,18 +93,21 @@ struct PostCardView: View {
                         .font(.parkFactorFontSmallText)
                         .foregroundStyle(Color.white)
                         .padding(.top, 5)
-                    if let url = URL(string: post.postImage!) {
-                        AsyncImage(url: url) { image in
-                            image
-                                .resizable()
-                                .scaledToFit()
-                                .frame(maxWidth: .infinity, maxHeight: 150)
-                                .cornerRadius(10)
-                                .padding(.top, 5)
-                        } placeholder: {
-                            ProgressView()
-                                .frame(maxWidth: .infinity, maxHeight: 200)
+                    HStack {
+                        Spacer()
+                        if let url = URL(string: post.postImage!) {
+                            AsyncImage(url: url) { image in
+                                image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(maxWidth: 100, maxHeight: 100)
+                                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                            } placeholder: {
+                                ProgressView()
+                                    .frame(maxWidth: 100, maxHeight: 100)
+                            }
                         }
+                        Spacer()
                     }
                 }
                 VStack(alignment: .trailing) {
@@ -180,5 +183,5 @@ struct PostCardView: View {
         authorProfilePicture: "https://parkfactor-profilepictures.s3.us-west-1.amazonaws.com/jacobota-profilepic.jpg",
         createdAt: "2025-03-21T03:21:58.782Z",
         content: "I am testing",
-        postImage: ""), savedUser: SavedUser(), isNavOn: true)
+        postImage: "https://parkfactor-postimages.s3.us-west-1.amazonaws.com/99d3966a-a2b6-49cd-bee8-97b7832734df-postimage.jpg"), savedUser: SavedUser(), isNavOn: true)
 }

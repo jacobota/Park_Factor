@@ -18,11 +18,6 @@ struct AccountPageLikedPostsView: View {
     var body: some View {
         
         ScrollView {
-            Text("\(resultMessage)")
-                .font(.parkFactorFontText)
-                .foregroundStyle(resultShow ? Color.red : Color.parkFactorPrimary)
-                .multilineTextAlignment(.center)
-                .opacity(resultShow ? 1 : 0)
             if posts.isEmpty {
                 Text("N/A")
                     .font(.parkFactorFontBigTextNorwester)

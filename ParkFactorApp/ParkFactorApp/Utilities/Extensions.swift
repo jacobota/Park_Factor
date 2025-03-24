@@ -25,6 +25,7 @@ extension Font {
     // Archivo Narrow fonts
     static let parkFactorFontUsername = Font.custom("ArchivoNarrow-Regular", size: 24)
     static let parkFactorFontSubtitleArchivo = Font.custom("ArchivoNarrow-Regular", size: 26)
+    static let parkFactorFontBigTextArchivo = Font.custom("ArchivoNarrow-Regular", size: 24)
     static let parkFactorFontText = Font.custom("ArchivoNarrow-Regular", size: 22)
     static let parkFactorFontSmallText = Font.custom("ArchivoNarrow-Regular", size: 18)
     static let parkFactorFontSubSectionText = Font.custom("ArchivoNarrow-Regular", size: 15)

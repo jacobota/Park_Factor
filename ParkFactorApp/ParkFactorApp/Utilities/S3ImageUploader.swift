@@ -12,12 +12,12 @@ import Smithy
 
 // Inspired by https://docs.aws.amazon.com/sdk-for-swift/latest/developer-guide/swift_s3_code_examples.html
 
-func s3UploadImage(imageData: Data, fileName: String) async -> String {
+func s3UploadImage(s3BucketName: String, s3BucketRegion: String, imageData: Data, fileName: String) async -> String {
     // Environment variables for the bucket
     let accessKey = Env.awsAccessKey
     let secretAccessKey = Env.awsSecretAccessKey
-    let bucketName = Env.s3BucketName
-    let bucketRegion = Env.s3BucketRegion
+    let bucketName = s3BucketName
+    let bucketRegion = s3BucketRegion
     
     do {
         // Configure AWS credentials (https://docs.aws.amazon.com/sdk-for-swift/latest/developer-guide/using-identity.html)

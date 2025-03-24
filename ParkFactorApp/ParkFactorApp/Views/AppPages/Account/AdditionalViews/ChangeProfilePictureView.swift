@@ -114,7 +114,7 @@ struct ChangeProfilePictureView: View {
     private func uploadImageToS3(selectedImage: UIImage?) async {
         if let image = selectedImage, let imageJpegData = image.jpegData(compressionQuality: 0.9) {
             let fileName = "\(savedUser.user.username)-profilepic.jpg"
-            let s3Url = await s3UploadImage(imageData: imageJpegData, fileName: fileName)
+            let s3Url = await s3UploadImage(s3BucketName: Env.s3BucketNameProfilePic, s3BucketRegion: Env.s3BucketRegion, imageData: imageJpegData, fileName: fileName)
             
             await updateUserProfilePicture(s3Url)
         } else {

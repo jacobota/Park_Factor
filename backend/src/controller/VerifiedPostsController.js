@@ -13,7 +13,7 @@ router.post("/create", authenticateToken, async (req, res) => {
     try {
         // Call the service to create the verified post
         const data = await verifiedPostsService.createVerifiedPost(req.user, req.body);
-        res.status(201).json({message: 'Verified Post Created', post: data});
+        res.status(201).json(data);
     } catch (err) {
         res.status(400).json({message: err.message});
     }
