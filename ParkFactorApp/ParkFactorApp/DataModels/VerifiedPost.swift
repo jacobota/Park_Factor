@@ -8,6 +8,7 @@
 import Foundation
 
 struct VerifiedUserPost: Codable {
+    var authorProfilePicture: String = ""
     var content: String = ""
     var postImage: String = ""
 }

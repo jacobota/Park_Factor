@@ -36,7 +36,7 @@ async function createVerifiedPost(user, body) {
             const verifiedPost = {
                 postId: uuid.v4(),
                 author: user.username,
-                authorProfilePicture: user.profilePicture,
+                authorProfilePicture: body.authorProfilePicture,
                 content: body.content,
                 postImage: body.postImage,
                 createdAt: String(new Date().toISOString())

@@ -60,7 +60,7 @@ struct NewsView: View {
                     } else if selectedTab == "Community" {
                         ConcourseView(savedUser: savedUser)
                     } else if selectedTab == "Post" {
-                        PostTemplateView()
+                        PostTemplateView(savedUser: savedUser)
                     }
                     
                     Spacer()

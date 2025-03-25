@@ -25,6 +25,8 @@ struct PostTemplateView: View {
         case content
     }
     
+    var savedUser: SavedUser
+    
     var body: some View {
         ZStack {
             Color.parkFactorAppPageBackground.ignoresSafeArea()
@@ -181,6 +183,7 @@ struct PostTemplateView: View {
     
     private func postVerifiedUserPost() async {
         var verifiedUserPost = VerifiedUserPost()
+        verifiedUserPost.authorProfilePicture = savedUser.user.profilePicture ?? ""
         verifiedUserPost.content = postContent
         
         // call the network request to save verified user post
@@ -270,5 +273,5 @@ struct PostTemplateView: View {
 }
 
 #Preview {
-    PostTemplateView()
+    PostTemplateView(savedUser: SavedUser())
 }
