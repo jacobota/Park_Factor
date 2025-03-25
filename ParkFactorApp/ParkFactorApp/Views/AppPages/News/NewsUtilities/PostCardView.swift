@@ -10,9 +10,11 @@ import SwiftUI
 struct PostCardView: View {
     @AppStorage("accessToken") private var accessToken: String?
     @State var isSelected: Bool
+    @State private var showDeleteAlert: Bool = false
     let post: Post
     var savedUser: SavedUser
     let isNavOn: Bool
+    let onDelete: () -> Void
     
     var body: some View {
         ZStack {
@@ -95,11 +97,15 @@ struct PostCardView: View {
                                     .font(.system(size: 20))
                                     .padding(.horizontal, 10)
                             }
-                            Image(systemName: "trash")
-                                .foregroundStyle(Color.red)
-                                .opacity(1)
-                                .font(.system(size: 20))
-                                .padding(.top, 3)
+                            Button(action: {
+                                showDeleteAlert = true
+                            }) {
+                                Image(systemName: "trash")
+                                    .foregroundStyle(Color.red)
+                                    .opacity(1)
+                                    .font(.system(size: 20))
+                                    .padding(.top, 3)
+                            }
                         }
                     }
                     Text(post.content!)
@@ -143,6 +149,45 @@ struct PostCardView: View {
             .padding(20)
         }
         .padding(10)
+        .alert(isPresented: $showDeleteAlert) {
+            Alert(
+                title: Text("Delete Post"),
+                message: Text("Are you sure you want to delete this post? \n\nThis action cannot is permanent."),
+                primaryButton: .destructive(Text("Delete")) {
+                    Task {
+                        await deletePost()
+                    }
+                },
+                secondaryButton: .cancel()
+            )
+        }
+    }
+    
+    private func deletePost() async {
+        // call the network request to delete the user
+        let baseUrl = Env.expressBaseURL
+        
+        //create the url
+        let url = URL(string: "\(baseUrl)/verifiedPosts/delete/\(post.postId)")!
+        var request = URLRequest(url: url)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(accessToken!)", forHTTPHeaderField: "Authorization")
+        request.httpMethod = "DELETE"
+        
+        do {
+            let (_, res) = try await URLSession.shared.data(for: request)
+            
+            // handle the result if bad
+            if let httpResponse = res as? HTTPURLResponse {
+                // If the result of the http response is a 400 then the message of what went wrong will be returned and placed in errorMessage
+                if httpResponse.statusCode != 200 {
+                    return
+                }
+                onDelete()
+            }
+        } catch {
+            return
+        }
     }
     
     private func updateUsersLikedPosts() async {
@@ -196,5 +241,5 @@ struct PostCardView: View {
         authorProfilePicture: "https://parkfactor-profilepictures.s3.us-west-1.amazonaws.com/jacobota-profilepic.jpg",
         createdAt: "2025-03-21T03:21:58.782Z",
         content: "I am testing",
-        postImage: "https://parkfactor-postimages.s3.us-west-1.amazonaws.com/99d3966a-a2b6-49cd-bee8-97b7832734df-postimage.jpg"), savedUser: SavedUser(), isNavOn: true)
+        postImage: "https://parkfactor-postimages.s3.us-west-1.amazonaws.com/99d3966a-a2b6-49cd-bee8-97b7832734df-postimage.jpg"), savedUser: SavedUser(), isNavOn: true, onDelete:{})
 }

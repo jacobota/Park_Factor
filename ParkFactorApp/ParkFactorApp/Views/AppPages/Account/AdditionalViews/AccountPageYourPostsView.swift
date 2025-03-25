@@ -32,7 +32,15 @@ struct AccountPageYourPostsView: View {
                 LazyVStack(spacing: 0) {
                     ForEach(posts) { post in
                         let isSelected = savedUser.user.userLikedPosts.contains(where: { $0 == post.postId })
-                        PostCardView(isSelected: isSelected, post: post, savedUser: savedUser, isNavOn: false)
+                        PostCardView(
+                            isSelected: isSelected,
+                            post: post,
+                            savedUser: savedUser,
+                            isNavOn: true,
+                            onDelete: {
+                                deletePost(post)
+                            }
+                        )
                         Rectangle()
                             .fill(Color.white)
                             .frame(height: 2)
@@ -46,6 +54,12 @@ struct AccountPageYourPostsView: View {
             Task {
                 await retrieveOwnPosts()
             }
+        }
+    }
+    
+    private func deletePost(_ post: Post) {
+        if let index = posts.firstIndex(where: { $0.postId == post.postId }) {
+          posts.remove(at: index)
         }
     }
     

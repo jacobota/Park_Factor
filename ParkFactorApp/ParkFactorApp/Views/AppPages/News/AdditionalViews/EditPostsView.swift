@@ -236,7 +236,7 @@ struct EditPostsView: View {
                     return
                 }
             }
-
+            
             resultMessage = "Successsfully Updated Post"
             resultShow = true
         } catch {

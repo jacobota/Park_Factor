@@ -11,7 +11,7 @@ struct ConcourseView: View {
     @AppStorage("accessToken") private var accessToken: String?
     @State private var resultMessage: String = ""
     @State private var resultShow: Bool = false
-    @State private var posts: [Post] = []
+    @State var posts: [Post] = []
     
     var savedUser: SavedUser
     
@@ -26,7 +26,15 @@ struct ConcourseView: View {
                 LazyVStack(spacing: 0) {
                     ForEach(posts) { post in
                         let isSelected = savedUser.user.userLikedPosts.contains(where: { $0 == post.postId })
-                        PostCardView(isSelected: isSelected, post: post, savedUser: savedUser, isNavOn: true)
+                        PostCardView(
+                            isSelected: isSelected,
+                            post: post,
+                            savedUser: savedUser,
+                            isNavOn: true,
+                            onDelete: {
+                                deletePost(post)
+                            }
+                        )
                         Rectangle()
                             .fill(Color.parkFactorPrimary)
                             .frame(height: 2)
@@ -39,6 +47,12 @@ struct ConcourseView: View {
             Task {
                 await retrievePosts()
             }
+        }
+    }
+    
+    private func deletePost(_ post: Post) {
+        if let index = posts.firstIndex(where: { $0.postId == post.postId }) {
+          posts.remove(at: index)
         }
     }
     

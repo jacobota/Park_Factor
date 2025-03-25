@@ -257,6 +257,9 @@ struct PostTemplateView: View {
                 }
             }
             resultMessage = "Successsfully Created Post"
+            postContent = ""
+            selectedImage = nil
+            postImage = ""
             resultShow = false
             successShow = true
         } catch {
