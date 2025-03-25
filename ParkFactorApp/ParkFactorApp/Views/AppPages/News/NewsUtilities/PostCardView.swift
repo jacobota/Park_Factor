@@ -79,7 +79,6 @@ struct PostCardView: View {
                                     .font(.parkFactorFontTextNorwester)
                                     .foregroundStyle(Color.white)
                                     .lineLimit(1)
-                                    .minimumScaleFactor(0.5)
                                 Image(systemName: "checkmark.diamond.fill")
                                     .foregroundStyle(Color.parkFactorPrimary)
                                     .opacity(1)

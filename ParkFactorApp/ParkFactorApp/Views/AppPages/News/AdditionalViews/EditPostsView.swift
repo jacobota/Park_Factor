@@ -169,6 +169,7 @@ struct EditPostsView: View {
                 }
                 .padding()
             }
+            .padding()
             .scrollIndicators(.hidden)
             .alert("Result", isPresented: $resultShow) {
                 Button("OK", role: .cancel) { }
