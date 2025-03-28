@@ -34,7 +34,7 @@ struct TabBarView: View {
                 NewsView(savedUser: savedUser)
             }
             Tab("Following", systemImage: "flag", value: .favorites) {
-                FollowingView()
+                FollowingView(savedUser: savedUser)
             }
             Tab("Account", systemImage: "person", value: .account) {
                 AccountView(isLoggedIn: $isLoggedIn, savedUser: savedUser)

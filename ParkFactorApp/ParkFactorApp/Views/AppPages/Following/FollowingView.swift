@@ -12,6 +12,8 @@ struct FollowingView: View {
     
     let subTabs = ["Teams", "Players"]
     
+    var savedUser: SavedUser
+    
     var body: some View {
         NavigationView {
             ZStack {
@@ -42,7 +44,7 @@ struct FollowingView: View {
                     .background(Color.parkFactorSecondary)
                     
                     if selectedTab == "Teams" {
-                        TeamsFollowingPageView()
+                        TeamsFollowingPageView(savedUser: savedUser)
                     } else if selectedTab == "Players" {
                         PlayersFollowingPageView()
                     }
@@ -71,5 +73,5 @@ struct FollowingView: View {
 }
 
 #Preview {
-    FollowingView()
+    FollowingView(savedUser: SavedUser())
 }
