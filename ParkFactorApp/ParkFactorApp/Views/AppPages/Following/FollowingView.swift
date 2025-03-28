@@ -46,7 +46,7 @@ struct FollowingView: View {
                     if selectedTab == "Teams" {
                         TeamsFollowingPageView(savedUser: savedUser)
                     } else if selectedTab == "Players" {
-                        PlayersFollowingPageView()
+                        PlayersFollowingPageView(savedUser: savedUser)
                     }
                     
                     Spacer()

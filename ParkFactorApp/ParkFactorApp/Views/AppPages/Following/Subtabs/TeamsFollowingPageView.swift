@@ -9,7 +9,6 @@ import SwiftUI
 
 struct TeamsFollowingPageView: View {
     @AppStorage("accessToken") private var accessToken: String?
-    @State private var didSelectTeams: Bool = false
     @State private var errorMessage: String = ""
     @State private var errorShow: Bool = false
     @State private var teams: [Team] = []
