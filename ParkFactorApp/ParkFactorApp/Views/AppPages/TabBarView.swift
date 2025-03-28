@@ -15,7 +15,6 @@ struct TabBarView: View {
     var savedUser: SavedUser
     
     enum Tabs {
-        //case mainView
         case stats
         case news
         case favorites
@@ -24,9 +23,6 @@ struct TabBarView: View {
     
     var body: some View {
         TabView(selection: $selectedTab) {
-//            Tab("Park Factor", systemImage: "baseball.diamond.bases", value: .mainView) {
-//                MainPageView(savedUser: savedUser)
-//            }
             Tab("Stats", systemImage: "chart.bar.xaxis", value: .stats) {
                 StatsView()
             }
