@@ -42,16 +42,15 @@ struct FollowingView: View {
                     .background(Color.parkFactorSecondary)
                     
                     if selectedTab == "Teams" {
-                        TeamsFollowingView()
+                        TeamsFollowingPageView()
                     } else if selectedTab == "Players" {
-                        PlayersFollowingView()
+                        PlayersFollowingPageView()
                     }
                     
                     Spacer()
                     
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.parkFactorAppPageBackground)
                 .padding(.bottom)
                 .padding(.top, 10)
             }
