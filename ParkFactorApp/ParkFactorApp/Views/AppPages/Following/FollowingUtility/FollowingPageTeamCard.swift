@@ -14,32 +14,34 @@ struct FollowingPageTeamCard: View {
     
     var body: some View {
         HStack {
-            Spacer()
-            AsyncImage(url: URL(string: "https://cdn.ssref.net/req/202502211/tlogo/br/\(team.franchID).png"), scale: 3) { image in
-                image
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 50, height: 70)
-                    .background(Color.white)
-                    .clipShape(Circle())
-                    .overlay(
-                        Circle().stroke(Color.parkFactorPrimary, lineWidth: 2)
-                    )
-            } placeholder: {
-                ProgressView()
-            }
-            .padding(10)
-            
-            Spacer()
-            
-            Text(team.teamName)
-                .font(.parkFactorFontTextNorwester)
-                .foregroundColor(Color.white)
-                .multilineTextAlignment(.center)
-                .cornerRadius(5)
-                .containerRelativeFrame(.horizontal) { size, axis in
-                    size * 0.4
+            NavigationLink(destination: TeamPageView(team: team)) {
+                Spacer()
+                AsyncImage(url: URL(string: "https://cdn.ssref.net/req/202502211/tlogo/br/\(team.franchID).png"), scale: 3) { image in
+                    image
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 50, height: 70)
+                        .background(Color.white)
+                        .clipShape(Circle())
+                        .overlay(
+                            Circle().stroke(Color.parkFactorPrimary, lineWidth: 2)
+                        )
+                } placeholder: {
+                    ProgressView()
                 }
+                .padding(10)
+                
+                Spacer()
+                
+                Text(team.teamName)
+                    .font(.parkFactorFontTextNorwester)
+                    .foregroundColor(Color.white)
+                    .multilineTextAlignment(.center)
+                    .cornerRadius(5)
+                    .containerRelativeFrame(.horizontal) { size, axis in
+                        size * 0.4
+                    }
+            }
             
             Spacer()
             
