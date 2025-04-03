@@ -112,3 +112,68 @@ def get_pitcher_stats_career():
         return jsonify({'career_stats': fg_pitcher_record})
     except Exception as e:
         return jsonify({'error': str(e)}), 500    
+    
+@pitcher_route.route('/api/pitcher-stats/percentiles')
+def get_pitcher_percentiles():
+    try:
+        key_mlbam = request.args.get('mlbam-id')
+        if not key_mlbam:
+            return jsonify({'error': 'Savant ID required'}), 400
+        else:
+            key_mlbam = int(key_mlbam)
+        current_year = pb.utils.most_recent_season()
+        statcast_percentiles_data = pb.statcast_pitcher_percentile_ranks(current_year)
+        statcast_percentiles_record = statcast_percentiles_data[statcast_percentiles_data['player_id'] == key_mlbam].to_dict('records')
+        return jsonify({"percentile": statcast_percentiles_record})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+@pitcher_route.route('/api/pitcher-stats/leaderboard')
+def get_pitcher_leaderboard():
+    try:
+        # Get pitcher id from query parameters and most recent year from pybaseball
+        current_year = pb.utils.most_recent_season()
+        statcast_leaderboard = pb.pitching_stats(current_year, qual=1)
+
+        # Define the stats the leaderboard will represent
+        leaderboard_stats = ['SV', 'W', 'L', 'ERA', 'IP', 'SO', 'WHIP', 'WAR', 'xERA', 'SIERA', 'K%', 'BB%', 'GB%', 'EV', 'vFA (pi)']
+        leaderboard_records = statcast_leaderboard.to_dict('records')
+
+        # Replace NaN values with None
+        leaderboard_records = replace_nan_with_none(leaderboard_records)
+
+        top_5_per_stat = {}
+        for stat in leaderboard_stats:
+            # If the stat is K%, we want the lowest values
+            if stat == 'L' or stat == 'ERA' or stat == 'WHIP' or stat == 'xERA' or stat == 'SIERA' or stat == 'BB%' or stat == 'EV':
+                top_5_per_stat[stat] = [
+                    {
+                        "Team": pitcher["Team"],
+                        "Name": pitcher["Name"],
+                        stat: pitcher[stat]
+                    }
+                    for pitcher in sorted(
+                        # Run a lambda function to sort each record of players by stat, take bottom 5
+                        (record for record in leaderboard_records if stat in record and record[stat] is not None),
+                        key=lambda x: x[stat]
+                    )[:5]
+                ]
+            else:
+                # Sort the stat and take the top 5 for the remaining stats
+                top_5_per_stat[stat] = [
+                    {
+                        "Team": pitcher["Team"],
+                        "Name": pitcher["Name"],
+                        stat: pitcher[stat]
+                    }
+                    for pitcher in sorted(
+                        # Run a lambda function to sort each record of players by stat, take top 5
+                        (record for record in leaderboard_records if stat in record and record[stat] is not None),
+                        key=lambda x: x[stat],
+                        reverse=True
+                    )[:5]
+                ]
+        
+        return jsonify(top_5_per_stat)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500

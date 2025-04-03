@@ -26,7 +26,8 @@ def get_all_mlb_players():
     try:
         # Call table initialized by player_search to get all players, filter by mlb_played_last
         players = player_search.table
-        players_list = players[players['mlb_played_last'] == 2024.0].to_dict('records')
+        current_year = pb.utils.most_recent_season()
+        players_list = players[players['mlb_played_last'] == current_year].to_dict('records')
         return jsonify(players_list)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
@@ -94,7 +95,7 @@ def test():
         ]
 
         #Grab team, position, age and team_id from statcast (out above average)
-        statcast_hitter_bio_data = pb.statcast_sprint_speed(current_year)  
+        statcast_hitter_bio_data = pb.statcast_sprint_speed(current_year, min_opp=0)  
         statcast_hitter_bio_record = statcast_hitter_bio_data[statcast_hitter_bio_data['player_id'] == mlbam_id].to_dict('records')      
 
         statcast_hitter_bio_selected_attributes = ['last_name, first_name', 'age', 'team', 'position']

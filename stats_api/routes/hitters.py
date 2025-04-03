@@ -62,7 +62,7 @@ def get_hitter_stats_this_season():
         statcast_sprint_speed_record = statcast_sprint_speed_data[statcast_sprint_speed_data['player_id'] == key_mlbam].to_dict('records')      
 
          # Select specific attributes to return for batting, sprint speed, fielding stats
-        fg_hitter_record_selected_attributes = ['G', 'AVG', 'OBP', 'SLG', 'OPS', 'WAR', 'HR', 'R', 'H', 'RBI', 'SB', 'wOBA', 'xwOBA', 'xBA', 'xSLG', 'EV', 'maxEV', 'Barrel%', 'HardHit%', 'Swing%', 'Z-Swing%', 'Contact%', 'WPA', 'BB%', 'K%', 'BB/K', 'BsR', 'CS', 'wSB', 'ISO', 'BABIP']
+        fg_hitter_record_selected_attributes = ['G', 'AVG', 'OBP', 'SLG', 'OPS', 'WAR', 'HR', 'R', 'H', 'RBI', 'SB', 'wOBA', 'xwOBA', 'xBA', 'xSLG', 'EV', 'maxEV', 'Barrel%', 'HardHit%', 'Swing%', 'Z-Swing%', 'Contact%', 'WPA', 'BB%', 'K%', 'BB/K', 'BsR', 'CS', 'wSB', 'ISO', 'BABIP', 'wRC+']
         fg_selected_attribute_record = [
             {attr: hitter[attr] for attr in fg_hitter_record_selected_attributes if attr in hitter}
             for hitter in fg_hitter_record
@@ -140,5 +140,66 @@ def get_hitter_stats_career():
         fg_selected_attribute_record = replace_nan_with_none(fg_selected_attribute_record)
 
         return jsonify({'career_stats': fg_selected_attribute_record})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+
+@hitter_route.route('/api/hitter-stats/percentiles')
+def get_hitter_percentiles():
+    try:
+        key_mlbam = request.args.get('mlbam-id')
+        if not key_mlbam:
+            return jsonify({'error': 'Savant ID required'}), 400
+        else:
+            key_mlbam = int(key_mlbam)
+        current_year = pb.utils.most_recent_season()
+        statcast_percentiles_data = pb.statcast_batter_percentile_ranks(current_year)
+        statcast_percentiles_record = statcast_percentiles_data[statcast_percentiles_data['player_id'] == key_mlbam].to_dict('records')
+        return jsonify({"percentile": statcast_percentiles_record})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+@hitter_route.route('/api/hitter-stats/leaderboard')
+def get_hitter_leaderboard():
+    try:
+        current_year = pb.utils.most_recent_season()
+        statcast_leaderboard = pb.batting_stats(current_year)
+        # Define the stats the leaderboard will present
+        leaderboard_stats = ['AVG', 'OBP', 'SLG', 'OPS', 'WAR', 'HR', 'R', 'H', 'RBI', 'SB', 'xwOBA', 'EV', 'Barrel%', 'BB%', 'K%', 'BsR', 'wRC+']
+        leaderboard_records = statcast_leaderboard.to_dict('records')
+
+        top_5_per_stat = {}
+        for stat in leaderboard_stats:
+            # If the stat is K%, we want the lowest values
+            if stat == 'K%':
+                top_5_per_stat[stat] = [
+                    {
+                        "Team": hitter["Team"],
+                        "Name": hitter["Name"],
+                        stat: hitter[stat]
+                    }
+                    for hitter in sorted(
+                        # Run a lambda function to sort each record of players by stat, take bottom 5
+                        (record for record in leaderboard_records if stat in record and record[stat] is not None),
+                        key=lambda x: x[stat]
+                    )[:5]
+                ]
+            else:
+                # Sort the stat and take the top 5 for the remaining stats
+                top_5_per_stat[stat] = [
+                    {
+                        "Team": hitter["Team"],
+                        "Name": hitter["Name"],
+                        stat: hitter[stat]
+                    }
+                    for hitter in sorted(
+                        # Run a lambda function to sort each record of players by stat, take top 5
+                        (record for record in leaderboard_records if stat in record and record[stat] is not None),
+                        key=lambda x: x[stat],
+                        reverse=True
+                    )[:5]
+                ]
+        
+        return jsonify(top_5_per_stat)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
