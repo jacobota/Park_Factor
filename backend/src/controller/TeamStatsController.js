@@ -24,4 +24,26 @@ router.get('/current-season/:teamId', async (req, res) => {
     }
 });
 
+// Get hitting leaderboard for MLB teams
+router.get('/leaderboard/hitting', async (req, res) => {
+    try {
+        const response = await fetch(`${flaskUrl}/team-stats/api/stats/leaderboard/hitting`);
+        const data = await response.json();
+        res.status(200).json(data);
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
+
+// Get pitching leaderboard for MLB teams
+router.get('/leaderboard/pitching', async (req, res) => {
+    try {
+        const response = await fetch(`${flaskUrl}/team-stats/api/stats/leaderboard/pitching`);
+        const data = await response.json();
+        res.status(200).json(data);
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
+
 module.exports = router;

@@ -20,7 +20,7 @@ router.get('/stats/current-season/:fgId/:mlbamId', async (req, res) => {
         const data = await response.json();
         res.status(200).json(data);
     } catch (err) {
-        res.status(400).json(err.message);
+        res.status(400).json({message: err.message});
     }
 });
 
@@ -31,7 +31,29 @@ router.get('/stats/career/:fgId/:startDate/:endDate', async (req, res) => {
         const data = await response.json();
         res.status(200).json(data);
     } catch (err) {
-        res.status(400).json(err.message);
+        res.status(400).json({message: err.message});
+    }
+});
+
+// get MLB pitcher percentiles for current season
+router.get('/stats/percentiles/:mlbamId', async (req, res) => {
+    try {
+        const response = await fetch(`${flaskUrl}/pitchers/api/pitcher-stats/percentiles?mlbam-id=${req.params.mlbamId}`);
+        const data = await response.json();
+        res.status(200).json(data);
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
+
+// get pitching leaderboard stats
+router.get('/stats/leaderboard', async (req, res) => {
+    try {
+        const response = await fetch(`${flaskUrl}/pitchers/api/pitcher-stats/leaderboard`);
+        const data = await response.json();
+        res.status(200).json(data);
+    } catch (err) {
+        res.status(400).json({message: err.message});
     }
 });
 

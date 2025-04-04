@@ -21,7 +21,7 @@ router.get('/mlb-players', async (req, res) => {
         res.status(200).json(data);
     }   
     catch (err) {
-        res.status(400).json(err.message);
+        res.status(400).json({message: err.message});
     }
 });
 
@@ -33,7 +33,7 @@ router.get('/player-id/:first/:last', async (req, res) => {
         res.status(200).json(data);
     }
     catch (err) {
-        res.status(400).json(err.message);
+        res.status(400).json({message: err.message});
     }
 });
 
@@ -45,7 +45,7 @@ router.get('/player-bio/:bbrefid/:mlbamid', async (req, res) => {
         res.status(200).json(data);
     }
     catch (err) {
-        res.status(400).json(err.message);
+        res.status(400).json({message: err.message});
     }
 });
 
