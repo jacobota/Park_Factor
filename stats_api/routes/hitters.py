@@ -168,6 +168,9 @@ def get_hitter_leaderboard():
         leaderboard_stats = ['AVG', 'OBP', 'SLG', 'OPS', 'WAR', 'HR', 'R', 'H', 'RBI', 'SB', 'xwOBA', 'EV', 'Barrel%', 'BB%', 'K%', 'BsR', 'wRC+']
         leaderboard_records = statcast_leaderboard.to_dict('records')
 
+        # Replace NaN values with None
+        leaderboard_records = replace_nan_with_none(leaderboard_records)
+
         top_5_per_stat = {}
         for stat in leaderboard_stats:
             # If the stat is K%, we want the lowest values
