@@ -35,3 +35,21 @@ def get_team_id():
         return jsonify(team_id)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+
+@team_route.route('/api/mlb-team/schedule')
+def get_team_schedule():
+    try:
+        # Get team name from query parameters
+        team_name = request.args.get('team-name')
+        current_year = pb.utils.most_recent_season()
+        
+        # Check if team name is given
+        if not team_name:
+            return jsonify({'error': 'Team name is required'}), 400
+        
+        schedule_data = pb.schedule_and_record(current_year, team_name)
+        schedule_data_record = schedule_data.to_dict('records')
+
+        return jsonify(schedule_data_record)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
