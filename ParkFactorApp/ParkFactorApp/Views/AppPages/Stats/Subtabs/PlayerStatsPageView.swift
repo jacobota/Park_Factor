@@ -9,7 +9,27 @@ import SwiftUI
 
 struct PlayerStatsPageView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack {
+            Color.parkFactorAppPageBackground.ignoresSafeArea()
+            Section {
+                // Placeholder for a dropdown menu
+                VStack {
+                    Text("Players")
+                        .font(.parkFactorFontSubtitleNorwester)
+                        .foregroundStyle(Color.white)
+                        .padding(.top, 10)
+                    
+                    Rectangle()
+                        .fill(Color.white.opacity(0.9))
+                        .frame(height: 2)
+                        .padding(.top, 10)
+                }
+                .padding(20)
+                .background(Color.parkFactorSecondary)
+                .cornerRadius(20)
+            }
+            .padding()
+        }
     }
 }
 

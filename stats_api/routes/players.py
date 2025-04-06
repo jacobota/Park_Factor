@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 from pybaseball.playerid_lookup import _get_client
 import pybaseball as pb
+import numpy as np
 import pylahman as lahman
 
 # Get an instance of PlayerSearchClient using _get_client
@@ -8,6 +9,16 @@ player_search = _get_client()
 
 # Set up Blueprint for player_route
 player_route = Blueprint('player_route', __name__)
+
+def replace_nan_with_none(data):
+    if isinstance(data, list):
+        return [replace_nan_with_none(item) for item in data]
+    elif isinstance(data, dict):
+        return {key: replace_nan_with_none(value) for key, value in data.items()}
+    elif isinstance(data, float) and np.isnan(data):
+        return None
+    else:
+        return data
 
 @player_route.route('/')
 def home():
@@ -28,6 +39,10 @@ def get_all_mlb_players():
         players = player_search.table
         current_year = pb.utils.most_recent_season()
         players_list = players[players['mlb_played_last'] == current_year].to_dict('records')
+
+        # Replace NaN values with None
+        players_list = replace_nan_with_none(players_list)
+
         return jsonify(players_list)
     except Exception as e:
         return jsonify({'error': str(e)}), 500

@@ -9,17 +9,17 @@ import Foundation
 
 struct Player: Identifiable, Codable {
     let id: UUID = UUID()
-    let keyBbref: String
-    let keyFangraphs: Int
-    let keyMlbam: Int
-    let keyRetro: String
-    let mlbPlayedFirst: Int
-    let mlbPlayedLast: Int
-    let nameFirst: String
-    let nameLast: String
+    let keyBbref: String?
+    let keyFangraphs: Int?
+    let keyMlbam: Int?
+    let keyRetro: String?
+    let mlbPlayedFirst: Int?
+    let mlbPlayedLast: Int?
+    let nameFirst: String?
+    let nameLast: String?
     
     var fullName: String {
-        return "\(nameFirst.capitalized) \(nameLast.capitalized)"
+        return "\(nameFirst!.capitalized) \(nameLast!.capitalized)"
     }
     
     enum CodingKeys: String, CodingKey {

@@ -67,6 +67,12 @@ struct PlayersFollowingPageView: View {
                     
                     PlayerSearchBarView(searchText: $searchText, searchIsFocused: $searchIsFocused)
                     
+                    Text("\(errorMessage)")
+                        .font(.parkFactorFontText)
+                        .foregroundStyle(errorShow ? Color.red : Color.parkFactorPrimary)
+                        .multilineTextAlignment(.center)
+                        .opacity(errorShow ? 1 : 0)
+                    
                     Section {
                         ScrollView {
                             if searchIsFocused {
@@ -103,7 +109,7 @@ struct PlayersFollowingPageView: View {
             ScrollView {
                 LazyVStack(spacing: 30) {
                     if !searchText.isEmpty {
-                        ForEach((players.filter { $0.fullName.hasPrefix(searchText.capitalized) })) { player in
+                        ForEach((players.filter { $0.fullName.contains(searchText.capitalized) })) { player in
                             let isSelected = selectedPlayers.contains(where: { $0.keyMlbam == player.keyMlbam })
                             FollowingPagePlayerCard(
                                 player: player,
