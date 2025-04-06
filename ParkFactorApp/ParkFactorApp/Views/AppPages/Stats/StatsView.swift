@@ -8,19 +8,53 @@
 import SwiftUI
 
 struct StatsView: View {
+    @State private var selectedTab: String = "Teams"
+    
+    let subTabs = ["Teams", "Players"]
+    
+    var savedUser: SavedUser
+    
     var body: some View {
         NavigationView {
             ZStack {
                 Color.parkFactorSecondary.ignoresSafeArea()
-                VStack {
-                    ScrollView {
-                        Text("Stats Page")
+                VStack(spacing: 0) {
+                    VStack {
+                        ScrollView(.horizontal) {
+                            HStack {
+                                ForEach(subTabs, id: \.self) { subTab in
+                                    Button(action: {
+                                        selectedTab = subTab
+                                    }) {
+                                        Text(subTab)
+                                            .font(Font.parkFactorFontTextNorwester)
+                                            .foregroundColor(selectedTab == subTab ? Color.parkFactorPrimary : Color.gray)
+                                            .padding()
+                                            .cornerRadius(10)
+                                    }
+                                }
+                            }
+                            .background(Color.parkFactorSecondary)
+                            .cornerRadius(8)
+                        }
+                        .scrollDisabled(true)
+                        .frame(height: 25)
+                        .padding()
                     }
-                    .frame(maxWidth: .infinity)
+                    .background(Color.parkFactorSecondary)
+                    
+                    if selectedTab == "Players" {
+                        PlayerStatsPageView()
+                    } else if selectedTab == "Teams" {
+                        TeamStatsPageView()
+                    }
+                    
+                    Spacer()
+                    
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(Color.gray)
-                .padding(.vertical)
+                .padding(.bottom)
+                .padding(.top, 10)
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -39,5 +73,5 @@ struct StatsView: View {
 }
 
 #Preview {
-    StatsView()
+    StatsView(savedUser: SavedUser())
 }

@@ -24,7 +24,7 @@ struct TabBarView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             Tab("Stats", systemImage: "chart.bar.xaxis", value: .stats) {
-                StatsView()
+                StatsView(savedUser: savedUser)
             }
             Tab("Concourse", systemImage: "newspaper", value: .news) {
                 NewsView(savedUser: savedUser)
