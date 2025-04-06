@@ -8,27 +8,21 @@
 import SwiftUI
 
 struct PlayerStatsPageView: View {
+    @State private var options: [String] = ["Leaderboards", "Following Players", "Player Lookup"]
+    
+    @State private var selectedOption = "Leaderboards"
+    @State private var showDropdown = false
+    
     var body: some View {
         ZStack {
             Color.parkFactorAppPageBackground.ignoresSafeArea()
-            Section {
-                // Placeholder for a dropdown menu
-                VStack {
-                    Text("Players")
-                        .font(.parkFactorFontSubtitleNorwester)
-                        .foregroundStyle(Color.white)
-                        .padding(.top, 10)
-                    
-                    Rectangle()
-                        .fill(Color.white.opacity(0.9))
-                        .frame(height: 2)
-                        .padding(.top, 10)
+            ScrollView {
+                Section {
+                    VStack {
+                        DropDownMenuView(options: options, selectedOption: $selectedOption, showDropdown: $showDropdown)
+                    }
                 }
-                .padding(20)
-                .background(Color.parkFactorSecondary)
-                .cornerRadius(20)
             }
-            .padding()
         }
     }
 }
