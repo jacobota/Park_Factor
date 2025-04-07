@@ -24,7 +24,7 @@ struct DropDownMenuView: View {
                 }, label: {
                     HStack {
                         Text(selectedOption)
-                            .font(.parkFactorFontSubtitleNorwester)
+                            .font(.parkFactorFontBigTextNorwester)
                             .foregroundStyle(Color.parkFactorPrimary)
                             .padding(10)
                         Spacer()
@@ -34,7 +34,7 @@ struct DropDownMenuView: View {
                     }
                 })
                 .padding(.horizontal, 20)
-                .frame(width: .infinity, height: 75)
+                .frame(width: .infinity, height: 65)
                 
                 
                 // display selection menu if true
@@ -49,11 +49,11 @@ struct DropDownMenuView: View {
                                     HStack {
                                         if (option != selectedOption) {
                                             Text(option)
-                                                .font(.parkFactorFontSubtitleNorwester)
+                                                .font(.parkFactorFontBigTextNorwester)
                                                 .foregroundStyle(Color.white)
                                         } else {
                                             Text(option)
-                                                .font(.parkFactorFontSubtitleNorwester)
+                                                .font(.parkFactorFontBigTextNorwester)
                                                 .foregroundStyle(Color.parkFactorPrimary)
                                         }
                                     }
@@ -63,7 +63,7 @@ struct DropDownMenuView: View {
                             }
                         }
                     }
-                    .frame(height: 175)
+                    .frame(height: 55*CGFloat(options.count))
                 }
             }
             .foregroundStyle(Color.white)

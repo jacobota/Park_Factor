@@ -74,7 +74,7 @@ def get_team_hitting_leaderboard():
         current_year = pb.utils.most_recent_season()
         team_hitting_data = pb.team_batting(current_year, league='all')
         # Define the stats the leaderboard will present
-        leaderboard_stats = ['AVG', 'OBP', 'SLG', 'OPS', 'WAR', 'HR', 'R', 'H', 'RBI', 'SB', 'xwOBA', 'EV', 'Barrel%', 'BB%', 'K%', 'BsR', 'wRC+']
+        leaderboard_stats = ['AVG', 'OBP', 'SLG', 'OPS', 'WAR', 'HR', 'R', 'H', 'RBI', 'SB', 'EV', 'Barrel%', 'BB%', 'K%', 'BsR', 'wRC+']
         team_hitting_leaderboard_records = team_hitting_data.to_dict('records')
 
          # Replace NaN values with None

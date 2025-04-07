@@ -29,7 +29,7 @@ router.get('/leaderboard/hitting', async (req, res) => {
     try {
         const response = await fetch(`${flaskUrl}/team-stats/api/stats/leaderboard/hitting`);
         const data = await response.json();
-        res.status(200).json(data);
+        res.status(200).json({'teamHittingLeaderboard': data});
     } catch (err) {
         res.status(400).json({message: err.message});
     }

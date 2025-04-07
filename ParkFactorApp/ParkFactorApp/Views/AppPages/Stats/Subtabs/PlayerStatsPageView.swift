@@ -16,12 +16,19 @@ struct PlayerStatsPageView: View {
     var body: some View {
         ZStack {
             Color.parkFactorAppPageBackground.ignoresSafeArea()
-            ScrollView {
-                Section {
-                    VStack {
-                        DropDownMenuView(options: options, selectedOption: $selectedOption, showDropdown: $showDropdown)
+            VStack {
+                DropDownMenuView(options: options, selectedOption: $selectedOption, showDropdown: $showDropdown)
+                
+                ScrollView {
+                    if selectedOption == "Leaderboards" {
+                        PlayerLeaderboardStatsView()
+                    } else if selectedOption == "Following Players" {
+                        PlayerFollowingStatsView()
+                    } else if selectedOption == "Player Lookup" {
+                        PlayerLookupStatsView()
                     }
                 }
+                .padding(.top, 30)
             }
         }
     }
