@@ -14,7 +14,7 @@ struct FollowingPageTeamCard: View {
     
     var body: some View {
         HStack {
-            NavigationLink(destination: TeamPageView(team: team)) {
+            NavigationLink(destination: TeamPageView(teamAbbr: team.teamIDBR)) {
                 Spacer()
                 AsyncImage(url: URL(string: "https://cdn.ssref.net/req/202502211/tlogo/br/\(team.franchID).png"), scale: 3) { image in
                     image

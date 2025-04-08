@@ -26,27 +26,27 @@ struct TeamTypeDoubleCardView<T: TeamStatDoubleProtocol>: View {
                         Text("\(index + 1)")
                             .font(.parkFactorFontTextNorwester)
                             .foregroundStyle(Color.white)
-                        
-                        AsyncImage(url: URL(string: "https://cdn.ssref.net/req/202502211/tlogo/br/\(correctIncorrectTeamLogo(record.team)).png"), scale: 3) { image in
-                            image
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 35, height: 35)
-                                .background(Color.white)
-                                .clipShape(Circle())
-                                .overlay(
-                                    Circle().stroke(lineWidth: 0)
-                                )
-                        } placeholder: {
-                            ProgressView()
-                        }
-                        .padding(10)
-                        
-                        Text(getTeamName(record.team))
-                            .font(.parkFactorFontTextNorwester)
-                            .foregroundStyle(Color.white)
-                            .frame(width: 150, alignment: .leading)
+                        NavigationLink(destination: TeamPageView(teamAbbr: getTeamAbbrForNavLinks(record.team))) {
+                            AsyncImage(url: URL(string: "https://cdn.ssref.net/req/202502211/tlogo/br/\(correctIncorrectTeamLogo(record.team)).png"), scale: 3) { image in
+                                image
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 35, height: 35)
+                                    .background(Color.white)
+                                    .clipShape(Circle())
+                                    .overlay(
+                                        Circle().stroke(lineWidth: 0)
+                                    )
+                            } placeholder: {
+                                ProgressView()
+                            }
+                            .padding(10)
                             
+                            Text(getTeamName(record.team))
+                                .font(.parkFactorFontTextNorwester)
+                                .foregroundStyle(Color.white)
+                                .frame(width: 150, alignment: .leading)
+                        }
         
                         Spacer()
                         Text("\(record.value, specifier: "%.\(decimalCount)f")")
@@ -137,6 +137,17 @@ struct TeamTypeDoubleCardView<T: TeamStatDoubleProtocol>: View {
             return "ANA"
         case "TBR":
             return "TBD"
+        case "ATH":
+            return "OAK"
+        default:
+            return abbr
+        }
+    }
+    
+    private func getTeamAbbrForNavLinks(_ abbr: String) -> String {
+        switch abbr {
+        case "ATH":
+            return "OAK"
         default:
             return abbr
         }

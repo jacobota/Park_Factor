@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct TeamPageView: View {
-    var team: Team
+    var teamAbbr: String
     var body: some View {
-        Text(team.teamMascot)
+        Text(teamAbbr)
     }
 }
 
 #Preview {
-    TeamPageView(team: Team(franchID: "ANA", lgID: "AL", teamID: "LAA", teamIDBR: "LAA", teamIDfg: 1, teamIDretro: "ANA", yearID: 2020))
+    TeamPageView(teamAbbr: "LAA")
 }
