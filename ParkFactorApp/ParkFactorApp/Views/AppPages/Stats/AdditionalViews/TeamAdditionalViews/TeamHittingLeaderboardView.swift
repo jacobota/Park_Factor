@@ -31,8 +31,21 @@ struct TeamHittingLeaderboardView: View {
                 if let warLeaders = leaderboard.teamHittingLeaderboard?.war {
                     TeamTypeDoubleCardView(decimalCount: 1, title: "WAR", leaderboardStats: warLeaders)
                 }
-                // Hits, HR
-                // R, RBI, SB
+                if let hitsLeaders = leaderboard.teamHittingLeaderboard?.hits {
+                    TeamTypeIntCardView(title: "Hits", leaderboardStats: hitsLeaders)
+                }
+                if let homerunsLeaders = leaderboard.teamHittingLeaderboard?.homeruns {
+                    TeamTypeIntCardView(title: "Home Runs", leaderboardStats: homerunsLeaders)
+                }
+                if let runsLeaders = leaderboard.teamHittingLeaderboard?.runs {
+                    TeamTypeIntCardView(title: "Runs", leaderboardStats: runsLeaders)
+                }
+                if let rbisLeaders = leaderboard.teamHittingLeaderboard?.rbi {
+                    TeamTypeIntCardView(title: "RBIs", leaderboardStats: rbisLeaders)
+                }
+                if let stolenBasesLeaders = leaderboard.teamHittingLeaderboard?.sb {
+                    TeamTypeIntCardView(title: "Stolen Bases", leaderboardStats: stolenBasesLeaders)
+                }
                 if let walkPercentageLeaders = leaderboard.teamHittingLeaderboard?.bbPercent {
                     TeamTypeDoubleCardView(decimalCount: 3, title: "BB%", leaderboardStats: walkPercentageLeaders)
                 }
@@ -46,7 +59,7 @@ struct TeamHittingLeaderboardView: View {
                     TeamTypeDoubleCardView(decimalCount: 1, title: "Exit Velocity", leaderboardStats: exitVelocityLeaders)
                 }
                 if let wRCPlusLeaders = leaderboard.teamHittingLeaderboard?.wRCPlus {
-                    TeamTypeDoubleCardView(decimalCount: 3, title: "wRC+", leaderboardStats: wRCPlusLeaders)
+                    TeamTypeIntCardView(title: "wRC+", leaderboardStats: wRCPlusLeaders)
                 }
                 if let bsrLeaders = leaderboard.teamHittingLeaderboard?.bsr {
                     TeamTypeDoubleCardView(decimalCount: 1, title: "BsR", leaderboardStats: bsrLeaders)

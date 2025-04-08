@@ -23,6 +23,10 @@ struct TeamTypeDoubleCardView<T: TeamStatDoubleProtocol>: View {
                 }
                 ForEach(Array(leaderboardStats.enumerated()), id: \.offset) { index, record in
                     HStack {
+                        Text("\(index + 1)")
+                            .font(.parkFactorFontTextNorwester)
+                            .foregroundStyle(Color.white)
+                        
                         AsyncImage(url: URL(string: "https://cdn.ssref.net/req/202502211/tlogo/br/\(correctIncorrectTeamLogo(record.team)).png"), scale: 3) { image in
                             image
                                 .resizable()

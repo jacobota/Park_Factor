@@ -205,9 +205,9 @@ struct WARTeam: Codable, TeamStatDoubleProtocol {
     }
 }
 
-struct WRCPlusTeam: Codable, TeamStatDoubleProtocol {
+struct WRCPlusTeam: Codable, TeamStatIntProtocol {
     let team: String
-    let value: Double
+    let value: Int
     
     enum CodingKeys: String, CodingKey {
         case team = "Team"
