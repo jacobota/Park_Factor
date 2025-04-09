@@ -140,7 +140,7 @@ def get_pitcher_leaderboard():
         statcast_leaderboard = pb.pitching_stats(current_year, qual=1)
 
         # Define the stats the leaderboard will represent
-        leaderboard_stats = ['SV', 'W', 'L', 'ERA', 'IP', 'SO', 'WHIP', 'WAR', 'xERA', 'SIERA', 'K%', 'BB%', 'GB%', 'EV', 'vFA (pi)']
+        leaderboard_stats = ['AVG', 'BB', 'R', 'H', 'W', 'L', 'IP', 'HR', 'SV', 'ERA', 'SO', 'WHIP', 'WAR', 'SIERA', 'K%', 'BB%', 'GB%', 'EV', 'vFA (pi)']
         leaderboard_records = statcast_leaderboard.to_dict('records')
 
         # Replace NaN values with None
@@ -149,7 +149,7 @@ def get_pitcher_leaderboard():
         top_5_per_stat = {}
         for stat in leaderboard_stats:
             # If the stat is K%, we want the lowest values
-            if stat == 'L' or stat == 'ERA' or stat == 'WHIP' or stat == 'xERA' or stat == 'SIERA' or stat == 'BB%' or stat == 'EV':
+            if stat == 'AVG' or stat == 'BB' or stat == 'R' or stat == 'H' or stat == 'HR' or stat == 'L' or stat == 'ERA' or stat == 'WHIP' or stat == 'SIERA' or stat == 'BB%' or stat == 'EV':
                 top_5_per_stat[stat] = [
                     {
                         "Team": pitcher["Team"],

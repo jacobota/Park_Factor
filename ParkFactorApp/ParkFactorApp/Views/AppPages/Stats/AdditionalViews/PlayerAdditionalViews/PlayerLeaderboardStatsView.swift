@@ -8,8 +8,25 @@
 import SwiftUI
 
 struct PlayerLeaderboardStatsView: View {
+    @State private var options: [String] = ["Hitting", "Pitching"]
+    
+    @State private var selectedOption = "Hitting"
+    @State private var showDropdown = false
+    
     var body: some View {
-        Text("Player Leaderboard")
+        ZStack {
+            Color.parkFactorAppPageBackground.ignoresSafeArea()
+            VStack {
+                DropDownMenuView(options: options, selectedOption: $selectedOption, showDropdown: $showDropdown)
+                if selectedOption == "Hitting" {
+                    PlayerHittingLeaderboardView()
+                        .padding(.vertical, 10)
+                } else if selectedOption == "Pitching" {
+                    PlayerPitchingLeaderboardView()
+                        .padding(.vertical, 10)
+                }
+            }
+        }
     }
 }
 

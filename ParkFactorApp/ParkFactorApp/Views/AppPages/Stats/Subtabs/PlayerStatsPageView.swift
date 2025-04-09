@@ -28,7 +28,7 @@ struct PlayerStatsPageView: View {
                         PlayerLookupStatsView()
                     }
                 }
-                .padding(.top, 30)
+                .padding(.top, 10)
             }
         }
     }

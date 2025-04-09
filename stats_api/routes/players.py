@@ -73,6 +73,8 @@ def get_id_of_player():
         player_info = playerid_results.to_dict('records')
         if not player_info:
             return jsonify({'error': 'No player found'}), 404
+        
+        player_info = replace_nan_with_none(player_info)
         return jsonify(player_info)
     except Exception as e:
         return jsonify({'error': str(e)}), 500

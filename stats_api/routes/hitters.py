@@ -169,7 +169,7 @@ def get_hitter_leaderboard():
         current_year = pb.utils.most_recent_season()
         statcast_leaderboard = pb.batting_stats(current_year)
         # Define the stats the leaderboard will present
-        leaderboard_stats = ['AVG', 'OBP', 'SLG', 'OPS', 'WAR', 'HR', 'R', 'H', 'RBI', 'SB', 'xwOBA', 'EV', 'Barrel%', 'BB%', 'K%', 'BsR', 'wRC+']
+        leaderboard_stats = ['AVG', 'OBP', 'SLG', 'OPS', 'WAR', 'HR', 'R', 'H', 'RBI', 'SB', 'EV', 'Barrel%', 'BB%', 'K%', 'BsR', 'wRC+']
         leaderboard_records = statcast_leaderboard.to_dict('records')
 
         # Replace NaN values with None
