@@ -13,16 +13,18 @@ struct PlayerLeaderboardStatsView: View {
     @State private var selectedOption = "Hitting"
     @State private var showDropdown = false
     
+    var savedUser: SavedUser
+    
     var body: some View {
         ZStack {
             Color.parkFactorAppPageBackground.ignoresSafeArea()
             VStack {
                 DropDownMenuView(options: options, selectedOption: $selectedOption, showDropdown: $showDropdown)
                 if selectedOption == "Hitting" {
-                    PlayerHittingLeaderboardView()
+                    PlayerHittingLeaderboardView(savedUser: savedUser)
                         .padding(.vertical, 10)
                 } else if selectedOption == "Pitching" {
-                    PlayerPitchingLeaderboardView()
+                    PlayerPitchingLeaderboardView(savedUser: savedUser)
                         .padding(.vertical, 10)
                 }
             }
@@ -31,5 +33,5 @@ struct PlayerLeaderboardStatsView: View {
 }
 
 #Preview {
-    PlayerLeaderboardStatsView()
+    PlayerLeaderboardStatsView(savedUser: SavedUser())
 }

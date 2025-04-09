@@ -13,6 +13,8 @@ struct PlayerStatsPageView: View {
     @State private var selectedOption = "Leaderboards"
     @State private var showDropdown = false
     
+    var savedUser: SavedUser
+    
     var body: some View {
         ZStack {
             Color.parkFactorAppPageBackground.ignoresSafeArea()
@@ -21,11 +23,11 @@ struct PlayerStatsPageView: View {
                 
                 ScrollView {
                     if selectedOption == "Leaderboards" {
-                        PlayerLeaderboardStatsView()
+                        PlayerLeaderboardStatsView(savedUser: savedUser)
                     } else if selectedOption == "Following Players" {
-                        PlayerFollowingStatsView()
+                        PlayerFollowingStatsView(savedUser: savedUser)
                     } else if selectedOption == "Player Lookup" {
-                        PlayerLookupStatsView()
+                        PlayerLookupStatsView(savedUser: savedUser)
                     }
                 }
                 .padding(.top, 10)
@@ -35,5 +37,5 @@ struct PlayerStatsPageView: View {
 }
 
 #Preview {
-    PlayerStatsPageView()
+    PlayerStatsPageView(savedUser: SavedUser())
 }

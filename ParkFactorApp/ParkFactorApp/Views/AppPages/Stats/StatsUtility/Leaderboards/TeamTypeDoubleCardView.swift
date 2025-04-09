@@ -11,6 +11,7 @@ struct TeamTypeDoubleCardView<T: TeamStatDoubleProtocol>: View {
     var decimalCount: Int
     var title: String
     var leaderboardStats: [T]
+    var savedUser: SavedUser
     
     var body: some View {
         VStack {
@@ -26,7 +27,7 @@ struct TeamTypeDoubleCardView<T: TeamStatDoubleProtocol>: View {
                         Text("\(index + 1)")
                             .font(.parkFactorFontTextNorwester)
                             .foregroundStyle(Color.white)
-                        NavigationLink(destination: TeamPageView(teamAbbr: getTeamAbbrForNavLinks(record.team))) {
+                        NavigationLink(destination: TeamPageView(teamAbbr: getTeamAbbrForNavLinks(record.team), savedUser: savedUser)) {
                             AsyncImage(url: URL(string: "https://cdn.ssref.net/req/202502211/tlogo/br/\(correctIncorrectTeamLogo(record.team)).png"), scale: 3) { image in
                                 image
                                     .resizable()
@@ -155,5 +156,5 @@ struct TeamTypeDoubleCardView<T: TeamStatDoubleProtocol>: View {
 }
 
 #Preview {
-    TeamTypeDoubleCardView(decimalCount: 3, title: "Batting Average", leaderboardStats: [BattingAverageTeam(team: "STL", value: 0.302), BattingAverageTeam(team: "ARI", value: 0.299), BattingAverageTeam(team: "SDP", value: 0.279), BattingAverageTeam(team: "DET", value: 0.274), BattingAverageTeam(team: "PHI", value: 0.274)])
+    TeamTypeDoubleCardView(decimalCount: 3, title: "Batting Average", leaderboardStats: [BattingAverageTeam(team: "STL", value: 0.302), BattingAverageTeam(team: "ARI", value: 0.299), BattingAverageTeam(team: "SDP", value: 0.279), BattingAverageTeam(team: "DET", value: 0.274), BattingAverageTeam(team: "PHI", value: 0.274)], savedUser: SavedUser())
 }

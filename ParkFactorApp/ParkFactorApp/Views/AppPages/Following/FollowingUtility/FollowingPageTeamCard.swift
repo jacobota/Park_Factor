@@ -11,10 +11,11 @@ struct FollowingPageTeamCard: View {
     let team: Team
     let isSelected: Bool
     let onSelect: () -> Void
+    var savedUser: SavedUser
     
     var body: some View {
         HStack {
-            NavigationLink(destination: TeamPageView(teamAbbr: team.teamIDBR)) {
+            NavigationLink(destination: TeamPageView(teamAbbr: team.teamIDBR, savedUser: savedUser)) {
                 Spacer()
                 AsyncImage(url: URL(string: "https://cdn.ssref.net/req/202502211/tlogo/br/\(team.franchID).png"), scale: 3) { image in
                     image
@@ -76,5 +77,5 @@ struct FollowingPageTeamCard: View {
 }
 
 #Preview {
-    FollowingPageTeamCard(team: Team(franchID: "ANA", lgID: "AL", teamID: "LAA", teamIDBR: "LAA", teamIDfg: 1, teamIDretro: "ANA", yearID: 2020), isSelected: false, onSelect: {})
+    FollowingPageTeamCard(team: Team(franchID: "ANA", lgID: "AL", teamID: "LAA", teamIDBR: "LAA", teamIDfg: 1, teamIDretro: "ANA", yearID: 2020), isSelected: false, onSelect: {}, savedUser: SavedUser())
 }

@@ -11,10 +11,11 @@ struct FollowingPagePlayerCard: View {
     let player: Player
     let isSelected: Bool
     let onSelect: () -> Void
+    var savedUser: SavedUser
     
     var body: some View {
         HStack {
-            NavigationLink(destination: PlayerPageView(player: player)) {
+            NavigationLink(destination: PlayerPageView(player: player, savedUser: savedUser)) {
                 Spacer()
                 AsyncImage(url: URL(string: "https://img.mlbstatic.com/mlb-photos/image/upload/w_180,d_people:generic:headshot:silo:current.png,q_auto:best,f_auto/v1/people/\(player.keyMlbam ?? 1)/headshot/silo/current"), scale: 3) { image in
                     image
@@ -76,5 +77,5 @@ struct FollowingPagePlayerCard: View {
 }
 
 #Preview {
-    FollowingPagePlayerCard(player: Player(keyBbref: "troutmi01", keyFangraphs: 10155, keyMlbam: 545361, keyRetro: "troutm001", mlbPlayedFirst: 2011, mlbPlayedLast: 2024, nameFirst: "mike", nameLast: "trout"), isSelected: false, onSelect: {})
+    FollowingPagePlayerCard(player: Player(keyBbref: "troutmi01", keyFangraphs: 10155, keyMlbam: 545361, keyRetro: "troutm001", mlbPlayedFirst: 2011, mlbPlayedLast: 2024, nameFirst: "mike", nameLast: "trout"), isSelected: false, onSelect: {}, savedUser: SavedUser())
 }

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct NewsView: View {
-    @State private var selectedTab: String = "Community"
+    @State private var selectedTab: String = "News"
     
     let subTabs = ["News", "Community", "Post"]
     

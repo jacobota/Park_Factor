@@ -15,13 +15,15 @@ struct PlayerTypeIntLeaderboardHelperView<T: PlayerStatIntProtocol>: View {
     let index: Int
     @State private var player: Player = Player(keyBbref: "", keyFangraphs: 0, keyMlbam: 0, keyRetro: "", mlbPlayedFirst: 0, mlbPlayedLast: 0, nameFirst: "", nameLast: "")
     
+    var savedUser: SavedUser
+    
     var body: some View {
         HStack {
             Text("\(index + 1)")
                 .font(.parkFactorFontTextNorwester)
                 .foregroundStyle(Color.white)
             
-            NavigationLink(destination: PlayerPageView(player: player)) {
+            NavigationLink(destination: PlayerPageView(player: player, savedUser: savedUser)) {
                 AsyncImage(url: URL(string: "https://img.mlbstatic.com/mlb-photos/image/upload/w_180,d_people:generic:headshot:silo:current.png,q_auto:best,f_auto/v1/people/\(player.keyMlbam ?? 1)/headshot/silo/current"), scale: 3) { image in
                     image
                         .resizable()
@@ -230,5 +232,5 @@ struct PlayerTypeIntLeaderboardHelperView<T: PlayerStatIntProtocol>: View {
 }
 
 #Preview {
-    PlayerTypeIntLeaderboardHelperView(record: HitsPlayer(team: "CHC", value: 104, name: "Will Smith"), isPitching: false, index: 0)
+    PlayerTypeIntLeaderboardHelperView(record: HitsPlayer(team: "CHC", value: 104, name: "Will Smith"), isPitching: false, index: 0, savedUser: SavedUser())
 }

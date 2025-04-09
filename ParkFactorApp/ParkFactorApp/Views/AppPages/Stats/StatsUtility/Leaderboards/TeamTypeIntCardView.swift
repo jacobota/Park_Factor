@@ -10,6 +10,7 @@ import SwiftUI
 struct TeamTypeIntCardView<T: TeamStatIntProtocol>: View {
     var title: String
     var leaderboardStats: [T]
+    var savedUser: SavedUser
     
     var body: some View {
         VStack {
@@ -26,7 +27,7 @@ struct TeamTypeIntCardView<T: TeamStatIntProtocol>: View {
                             .font(.parkFactorFontTextNorwester)
                             .foregroundStyle(Color.white)
                         
-                        NavigationLink(destination: TeamPageView(teamAbbr: getTeamAbbrForNavLinks(record.team))) {
+                        NavigationLink(destination: TeamPageView(teamAbbr: getTeamAbbrForNavLinks(record.team), savedUser: savedUser)) {
                             AsyncImage(url: URL(string: "https://cdn.ssref.net/req/202502211/tlogo/br/\(correctIncorrectTeamLogo(record.team)).png"), scale: 3) { image in
                                 image
                                     .resizable()
@@ -156,5 +157,5 @@ struct TeamTypeIntCardView<T: TeamStatIntProtocol>: View {
 }
 
 #Preview {
-    TeamTypeIntCardView(title: "Hits", leaderboardStats: [HitsTeam(team: "CHC", value: 104), HitsTeam(team: "BOS", value: 101), HitsTeam(team: "STL", value: 100), HitsTeam(team: "NYY", value: 92), HitsTeam(team: "SDP", value: 92)])
+    TeamTypeIntCardView(title: "Hits", leaderboardStats: [HitsTeam(team: "CHC", value: 104), HitsTeam(team: "BOS", value: 101), HitsTeam(team: "STL", value: 100), HitsTeam(team: "NYY", value: 92), HitsTeam(team: "SDP", value: 92)], savedUser: SavedUser())
 }

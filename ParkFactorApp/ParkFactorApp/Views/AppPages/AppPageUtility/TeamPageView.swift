@@ -9,11 +9,12 @@ import SwiftUI
 
 struct TeamPageView: View {
     var teamAbbr: String
+    var savedUser: SavedUser
     var body: some View {
         Text(teamAbbr)
     }
 }
 
 #Preview {
-    TeamPageView(teamAbbr: "LAA")
+    TeamPageView(teamAbbr: "LAA", savedUser: SavedUser())
 }

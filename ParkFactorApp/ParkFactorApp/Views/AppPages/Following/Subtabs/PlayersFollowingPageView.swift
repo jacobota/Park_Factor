@@ -118,7 +118,8 @@ struct PlayersFollowingPageView: View {
                                     Task {
                                         await togglePlayerSelection(player: player)
                                     }
-                                }
+                                },
+                                savedUser: savedUser
                             )
                             .animation(.linear(duration: 0.25), value: isSelected)
                         }
@@ -150,7 +151,8 @@ struct PlayersFollowingPageView: View {
                                 Task {
                                     await togglePlayerSelection(player: player)
                                 }
-                            }
+                            },
+                            savedUser: savedUser
                         )
                         .animation(.linear(duration: 0.25), value: isSelected)
                     }

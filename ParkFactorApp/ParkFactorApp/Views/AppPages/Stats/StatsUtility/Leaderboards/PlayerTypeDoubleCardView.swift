@@ -12,6 +12,7 @@ struct PlayerTypeDoubleCardView<T: PlayerStatDoubleProtocol>: View {
     var title: String
     var leaderboardStats: [T]
     var isPitching: Bool
+    var savedUser: SavedUser
     
     var body: some View {
         VStack {
@@ -23,7 +24,7 @@ struct PlayerTypeDoubleCardView<T: PlayerStatDoubleProtocol>: View {
                     Spacer()
                 }
                 ForEach(Array(leaderboardStats.enumerated()), id: \.offset) { index, record in
-                    PlayerTypeDoubleLeaderboardHelperView(record: record, decimalCount: decimalCount, isPitching: isPitching, index: index)
+                    PlayerTypeDoubleLeaderboardHelperView(record: record, decimalCount: decimalCount, isPitching: isPitching, index: index, savedUser: savedUser)
                 }
             }
             .padding(20)
@@ -36,5 +37,5 @@ struct PlayerTypeDoubleCardView<T: PlayerStatDoubleProtocol>: View {
 }
 
 #Preview {
-    PlayerTypeDoubleCardView(decimalCount: 3, title: "Batting Average", leaderboardStats: [BattingAveragePlayer(team: "LAA", value: 0.302, name: "Mike Trout"), BattingAveragePlayer(team: "ARI", value: 0.299, name: "Corbin Carroll"), BattingAveragePlayer(team: "SDP", value: 0.279, name: "Fernando Tatis Jr."), BattingAveragePlayer(team: "DET", value: 0.274, name: "Spencer Torkelson"), BattingAveragePlayer(team: "PHI", value: 0.274, name: "Bryce Harper")], isPitching: false)
+    PlayerTypeDoubleCardView(decimalCount: 3, title: "Batting Average", leaderboardStats: [BattingAveragePlayer(team: "LAA", value: 0.302, name: "Mike Trout"), BattingAveragePlayer(team: "ARI", value: 0.299, name: "Corbin Carroll"), BattingAveragePlayer(team: "SDP", value: 0.279, name: "Fernando Tatis Jr."), BattingAveragePlayer(team: "DET", value: 0.274, name: "Spencer Torkelson"), BattingAveragePlayer(team: "PHI", value: 0.274, name: "Bryce Harper")], isPitching: false, savedUser: SavedUser())
 }

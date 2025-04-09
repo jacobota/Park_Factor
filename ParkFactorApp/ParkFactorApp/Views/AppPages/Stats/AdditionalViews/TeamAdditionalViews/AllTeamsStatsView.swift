@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct AllTeamsStatsView: View {
+    var savedUser: SavedUser
     var body: some View {
         Text("All Teams")
     }
 }
 
 #Preview {
-    AllTeamsStatsView()
+    AllTeamsStatsView(savedUser: SavedUser())
 }

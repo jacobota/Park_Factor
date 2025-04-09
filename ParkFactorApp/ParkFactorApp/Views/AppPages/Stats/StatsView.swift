@@ -44,9 +44,9 @@ struct StatsView: View {
                     .background(Color.parkFactorSecondary)
                     
                     if selectedTab == "Players" {
-                        PlayerStatsPageView()
+                        PlayerStatsPageView(savedUser: savedUser)
                     } else if selectedTab == "Teams" {
-                        TeamStatsPageView()
+                        TeamStatsPageView(savedUser: savedUser)
                     }
                     
                     Spacer()

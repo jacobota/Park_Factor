@@ -12,57 +12,59 @@ struct PlayerHittingLeaderboardView: View {
     @State private var errorShow: Bool = false
     @State private var leaderboard: PlayerHittingLeaderboard = PlayerHittingLeaderboard(playerHittingLeaderboard: nil)
     
+    var savedUser: SavedUser
+    
     var body: some View {
         ZStack {
             Color.parkFactorAppPageBackground.ignoresSafeArea()
-            VStack {
+            LazyVStack {
                 if let battingAverageLeaders = leaderboard.playerHittingLeaderboard?.avg {
-                    PlayerTypeDoubleCardView(decimalCount: 3, title: "Batting Average", leaderboardStats: battingAverageLeaders, isPitching: false)
+                    PlayerTypeDoubleCardView(decimalCount: 3, title: "Batting Average", leaderboardStats: battingAverageLeaders, isPitching: false, savedUser: savedUser)
                 }
                 if let onBasePercentageLeaders = leaderboard.playerHittingLeaderboard?.onBasePercent {
-                    PlayerTypeDoubleCardView(decimalCount: 3, title: "OBP", leaderboardStats: onBasePercentageLeaders, isPitching: false)
+                    PlayerTypeDoubleCardView(decimalCount: 3, title: "OBP", leaderboardStats: onBasePercentageLeaders, isPitching: false, savedUser: savedUser)
                 }
                 if let onBasePlusSlugging = leaderboard.playerHittingLeaderboard?.onBasePlusSlugging {
-                    PlayerTypeDoubleCardView(decimalCount: 3, title: "OPS", leaderboardStats: onBasePlusSlugging, isPitching: false)
+                    PlayerTypeDoubleCardView(decimalCount: 3, title: "OPS", leaderboardStats: onBasePlusSlugging, isPitching: false, savedUser: savedUser)
                 }
                 if let sluggingLeaders = leaderboard.playerHittingLeaderboard?.slg {
-                    PlayerTypeDoubleCardView(decimalCount: 3, title: "Slugging", leaderboardStats: sluggingLeaders, isPitching: false)
+                    PlayerTypeDoubleCardView(decimalCount: 3, title: "Slugging", leaderboardStats: sluggingLeaders, isPitching: false, savedUser: savedUser)
                 }
                 if let warLeaders = leaderboard.playerHittingLeaderboard?.war {
-                    PlayerTypeDoubleCardView(decimalCount: 1, title: "WAR", leaderboardStats: warLeaders, isPitching: false)
+                    PlayerTypeDoubleCardView(decimalCount: 1, title: "WAR", leaderboardStats: warLeaders, isPitching: false, savedUser: savedUser)
                 }
                 if let hitsLeaders = leaderboard.playerHittingLeaderboard?.hits {
-                    PlayerTypeIntCardView(title: "Hits", leaderboardStats: hitsLeaders, isPitching: false)
+                    PlayerTypeIntCardView(title: "Hits", leaderboardStats: hitsLeaders, isPitching: false, savedUser: savedUser)
                 }
                 if let homerunsLeaders = leaderboard.playerHittingLeaderboard?.homeruns {
-                    PlayerTypeIntCardView(title: "Home Runs", leaderboardStats: homerunsLeaders, isPitching: false)
+                    PlayerTypeIntCardView(title: "Home Runs", leaderboardStats: homerunsLeaders, isPitching: false, savedUser: savedUser)
                 }
                 if let runsLeaders = leaderboard.playerHittingLeaderboard?.runs {
-                    PlayerTypeIntCardView(title: "Runs", leaderboardStats: runsLeaders, isPitching: false)
+                    PlayerTypeIntCardView(title: "Runs", leaderboardStats: runsLeaders, isPitching: false, savedUser: savedUser)
                 }
                 if let rbisLeaders = leaderboard.playerHittingLeaderboard?.rbi {
-                    PlayerTypeIntCardView(title: "RBIs", leaderboardStats: rbisLeaders, isPitching: false)
+                    PlayerTypeIntCardView(title: "RBIs", leaderboardStats: rbisLeaders, isPitching: false, savedUser: savedUser)
                 }
                 if let stolenBasesLeaders = leaderboard.playerHittingLeaderboard?.sb {
-                    PlayerTypeIntCardView(title: "Stolen Bases", leaderboardStats: stolenBasesLeaders, isPitching: false)
+                    PlayerTypeIntCardView(title: "Stolen Bases", leaderboardStats: stolenBasesLeaders, isPitching: false, savedUser: savedUser)
                 }
                 if let walkPercentageLeaders = leaderboard.playerHittingLeaderboard?.bbPercent {
-                    PlayerTypeDoubleCardView(decimalCount: 3, title: "BB%", leaderboardStats: walkPercentageLeaders, isPitching: false)
+                    PlayerTypeDoubleCardView(decimalCount: 3, title: "BB%", leaderboardStats: walkPercentageLeaders, isPitching: false, savedUser: savedUser)
                 }
                 if let strikeoutPercentageLeaders = leaderboard.playerHittingLeaderboard?.kPercent {
-                    PlayerTypeDoubleCardView(decimalCount: 3, title: "K%", leaderboardStats: strikeoutPercentageLeaders, isPitching: false)
+                    PlayerTypeDoubleCardView(decimalCount: 3, title: "K%", leaderboardStats: strikeoutPercentageLeaders, isPitching: false, savedUser: savedUser)
                 }
                 if let barrelPercentageLeaders = leaderboard.playerHittingLeaderboard?.barrelPercent {
-                    PlayerTypeDoubleCardView(decimalCount: 3, title: "Barrel%", leaderboardStats: barrelPercentageLeaders, isPitching: false)
+                    PlayerTypeDoubleCardView(decimalCount: 3, title: "Barrel%", leaderboardStats: barrelPercentageLeaders, isPitching: false, savedUser: savedUser)
                 }
                 if let exitVelocityLeaders = leaderboard.playerHittingLeaderboard?.exitVelocity {
-                    PlayerTypeDoubleCardView(decimalCount: 1, title: "Exit Velocity", leaderboardStats: exitVelocityLeaders, isPitching: false)
+                    PlayerTypeDoubleCardView(decimalCount: 1, title: "Exit Velocity", leaderboardStats: exitVelocityLeaders, isPitching: false, savedUser: savedUser)
                 }
                 if let wRCPlusLeaders = leaderboard.playerHittingLeaderboard?.wRCPlus {
-                    PlayerTypeIntCardView(title: "wRC+", leaderboardStats: wRCPlusLeaders, isPitching: false)
+                    PlayerTypeIntCardView(title: "wRC+", leaderboardStats: wRCPlusLeaders, isPitching: false, savedUser: savedUser)
                 }
                 if let bsrLeaders = leaderboard.playerHittingLeaderboard?.bsr {
-                    PlayerTypeDoubleCardView(decimalCount: 1, title: "BsR", leaderboardStats: bsrLeaders, isPitching: false)
+                    PlayerTypeDoubleCardView(decimalCount: 1, title: "BsR", leaderboardStats: bsrLeaders, isPitching: false, savedUser: savedUser)
                 }
             }
         }
@@ -135,5 +137,5 @@ struct PlayerHittingLeaderboardView: View {
 }
 
 #Preview {
-    PlayerHittingLeaderboardView()
+    PlayerHittingLeaderboardView(savedUser: SavedUser())
 }

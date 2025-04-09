@@ -46,7 +46,8 @@ struct TeamsFollowingPageView: View {
                                             Task {
                                                 await toggleTeamSelection(team: team)
                                             }
-                                        }
+                                        },
+                                        savedUser: savedUser
                                     )
                                     .animation(.linear(duration: 0.25), value: isSelected)
                                 }
@@ -59,7 +60,8 @@ struct TeamsFollowingPageView: View {
                                             Task {
                                                 await toggleTeamSelection(team: team)
                                             }
-                                        }
+                                        },
+                                        savedUser: savedUser
                                     )
                                     .animation(.linear(duration: 0.25), value: isSelected)
                                 }

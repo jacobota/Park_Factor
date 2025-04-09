@@ -8,11 +8,39 @@
 import SwiftUI
 
 struct PlayerFollowingStatsView: View {
+    var savedUser: SavedUser
+    
     var body: some View {
-        Text("Players Following")
+        ZStack {
+            Color.parkFactorAppPageBackground.ignoresSafeArea()
+            Section {
+                VStack {
+                    Text("Following Players")
+                        .font(.parkFactorFontSubtitleNorwester)
+                        .foregroundStyle(Color.parkFactorPrimary)
+                        .padding(.top, 10)
+                    
+                    Rectangle()
+                        .fill(Color.white.opacity(0.9))
+                        .frame(height: 2)
+                        .padding(.top, 10)
+                    
+                    Section {
+                        ScrollView {
+                            
+                        }
+                        .padding(.top, 20)
+                    }
+                }
+                .padding(20)
+                .background(Color.parkFactorSecondary)
+                .cornerRadius(20)
+            }
+            .padding()
+        }
     }
 }
 
 #Preview {
-    PlayerFollowingStatsView()
+    PlayerFollowingStatsView(savedUser: SavedUser())
 }
