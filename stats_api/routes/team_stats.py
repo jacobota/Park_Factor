@@ -63,6 +63,10 @@ def get_team_stats():
             for team_fielding in team_fielding_list
         ]
 
+        team_batting_list = replace_nan_with_none(team_batting_list)
+        team_pitching_list = replace_nan_with_none(team_pitching_list)
+        team_fielding_list = replace_nan_with_none(team_fielding_list)
+
         return jsonify({'team_batting': team_batting_list, 'team_pitching': team_pitching_list, 'team_fielding': team_fielding_list})
     except Exception as e:
         return jsonify({'error': str(e)}), 500

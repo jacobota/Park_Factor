@@ -162,6 +162,9 @@ def test():
         awards_df = lahman.awards_players()
         awards_record = awards_df[awards_df['playerID'] == bbref_id].to_dict('records')
 
+        player_bio = replace_nan_with_none(player_bio)
+        awards_record = replace_nan_with_none(awards_record)
+
         return jsonify({'player_bio': player_bio, 'awards': awards_record})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
