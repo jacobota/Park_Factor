@@ -12,8 +12,9 @@ struct PlayerTypeDoubleLeaderboardHelperView<T: PlayerStatDoubleProtocol>: View 
     @State private var errorShow: Bool = false
     let record: T
     let decimalCount: Int
+    let isPitching: Bool
     let index: Int
-    @State private var player: Player?
+    @State private var player: Player = Player(keyBbref: "", keyFangraphs: 0, keyMlbam: 0, keyRetro: "", mlbPlayedFirst: 0, mlbPlayedLast: 0, nameFirst: "", nameLast: "")
     
     var body: some View {
         HStack {
@@ -21,25 +22,27 @@ struct PlayerTypeDoubleLeaderboardHelperView<T: PlayerStatDoubleProtocol>: View 
                 .font(.parkFactorFontTextNorwester)
                 .foregroundStyle(Color.white)
             
-            AsyncImage(url: URL(string: "https://img.mlbstatic.com/mlb-photos/image/upload/w_180,d_people:generic:headshot:silo:current.png,q_auto:best,f_auto/v1/people/\(player?.keyMlbam ?? 1)/headshot/silo/current"), scale: 3) { image in
-                image
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 35, height: 35)
-                    .background(getTeamColor(record.team))
-                    .clipShape(Circle())
-                    .overlay(
-                        Circle().stroke(lineWidth: 0)
-                    )
-            } placeholder: {
-                ProgressView()
+            NavigationLink(destination: PlayerPageView(player: player)) {
+                AsyncImage(url: URL(string: "https://img.mlbstatic.com/mlb-photos/image/upload/w_180,d_people:generic:headshot:silo:current.png,q_auto:best,f_auto/v1/people/\(player.keyMlbam ?? 1)/headshot/silo/current"), scale: 3) { image in
+                    image
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 35, height: 35)
+                        .background(getTeamColor(record.team))
+                        .clipShape(Circle())
+                        .overlay(
+                            Circle().stroke(lineWidth: 0)
+                        )
+                } placeholder: {
+                    ProgressView()
+                }
+                .padding(10)
+                
+                Text(record.name)
+                    .font(.parkFactorFontTextNorwester)
+                    .foregroundStyle(Color.white)
+                    .frame(width: 150, alignment: .leading)
             }
-            .padding(10)
-            
-            Text(record.name)
-                .font(.parkFactorFontTextNorwester)
-                .foregroundStyle(Color.white)
-                .frame(width: 150, alignment: .leading)
             
             Spacer()
             Text("\(record.value, specifier: "%.\(decimalCount)f")")
@@ -77,6 +80,20 @@ struct PlayerTypeDoubleLeaderboardHelperView<T: PlayerStatDoubleProtocol>: View 
             lastName = "Arráez"
         } else if firstName == "Adolis" && lastName == "Garcia" {
             lastName = "García"
+        } else if firstName == "Teoscar" && lastName == "Hernandez" {
+            lastName = "Hernández"
+        } else if firstName == "Randy" && lastName == "Rodriguez" {
+            firstName = "Randy"
+            lastName = "Rodríguez"
+        } else if firstName == "Matthew" && lastName == "Boyd" {
+            firstName = "Matt"
+        } else if firstName == "Andres" && lastName == "Munoz" {
+            firstName = "Andrés"
+            lastName = "Muñoz"
+        } else if firstName == "Jhoan" && lastName == "Duran" {
+            lastName = "Durán"
+        } else if firstName == "Seranthony" && lastName == "Dominguez" {
+            lastName = "Domínguez"
         }
         
         // call the network request to retrieve players
@@ -126,7 +143,7 @@ struct PlayerTypeDoubleLeaderboardHelperView<T: PlayerStatDoubleProtocol>: View 
                 let decodedPlayer = try JSONDecoder().decode([Player].self, from: data)
                 DispatchQueue.main.async {
                     // Players with historically same name; need to fix later
-                    if (firstName == "Will" && lastName == "Smith") ||
+                    if (firstName == "Will" && lastName == "Smith" && !isPitching) ||
                         (firstName == "Jacob" && lastName == "Wilson") ||
                         (firstName == "José" && lastName == "Ramírez") {
                         player = decodedPlayer[1]
@@ -214,5 +231,5 @@ struct PlayerTypeDoubleLeaderboardHelperView<T: PlayerStatDoubleProtocol>: View 
 }
 
 #Preview {
-    PlayerTypeDoubleLeaderboardHelperView(record: BattingAveragePlayer(team: "LAA", value: 0.302, name: "Kristian Campbell"), decimalCount: 3, index: 0)
+    PlayerTypeDoubleLeaderboardHelperView(record: BattingAveragePlayer(team: "LAD", value: 0.302, name: "Will Smith"), decimalCount: 3, isPitching: false, index: 0)
 }
