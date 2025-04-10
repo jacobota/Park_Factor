@@ -37,7 +37,7 @@ def get_team_stats():
         team_batting = pb.team_batting(current_year,league='all', ind=1)
         team_batting_list = team_batting[team_batting['teamIDfg'] == teamIdfg].to_dict('records')
 
-        team_batting_selected_attributes = ['wRC+', 'wOBA', 'HR', 'AVG', 'SLG', 'OPS', 'BB%', 'K%', 'BB/K', 'ISO', 'BABIP', 'SB', 'CS', 'wSB', 'BsR', 'Age', 'WAR']
+        team_batting_selected_attributes = ['wRC+', 'wOBA', 'HR', 'AVG', 'SLG', 'OPS', 'R', 'BB%', 'K%', 'BB/K', 'ISO', 'BABIP', 'SB', 'CS', 'wSB', 'BsR', 'Age', 'WAR']
         team_batting_list = [
             {attr: team_batting[attr] for attr in team_batting_selected_attributes}
             for team_batting in team_batting_list
@@ -47,7 +47,7 @@ def get_team_stats():
         team_pitching = pb.team_pitching(current_year,league='all', ind=1)
         team_pitching_list = team_pitching[team_pitching['teamIDfg'] == teamIdfg].to_dict('records')
 
-        team_pitching_selected_attributes = ['ERA', 'FIP', 'xFIP', 'SIERA', 'BABIP', 'K-BB%', 'K%', 'BB%', 'WHIP', 'GB%', 'HR/FB', 'LOB%', 'Stuff+', 'Location+', 'Pitching+', 'WAR', 'W', 'L', 'RS', 'R', 'vFA (pi)']
+        team_pitching_selected_attributes = ['ERA', 'FIP', 'xFIP', 'SIERA', 'BABIP', 'K-BB%', 'K%', 'BB%', 'WHIP', 'GB%', 'HR/FB', 'LOB%', 'Stuff+', 'Location+', 'Pitching+', 'WAR', 'W', 'L', 'R', 'vFA (pi)']
         team_pitching_list = [
             {attr: team_pitching[attr] for attr in team_pitching_selected_attributes}
             for team_pitching in team_pitching_list
@@ -57,7 +57,7 @@ def get_team_stats():
         team_fielding = pb.team_fielding(current_year, league='all', ind=1)
         team_fielding_list = team_fielding[team_fielding['teamIDfg'] == teamIdfg].to_dict('records')
 
-        team_fielding_selected_attributes = ['DRS', 'OAA', 'UZR', 'E', 'FRM', 'FP']
+        team_fielding_selected_attributes = ['DRS', 'OAA', 'E', 'FP']
         team_fielding_list = [
             {attr: team_fielding[attr] for attr in team_fielding_selected_attributes}
             for team_fielding in team_fielding_list
