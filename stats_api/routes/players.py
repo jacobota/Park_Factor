@@ -88,7 +88,7 @@ Throws:
 """
    
 @player_route.route('/api/player-bio')
-def test():
+def get_player_bio():
     try:
         # Get player-id from query parameters
         bbref_id = request.args.get('bbref-id')
