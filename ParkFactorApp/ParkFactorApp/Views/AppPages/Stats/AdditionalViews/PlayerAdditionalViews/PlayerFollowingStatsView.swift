@@ -9,32 +9,26 @@ import SwiftUI
 
 struct PlayerFollowingStatsView: View {
     var savedUser: SavedUser
-    
     var body: some View {
         ZStack {
             Color.parkFactorAppPageBackground.ignoresSafeArea()
             Section {
-                VStack {
-                    Text("Following Players")
-                        .font(.parkFactorFontSubtitleNorwester)
-                        .foregroundStyle(Color.parkFactorPrimary)
-                        .padding(.top, 10)
-                    
-                    Rectangle()
-                        .fill(Color.white.opacity(0.9))
-                        .frame(height: 2)
-                        .padding(.top, 10)
-                    
-                    Section {
-                        ScrollView {
-                            
+                ScrollView {
+                    VStack {
+                        if savedUser.user.followingTeams.isEmpty {
+                            Text("N/A")
+                                .font(.parkFactorFontBigTextNorwester)
+                                .foregroundStyle(Color.white)
+                                .padding(.top, 10)
+                        } else {
+                            ForEach(savedUser.user.followingPlayers) { player in
+//                                TeamStatsCardView(savedUser: savedUser, team: team, isFollowing: true)
+//                                    .padding(.bottom, 10)
+                            }
                         }
-                        .padding(.top, 20)
                     }
                 }
-                .padding(20)
-                .background(Color.parkFactorSecondary)
-                .cornerRadius(20)
+                .padding(.top, 20)
             }
             .padding()
         }

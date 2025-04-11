@@ -38,9 +38,9 @@ router.get('/player-id/:first/:last', async (req, res) => {
 });
 
 // Get MLB player biography if possible, some players may have incomplete info
-router.get('/player-bio/:bbrefid/:mlbamid', async (req, res) => {
+router.get('/player-bio/:bbrefid', async (req, res) => {
     try {
-        const response = await fetch(`${flaskUrl}/players/api/player-bio?bbref-id=${req.params.bbrefid}&mlbam-id=${req.params.mlbamid}`);
+        const response = await fetch(`${flaskUrl}/players/api/player-bio?bbref-id=${req.params.bbrefid}`);
         const data = await response.json();
         res.status(200).json(data);
     }

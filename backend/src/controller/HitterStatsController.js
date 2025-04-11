@@ -24,6 +24,17 @@ router.get('/stats/current-season/:fgId/:mlbamId', async (req, res) => {
     }
 });
 
+// Get MLB player stats preview
+router.get('/stats/current-season-preview/:mlbamId', async (req, res) => {
+    try {
+        const response = await fetch(`${flaskUrl}/hitters/api/hitter-stats/current-season-preview?mlbam-id=${req.params.mlbamId}`);
+        const data = await response.json();
+        res.status(200).json(data);
+    } catch (err) {
+        res.status(400).json(err.message);
+    }
+});
+
 // Get MLB player stats for career
 router.get('/stats/career/:fgId/:startDate/:endDate', async (req, res) => {
     try {

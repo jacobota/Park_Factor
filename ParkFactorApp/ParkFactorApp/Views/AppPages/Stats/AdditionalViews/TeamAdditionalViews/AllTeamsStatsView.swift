@@ -18,17 +18,10 @@ struct AllTeamsStatsView: View {
             Color.parkFactorAppPageBackground.ignoresSafeArea()
             Section {
                 ScrollView {
-                    VStack {
-                        if savedUser.user.followingTeams.isEmpty {
-                            Text("N/A")
-                                .font(.parkFactorFontBigTextNorwester)
-                                .foregroundStyle(Color.white)
-                                .padding(.top, 10)
-                        } else {
-                            ForEach(teams) { team in
-                                TeamStatsCardView(savedUser: savedUser, team: team, isFollowing: savedUser.user.followingTeams.contains { $0.teamIDBR == team.teamIDBR })
-                                    .padding(.bottom, 10)
-                            }
+                    LazyVStack {
+                        ForEach(teams) { team in
+                            TeamStatsCardView(savedUser: savedUser, team: team, isFollowing: savedUser.user.followingTeams.contains { $0.teamIDBR == team.teamIDBR })
+                                .padding(.bottom, 10)
                         }
                     }
                 }

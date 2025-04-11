@@ -84,14 +84,51 @@ def get_hitter_stats_this_season():
         hitter_stats = {}
         if fg_selected_attribute_record:
             hitter_stats.update(fg_selected_attribute_record[0])
+        else:
+            return jsonify({'error': "Failure to get data"}), 500
         if statcast_sprint_speed_record:
             hitter_stats.update(statcast_sprint_speed_record[0])
         if fg_fielding_record:
             hitter_stats.update(fg_fielding_record[0])
+        else:
+            return jsonify({'error': "Failure to get data"}), 500
 
         hitter_stats = replace_nan_with_none(hitter_stats)        
 
         return jsonify({'hitter_stats': hitter_stats})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+"""Get hitter stats for this current season if they don't have a Fangraphs ID, if season hasn't started yet then the last
+season will be used. The stats will be returned for the player with the given playerid 
+from the query parameters. The playerid from fangraphs and baseball reference is required 
+to get the stats for the player.
+
+Return: 
+    JSON: The hitter stats for the current season
+Throws:
+    Exception: If an error occurs while getting player stats or playerids is not given
+"""
+
+@hitter_route.route('/api/hitter-stats/current-season-preview')
+def get_hitter_stats_this_season_preview():
+    try:
+        # Get hitter id from query parameters and most recent year from pybaseball
+        key_mlbam = request.args.get('mlbam-id')
+        current_year = pb.utils.most_recent_season()
+
+        if not key_mlbam:
+            return jsonify({'error': 'Savant ID required'}), 400
+        else:
+            key_mlbam = int(key_mlbam)
+        
+        # Get BBREF batting stats for the current season and filter by playerid
+        bbref_hitter_data = pb.batting_stats_bref(current_year);
+        bbref_hitter_record = bbref_hitter_data[bbref_hitter_data['mlbID'] == key_mlbam].to_dict('records')
+
+        bbref_hitter_record = replace_nan_with_none(bbref_hitter_record)        
+
+        return jsonify({'hitter_stats': bbref_hitter_record})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

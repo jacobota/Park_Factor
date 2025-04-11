@@ -66,6 +66,36 @@ def get_pitcher_stats_this_season():
         return jsonify({'pitcher_stats': fg_pitcher_record})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
+"""Get pitcher stats for the current season if no fg id. Using their MLB ID, this data will retrieve
+basic and advanced stats for the specified pitcher for the current season.
+
+Return: 
+    JSON: The pitcher's stats for the current season
+Throws:
+    Exception: If an error occurs while getting pitcher stats or if the ID is not provided
+"""
+
+@pitcher_route.route('/api/pitcher-stats/current-season-preview')
+def get_pitcher_stats_this_season_preview():
+    try:
+        # Get pitcher id from query parameters and most recent year from pybaseball
+        key_mlbam = request.args.get('mlbam-id')
+        current_year = pb.utils.most_recent_season()
+
+        # Check if key_mlbam is given or convert to int
+        if not key_mlbam:
+            return jsonify({'error': 'Savant ID required'}), 400
+        
+        # Get BBREF pitching stats for the current season and filter by playerid
+        bbref_pitcher_data = pb.pitching_stats_bref(current_year)
+        bbref_pitcher_record = bbref_pitcher_data[bbref_pitcher_data['mlbID'] == key_mlbam].to_dict('records')
+
+        bbref_pitcher_record = replace_nan_with_none(bbref_pitcher_record)
+        
+        return jsonify({'pitcher_stats': bbref_pitcher_record})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 """Gets the pitchers career stats for a given range of years. This data will retrieve basic and advanced
 pitching stats for the specified pitcher.
