@@ -45,11 +45,26 @@ struct PlayersFollowingPageView: View {
                         ScrollView {
                             Section {
                                 Section {
-                                    Text("Search Results")
-                                        .font(.parkFactorFontSubtitleNorwester)
-                                        .foregroundStyle(Color.white)
-                                        .fontWeight(.bold)
-                                        .foregroundStyle(.white)
+                                    if searchText == "" {
+                                        ForEach(savedUser.user.followingPlayers) { player in
+                                            FollowingPagePlayerCard(
+                                                player: player,
+                                                isSelected: true,
+                                                onSelect: {
+                                                    Task {
+                                                        await togglePlayerSelection(player: player)
+                                                    }
+                                                },
+                                                savedUser: savedUser
+                                                )
+                                        }
+                                    } else {
+                                        Text("Search Results")
+                                            .font(.parkFactorFontSubtitleNorwester)
+                                            .foregroundStyle(Color.white)
+                                            .fontWeight(.bold)
+                                            .foregroundStyle(.white)
+                                    }
                                 }
                                 ScrollView {
                                     LazyVStack(spacing: 30) {
