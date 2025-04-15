@@ -16,7 +16,7 @@ struct HitterStatsCardView: View {
     var body: some View {
         VStack {
             HStack {
-                NavigationLink(destination: PlayerPageView(player: player, savedUser: savedUser)) {
+                NavigationLink(destination: HittersPageView(player: player, hitterStatsHelper: hitterStatsHelper, savedUser: savedUser)) {
                     AsyncImage(url: URL(string: "https://img.mlbstatic.com/mlb-photos/image/upload/w_180,d_people:generic:headshot:silo:current.png,q_auto:best,f_auto/v1/people/\(player.keyMlbam ?? 1)/headshot/silo/current"), scale: 3) { image in
                         image
                             .resizable()
