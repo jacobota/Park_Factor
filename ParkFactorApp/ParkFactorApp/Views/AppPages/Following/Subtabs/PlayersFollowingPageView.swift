@@ -18,38 +18,6 @@ struct PlayersFollowingPageView: View {
     
     var savedUser: SavedUser
     
-    let trendingPlayers: [String] = [
-        "Shohei Ohtani",
-        "Aaron Judge",
-        "Bobby Witt",
-        "Juan Soto",
-        "Mookie Betts",
-        "Francisco Lindor",
-        "Yordan Álvarez",
-        "Freddie Freeman",
-        "José Ramírez",
-        "Gunnar Henderson",
-        "Tarik Skubal",
-        "Bryce Harper",
-        "Vladimir Guerrero",
-        "Kyle Tucker",
-        "Paul Skenes",
-        "Ronald Acuña",
-        "Corey Seager",
-        "Ketel Marte",
-        "Zack Wheeler",
-        "Chris Sale",
-        "Rafael Devers",
-        "Fernando Tatís",
-        "Julio Rodríguez",
-        "Jackson Merrill",
-        "Corbin Burnes",
-        "Gerrit Cole",
-        "Jarren Duran",
-        "William Contreras",
-        "Manny Machado",
-        "José Altuve"
-    ]
     var body: some View {
         ZStack {
             Color.parkFactorAppPageBackground.ignoresSafeArea()
@@ -75,11 +43,37 @@ struct PlayersFollowingPageView: View {
                     
                     Section {
                         ScrollView {
-                            if searchIsFocused {
-                                searchFilteredPlayersListView
-                            } else {
-                                trendingPlayersListView
+                            Section {
+                                Section {
+                                    Text("Search Results")
+                                        .font(.parkFactorFontSubtitleNorwester)
+                                        .foregroundStyle(Color.white)
+                                        .fontWeight(.bold)
+                                        .foregroundStyle(.white)
+                                }
+                                ScrollView {
+                                    LazyVStack(spacing: 30) {
+                                        if !searchText.isEmpty {
+                                            ForEach((players.filter { $0.fullName.contains(searchText.capitalized) })) { player in
+                                                let isSelected = selectedPlayers.contains(where: { $0.keyMlbam == player.keyMlbam })
+                                                FollowingPagePlayerCard(
+                                                    player: player,
+                                                    isSelected: isSelected,
+                                                    onSelect: {
+                                                        Task {
+                                                            await togglePlayerSelection(player: player)
+                                                        }
+                                                    },
+                                                    savedUser: savedUser
+                                                )
+                                                .animation(.linear(duration: 0.25), value: isSelected)
+                                            }
+                                        }
+                                    }
+                                }
+                                .scrollIndicators(.hidden)
                             }
+                            .padding()
                         }
                         .padding(.top, 20)
                     }
@@ -95,72 +89,6 @@ struct PlayersFollowingPageView: View {
                 await fetchPlayers()
             }
         }
-    }
-    
-    private var searchFilteredPlayersListView: some View {
-        Section {
-            Section {
-                Text("Search Results")
-                    .font(.parkFactorFontSubtitleNorwester)
-                    .foregroundStyle(Color.white)
-                    .fontWeight(.bold)
-                    .foregroundStyle(.white)
-            }
-            ScrollView {
-                LazyVStack(spacing: 30) {
-                    if !searchText.isEmpty {
-                        ForEach((players.filter { $0.fullName.contains(searchText.capitalized) })) { player in
-                            let isSelected = selectedPlayers.contains(where: { $0.keyMlbam == player.keyMlbam })
-                            FollowingPagePlayerCard(
-                                player: player,
-                                isSelected: isSelected,
-                                onSelect: {
-                                    Task {
-                                        await togglePlayerSelection(player: player)
-                                    }
-                                },
-                                savedUser: savedUser
-                            )
-                            .animation(.linear(duration: 0.25), value: isSelected)
-                        }
-                    }
-                }
-            }
-            .scrollIndicators(.hidden)
-        }
-        .padding()
-    }
-    
-    private var trendingPlayersListView: some View {
-        Section {
-            Section {
-                Text("Top 30 Right Now")
-                    .font(.parkFactorFontBigTextNorwester)
-                    .foregroundStyle(Color.white)
-                    .fontWeight(.bold)
-                    .foregroundStyle(.white)
-            }
-            ScrollView {
-                LazyVStack(spacing: 30) {
-                    ForEach(players.filter { trendingPlayers.contains($0.fullName) }) { player in
-                        let isSelected = selectedPlayers.contains(where: { $0.keyMlbam == player.keyMlbam })
-                        FollowingPagePlayerCard(
-                            player: player,
-                            isSelected: isSelected,
-                            onSelect: {
-                                Task {
-                                    await togglePlayerSelection(player: player)
-                                }
-                            },
-                            savedUser: savedUser
-                        )
-                        .animation(.linear(duration: 0.25), value: isSelected)
-                    }
-                }
-            }
-            .scrollIndicators(.hidden)
-        }
-        .padding()
     }
     
     private func fetchPlayers() async {

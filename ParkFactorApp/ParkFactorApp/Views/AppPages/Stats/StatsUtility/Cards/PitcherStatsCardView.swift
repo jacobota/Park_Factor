@@ -73,8 +73,8 @@ struct PitcherStatsCardView: View {
                 // Bottom Row with stats
                 Text("\(pitchingStatsHelper.pitchingStats?[0].games ?? 0)")
                 Text(String(format: "%.1f", NSDecimalNumber(decimal: pitchingStatsHelper.pitchingStats?[0].inningsPitched ?? 0).doubleValue))
-                Text("\(pitchingStatsHelper.pitchingStats?[0].era ?? 0)")
-                Text("\(pitchingStatsHelper.pitchingStats?[0].strikeoutPercentage ?? 0)")
+                Text(String(format: "%.2f", (NSDecimalNumber(decimal: pitchingStatsHelper.pitchingStats?[0].era ?? 0.0).doubleValue)))
+                Text(String(format: "%.3f", (NSDecimalNumber(decimal: pitchingStatsHelper.pitchingStats?[0].strikeoutPercentage ?? 0.0).doubleValue)))
                 Text(String(format: "%.3f", (NSDecimalNumber(decimal: pitchingStatsHelper.pitchingStats?[0].walkPercentage ?? 0).doubleValue)))
                 Text(String(format: "%.1f", NSDecimalNumber(decimal: pitchingStatsHelper.pitchingStats?[0].war ?? 0).doubleValue))
             }
