@@ -62,7 +62,7 @@ def get_hitter_stats_this_season():
         statcast_sprint_speed_record = statcast_sprint_speed_data[statcast_sprint_speed_data['player_id'] == key_mlbam].to_dict('records')      
 
          # Select specific attributes to return for batting, sprint speed, fielding stats
-        fg_hitter_record_selected_attributes = ['G', 'AVG', 'OBP', 'SLG', 'OPS', 'WAR', 'HR', 'R', 'H', 'RBI', 'SB', 'wOBA', 'xwOBA', 'xBA', 'xSLG', 'EV', 'maxEV', 'Barrel%', 'HardHit%', 'Swing%', 'Z-Swing%', 'Contact%', 'WPA', 'BB%', 'K%', 'BB/K', 'BsR', 'CS', 'wSB', 'ISO', 'BABIP', 'wRC+']
+        fg_hitter_record_selected_attributes = ['Team', 'G', 'AVG', 'OBP', 'SLG', 'OPS', 'WAR', 'HR', 'R', 'H', 'RBI', 'SB', 'wOBA', 'xwOBA', 'xBA', 'xSLG', 'EV', 'maxEV', 'Barrel%', 'HardHit%', 'Swing%', 'Z-Swing%', 'Contact%', 'WPA', 'BB%', 'K%', 'BB/K', 'BsR', 'CS', 'wSB', 'ISO', 'BABIP', 'wRC+']
         fg_selected_attribute_record = [
             {attr: hitter[attr] for attr in fg_hitter_record_selected_attributes if attr in hitter}
             for hitter in fg_hitter_record
@@ -85,19 +85,19 @@ def get_hitter_stats_this_season():
         if fg_selected_attribute_record:
             hitter_stats.update(fg_selected_attribute_record[0])
         else:
-            return jsonify({'error': "Failure to get data"}), 500
+            return jsonify({'hitter_stats': None})
         if statcast_sprint_speed_record:
             hitter_stats.update(statcast_sprint_speed_record[0])
         if fg_fielding_record:
             hitter_stats.update(fg_fielding_record[0])
         else:
-            return jsonify({'error': "Failure to get data"}), 500
+            return jsonify({'hitter_stats': hitter_stats})
 
         hitter_stats = replace_nan_with_none(hitter_stats)        
 
         return jsonify({'hitter_stats': hitter_stats})
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'hitter_stats': None})
     
 """Get hitter stats for this current season if they don't have a Fangraphs ID, if season hasn't started yet then the last
 season will be used. The stats will be returned for the player with the given playerid 
@@ -126,9 +126,12 @@ def get_hitter_stats_this_season_preview():
         bbref_hitter_data = pb.batting_stats_bref(current_year);
         bbref_hitter_record = bbref_hitter_data[bbref_hitter_data['mlbID'] == key_mlbam].to_dict('records')
 
+        if not bbref_hitter_record:
+            return jsonify({'hitter_preview_stats': None})
+
         bbref_hitter_record = replace_nan_with_none(bbref_hitter_record)        
 
-        return jsonify({'hitter_stats': bbref_hitter_record})
+        return jsonify({'hitter_preview_stats': bbref_hitter_record})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

@@ -22,8 +22,8 @@ struct PlayerFollowingStatsView: View {
                                 .padding(.top, 10)
                         } else {
                             ForEach(savedUser.user.followingPlayers) { player in
-//                                TeamStatsCardView(savedUser: savedUser, team: team, isFollowing: true)
-//                                    .padding(.bottom, 10)
+                                PlayerStatsCardView(savedUser: savedUser, player: player, isFollowing: true)
+                                    .padding(.bottom, 10)
                             }
                         }
                     }

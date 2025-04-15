@@ -55,7 +55,7 @@ def get_pitcher_stats_this_season():
             return jsonify({'pitcher_stats': None})
 
         # Select specific attributes to return for pitching, sprint speed, oaa stats
-        fg_pitcher_record_selected_attributes = ['G', 'GS', 'CG', 'SV', 'W', 'L', 'ERA', 'IP', 'SO', 'BB', 'WHIP', 'WAR', 'Stuff+', 'Location+', 'Pitching+', 'xERA', 'SIERA', 'FIP', 'xFIP', 'K%', 'BB%', 'K-BB%', 'GB%', 'EV', 'HardHit%', 'Barrel%', 'BABIP', 'Stf+ CH', 'Stf+ CU', 'Stf+ FA', 'Stf+ FC', 'Stf+ FO', 'Stf+ FS', 'Stf+ KC', 'Stf+ SI', 'Stf+ SL', 'Loc+ CH', 'Loc+ CU', 'Loc+ FA', 'Loc+ FC', 'Loc+ FO', 'Loc+ FS', 'Loc+ KC', 'Loc+ SI', 'Loc+ SL', 'Pit+ CH', 'Pit+ CU', 'Pit+ FA', 'Pit+ FC', 'Pit+ FO', 'Pit+ FS', 'Pit+ KC', 'Pit+ SI', 'Pit+ SL', 'CH% (pi)', 'vCH (pi)', 'CU% (pi)', 'vCU (pi)', 'FA% (pi)', 'vFA (pi)', 'FC% (pi)', 'vFC (pi)', 'FO% (pi)', 'vFO (pi)', 'FS% (pi)', 'vFS (pi)', 'KC% (pi)', 'vKC (pi)', 'SI% (pi)', 'vSI (pi)', 'SL% (pi)', 'vSL (pi)', 'O-Swing% (pi)']
+        fg_pitcher_record_selected_attributes = ['Team', 'G', 'GS', 'CG', 'SV', 'W', 'L', 'ERA', 'IP', 'SO', 'BB', 'WHIP', 'WAR', 'Stuff+', 'Location+', 'Pitching+', 'xERA', 'SIERA', 'FIP', 'xFIP', 'K%', 'BB%', 'K-BB%', 'GB%', 'EV', 'HardHit%', 'Barrel%', 'BABIP', 'Stf+ CH', 'Stf+ CU', 'Stf+ FA', 'Stf+ FC', 'Stf+ FO', 'Stf+ FS', 'Stf+ KC', 'Stf+ SI', 'Stf+ SL', 'Loc+ CH', 'Loc+ CU', 'Loc+ FA', 'Loc+ FC', 'Loc+ FO', 'Loc+ FS', 'Loc+ KC', 'Loc+ SI', 'Loc+ SL', 'Pit+ CH', 'Pit+ CU', 'Pit+ FA', 'Pit+ FC', 'Pit+ FO', 'Pit+ FS', 'Pit+ KC', 'Pit+ SI', 'Pit+ SL', 'CH% (pi)', 'vCH (pi)', 'CU% (pi)', 'vCU (pi)', 'FA% (pi)', 'vFA (pi)', 'FC% (pi)', 'vFC (pi)', 'FO% (pi)', 'vFO (pi)', 'FS% (pi)', 'vFS (pi)', 'KC% (pi)', 'vKC (pi)', 'SI% (pi)', 'vSI (pi)', 'SL% (pi)', 'vSL (pi)', 'O-Swing% (pi)']
         fg_pitcher_record = [
             {attr: pitcher[attr] for attr in fg_pitcher_record_selected_attributes if attr in pitcher}
             for pitcher in fg_pitcher_record
@@ -65,7 +65,7 @@ def get_pitcher_stats_this_season():
         
         return jsonify({'pitcher_stats': fg_pitcher_record})
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'pitcher_stats': None})
     
 """Get pitcher stats for the current season if no fg id. Using their MLB ID, this data will retrieve
 basic and advanced stats for the specified pitcher for the current season.
@@ -91,11 +91,14 @@ def get_pitcher_stats_this_season_preview():
         bbref_pitcher_data = pb.pitching_stats_bref(current_year)
         bbref_pitcher_record = bbref_pitcher_data[bbref_pitcher_data['mlbID'] == key_mlbam].to_dict('records')
 
+        if not bbref_pitcher_record:
+            return jsonify({'pitcher_preview_stats': None})
+
         bbref_pitcher_record = replace_nan_with_none(bbref_pitcher_record)
         
-        return jsonify({'pitcher_stats': bbref_pitcher_record})
+        return jsonify({'pitcher_preview_stats': bbref_pitcher_record})
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'pitcher_preview_stats': None})
 
 """Gets the pitchers career stats for a given range of years. This data will retrieve basic and advanced
 pitching stats for the specified pitcher.
