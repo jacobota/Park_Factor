@@ -84,9 +84,9 @@ struct TeamStatsCardView: View {
                     Text("\(pitching.wins ?? 0)-\(pitching.losses ?? 0)")
                     Text("\(batting.runs ?? 0)")
                     Text("\(pitching.runs ?? 0)")
-                    Text(String(format: "%.2f", pitching.era ?? 0.0))
-                    Text(String(format: "%.3f", batting.woba ?? 0.0))
-                    Text(String(format: "%.1f", (batting.war ?? 0.0) + (pitching.war ?? 0.0)))
+                    Text(String(format: "%.2f", NSDecimalNumber(decimal: pitching.era ?? 0).doubleValue))
+                    Text(String(format: "%.3f", NSDecimalNumber(decimal: batting.woba ?? 0).doubleValue))
+                    Text(String(format: "%.1f", ((NSDecimalNumber(decimal: batting.war ?? 0.0).doubleValue) + NSDecimalNumber(decimal: pitching.war ?? 0.0).doubleValue)))
                 } else {
                     ProgressView()
                     ProgressView()

@@ -20,24 +20,24 @@ struct TeamStats: Codable {
 }
 
 struct TeamBatting: Codable {
-    let average: Double?
+    let average: Decimal?
     let age: Int?
-    let babip: Double?
-    let bbPercentage: Double?
-    let bbToK: Double?
-    let bsr: Double?
+    let babip: Decimal?
+    let bbPercentage: Decimal?
+    let bbToK: Decimal?
+    let bsr: Decimal?
     let cs: Int?
     let hr: Int?
-    let iso: Double?
-    let kPercentage: Double?
-    let ops: Double?
+    let iso: Decimal?
+    let kPercentage: Decimal?
+    let ops: Decimal?
     let runs: Int?
     let sb: Int?
-    let slg: Double?
-    let war: Double?
-    let woba: Double?
+    let slg: Decimal?
+    let war: Decimal?
+    let woba: Decimal?
     let wrcPlus: Int?
-    let wsb: Double?
+    let wsb: Decimal?
     
     enum CodingKeys: String, CodingKey {
         case average = "AVG"
@@ -64,7 +64,7 @@ struct TeamBatting: Codable {
 struct TeamFielding: Codable {
     let drs: Int?
     let errors: Int?
-    let fieldingPercentage: Double?
+    let fieldingPercentage: Decimal?
     let oaa: Int?
     
     enum CodingKeys: String, CodingKey {
@@ -76,26 +76,26 @@ struct TeamFielding: Codable {
 }
 
 struct TeamPitching: Codable {
-    let babip: Double?
-    let bbPercentage: Double?
-    let era: Double?
-    let fip: Double?
-    let gbPercentage: Double?
-    let hrPerFb: Double?
-    let kPercentage: Double?
-    let kMinusBbPercentage: Double?
+    let babip: Decimal?
+    let bbPercentage: Decimal?
+    let era: Decimal?
+    let fip: Decimal?
+    let gbPercentage: Decimal?
+    let hrPerFb: Decimal?
+    let kPercentage: Decimal?
+    let kMinusBbPercentage: Decimal?
     let losses: Int?
-    let lobPercentage: Double?
+    let lobPercentage: Decimal?
     let locationPlus: Int?
     let pitchingPlus: Int?
     let runs: Int?
-    let siera: Double?
+    let siera: Decimal?
     let stuffPlus: Int?
     let wins: Int?
-    let war: Double?
-    let whip: Double?
-    let vfaPi: Double?
-    let xfip: Double?
+    let war: Decimal?
+    let whip: Decimal?
+    let vfaPi: Decimal?
+    let xfip: Decimal?
     
     enum CodingKeys: String, CodingKey {
         case babip = "BABIP"
