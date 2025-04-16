@@ -100,4 +100,4 @@ def get_player_bio():
 
         return jsonify({'player_bio': player_bio})
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'player_bio': None})
