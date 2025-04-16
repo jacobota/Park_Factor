@@ -25,20 +25,23 @@ struct PlayerPageView: View {
     @State private var foundStat: Bool = false
     
     var body: some View {
-        VStack {
-            if isLoading {
-                ProgressView()
-            } else {
-                if (hitterStatsHelper?.hitterStats) != nil {
-                    HittersPageView(player: player, hitterStatsHelper: hitterStatsHelper ?? HitterStatsHelper(hitterStats: HitterStats(average: nil, babip: nil, walkPercentage: nil, walkToStrikeoutRatio: nil, barrelPercentage: nil, bsr: nil, caughtStealing: nil, contactPercentage: nil, defensiveRunsSaved: nil, errors: nil, exitVelocity: nil, fieldingPercentage: nil, games: nil, hits: nil, homeRuns: nil, hardHitPercentage: nil, iso: nil, strikeoutPercentage: nil, outsAboveAverage: nil, onBasePercentage: nil, onBasePlusSlugging: nil, runs: nil, rbi: nil, sb: nil, sluggingPercentage: nil, swingPercentage: nil, team: "", uzr: nil, war: nil, winProbabilityAdded: nil, zSwingPercentage: nil, maxExitVelocity: nil, sprintSpeed: nil, wOBA: nil, wRCPlus: nil, wSB: nil, xBA: nil, xSlg: nil, xWOBA: nil)), savedUser: savedUser)
-                } else if (hitterPreviewStatsHelper?.hitterPreviewStats) != nil {
-                    HittersPreviewPageView()
-                } else if (pitchingStatsHelper?.pitchingStats) != nil {
-                    PitchersPageView(savedUser: savedUser, player: player, pitchingStatsHelper: pitchingStatsHelper ?? PitchingStatsHelper(pitchingStats: [PitchingStats(babip: nil, walks: nil, walkPercentage: nil, barrelPercentage: nil, completeGames: nil, changeupPercentage: nil, curveballPercentage: nil, era: nil, exitVelocity: nil, fastballPercentage: nil, cutterPercentage: nil, fip: nil, splitterPercentage: nil, games: nil, groundBallPercentage: nil, gamesStarted: nil, hardHitPercentage: nil, inningsPitched: nil, strikeoutPercentage: nil, strikeoutMinusWalkPercentage: nil, losses: nil, locationPlusChangeup: nil, locationPlusCurveball: nil, locationPlusFastball: nil, locationPlusCutter: nil, locationPlusOther: nil, locationPlusSplitter: nil, locationPlusKnuckleCurve: nil, locationPlusSinker: nil, locationPlusSlider: nil, locationPlus: nil, oSwingPercentage: nil, pitchPlusChangeup: nil, pitchPlusCurveball: nil, pitchPlusFastball: nil, pitchPlusCutter: nil, pitchPlusOther: nil, pitchPlusSplitter: nil, pitchPlusKnuckleCurve: nil, pitchPlusSinker: nil, pitchPlusSlider: nil, pitchingPlus: nil, sinkerPercentage: nil, siera: nil, sliderPercentage: nil, strikeouts: nil, saves: nil, stuffPlusChangeup: nil, stuffPlusCurveball: nil, stuffPlusFastball: nil, stuffPlusCutter: nil, stuffPlusOther: nil, stuffPlusSplitter: nil, stuffPlusKnuckleCurve: nil, stuffPlusSinker: nil, stuffPlusSlider: nil, stuffPlus: nil, team: nil, wins: nil, war: nil, whip: nil, velocityChangeup: nil, velocityCurveball: nil, velocityFastball: nil, velocityCutter: nil, velocitySplitter: nil, velocitySinker: nil, velocitySlider: nil, expectedEra: nil, expectedFip: nil)]))
-                } else if (pitchingPreviewStatsHelper?.pitchingPreviewStats) != nil {
-                    PitchersPreviewPageView()
-                }else {
-                    PlayerNoDataPageView()
+        ZStack {
+            Color.parkFactorSecondary.ignoresSafeArea()
+            VStack {
+                if isLoading {
+                    ProgressView()
+                } else {
+                    if (hitterStatsHelper?.hitterStats) != nil {
+                        HittersPageView(player: player, hitterStatsHelper: hitterStatsHelper ?? HitterStatsHelper(hitterStats: HitterStats(average: nil, babip: nil, walkPercentage: nil, walkToStrikeoutRatio: nil, barrelPercentage: nil, bsr: nil, caughtStealing: nil, contactPercentage: nil, defensiveRunsSaved: nil, errors: nil, exitVelocity: nil, fieldingPercentage: nil, games: nil, hits: nil, homeRuns: nil, hardHitPercentage: nil, iso: nil, strikeoutPercentage: nil, outsAboveAverage: nil, onBasePercentage: nil, onBasePlusSlugging: nil, runs: nil, rbi: nil, sb: nil, sluggingPercentage: nil, swingPercentage: nil, team: "", uzr: nil, war: nil, winProbabilityAdded: nil, zSwingPercentage: nil, maxExitVelocity: nil, sprintSpeed: nil, wOBA: nil, wRCPlus: nil, wSB: nil, xBA: nil, xSlg: nil, xWOBA: nil)), savedUser: savedUser)
+                    } else if (hitterPreviewStatsHelper?.hitterPreviewStats) != nil {
+                        HittersPreviewPageView()
+                    } else if (pitchingStatsHelper?.pitchingStats) != nil {
+                        PitchersPageView(savedUser: savedUser, player: player, pitchingStatsHelper: pitchingStatsHelper ?? PitchingStatsHelper(pitchingStats: [PitchingStats(babip: nil, walks: nil, walkPercentage: nil, barrelPercentage: nil, completeGames: nil, changeupPercentage: nil, curveballPercentage: nil, era: nil, exitVelocity: nil, fastballPercentage: nil, cutterPercentage: nil, fip: nil, splitterPercentage: nil, games: nil, groundBallPercentage: nil, gamesStarted: nil, hardHitPercentage: nil, inningsPitched: nil, strikeoutPercentage: nil, strikeoutMinusWalkPercentage: nil, losses: nil, locationPlusChangeup: nil, locationPlusCurveball: nil, locationPlusFastball: nil, locationPlusCutter: nil, locationPlusOther: nil, locationPlusSplitter: nil, locationPlusKnuckleCurve: nil, locationPlusSinker: nil, locationPlusSlider: nil, locationPlus: nil, oSwingPercentage: nil, pitchPlusChangeup: nil, pitchPlusCurveball: nil, pitchPlusFastball: nil, pitchPlusCutter: nil, pitchPlusOther: nil, pitchPlusSplitter: nil, pitchPlusKnuckleCurve: nil, pitchPlusSinker: nil, pitchPlusSlider: nil, pitchingPlus: nil, sinkerPercentage: nil, siera: nil, sliderPercentage: nil, strikeouts: nil, saves: nil, stuffPlusChangeup: nil, stuffPlusCurveball: nil, stuffPlusFastball: nil, stuffPlusCutter: nil, stuffPlusOther: nil, stuffPlusSplitter: nil, stuffPlusKnuckleCurve: nil, stuffPlusSinker: nil, stuffPlusSlider: nil, stuffPlus: nil, team: nil, wins: nil, war: nil, whip: nil, velocityChangeup: nil, velocityCurveball: nil, velocityFastball: nil, velocityCutter: nil, velocitySplitter: nil, velocitySinker: nil, velocitySlider: nil, expectedEra: nil, expectedFip: nil)]))
+                    } else if (pitchingPreviewStatsHelper?.pitchingPreviewStats) != nil {
+                        PitchersPreviewPageView()
+                    }else {
+                        PlayerNoDataPageView(player: player)
+                    }
                 }
             }
         }
@@ -353,9 +356,9 @@ struct PlayerPageView: View {
 }
 
 // Hitters Preview
-//#Preview {
-//    PlayerPageView(player: Player(keyBbref: "troutmi01", keyFangraphs: 10155, keyMlbam: 545361, keyRetro: "troutm001", mlbPlayedFirst: 2011, mlbPlayedLast: 2025, nameFirst: "mike", nameLast: "trout"), savedUser: SavedUser())
-//}
+#Preview {
+    PlayerPageView(player: Player(keyBbref: "troutmi01", keyFangraphs: 10155, keyMlbam: 545361, keyRetro: "troutm001", mlbPlayedFirst: 2011, mlbPlayedLast: 2025, nameFirst: "mike", nameLast: "trout"), savedUser: SavedUser())
+}
 
 // Pitchers Preview
 //#Preview {
@@ -368,6 +371,6 @@ struct PlayerPageView: View {
 //}
 
 // Pitchers Preview Stats Preview
-#Preview {
-    PlayerPageView(player: Player(keyBbref: "skenepa01", keyFangraphs: -1, keyMlbam: 694973, keyRetro: "skenp001", mlbPlayedFirst: 2024, mlbPlayedLast: 2025, nameFirst: "paul", nameLast: "skenes"), savedUser: SavedUser())
-}
+//#Preview {
+//    PlayerPageView(player: Player(keyBbref: "skenepa01", keyFangraphs: -1, keyMlbam: 694973, keyRetro: "skenp001", mlbPlayedFirst: 2024, mlbPlayedLast: 2025, nameFirst: "paul", nameLast: "skenes"), savedUser: SavedUser())
+//}
