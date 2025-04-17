@@ -96,7 +96,49 @@ def get_player_bio():
         # Player biographical info based on bbref id
         df, player_bio = pb.get_splits(bbref_id, player_info=True)
 
+        if not player_bio:
+            return jsonify({'player_bio': None})
+
         player_bio = replace_nan_with_none(player_bio)
+
+        # Replace some Bats and Throws with a B, R or L if value is Both, Right, or Left
+        if "Both" in player_bio['Bats']:
+            player_bio['Bats'] = 'B'
+        elif "Right" in player_bio['Bats']:
+            player_bio['Bats'] = 'R'
+        elif "Left" in player_bio['Bats']:
+            player_bio['Bats'] = 'L'
+
+        if "Both" in player_bio['Throws']:
+            player_bio['Throws'] = 'B'
+        elif "Right" in player_bio['Throws']:
+            player_bio['Throws'] = 'R'
+        elif "Left" in player_bio['Throws']:
+            player_bio['Throws'] = 'L'
+
+        # Replace some output for position so that it reads in baseball terms
+        player_bio['Position'] = player_bio['Position'].strip()
+
+        # Make position mappings so positions can be converted to baseball terms
+        position_mapping = {
+            "Second Baseman": "2B",
+            "Shortstop": "SS",
+            "First Baseman": "1B",
+            "Third Baseman": "3B",
+            "Outfielder": "OF",
+            "Leftfielder": "LF",
+            "Centerfielder": "CF",
+            "Rightfielder": "RF",
+            "Catcher": "C",
+            "Pitcher": "P",
+            "Designated Hitter": "DH"
+        }
+
+        # Replace the full position names with their abbreviations
+        for pos, posAbbr in position_mapping.items():
+            player_bio['Position'] = player_bio['Position'].replace(pos, posAbbr)
+
+        player_bio['Position'] = player_bio['Position'].replace(" and ", " ").strip().replace(" ", ",")
 
         return jsonify({'player_bio': player_bio})
     except Exception as e:

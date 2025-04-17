@@ -71,20 +71,8 @@ struct HittersPageView: View {
                 }
                 .background(Color.parkFactorSecondary)
                 
-                ZStack {
-                    Color.parkFactorAppPageBackground.ignoresSafeArea()
-                    VStack {
-                        Text("Apologies!")
-                            .foregroundStyle(Color.parkFactorPrimary)
-                            .font(.parkFactorFontTitle)
-                        Text("Could not find stats for")
-                            .foregroundStyle(Color.parkFactorPrimary)
-                            .font(.parkFactorFontTitle)
-                            .multilineTextAlignment(.center)
-                        Text(player.fullName)
-                            .foregroundStyle(Color.parkFactorPrimary)
-                            .font(.parkFactorFontTitle)
-                    }
+                if selectedTab == "Overview" {
+                    HitterStatsOverviewView(player: player, hitterStatsHelper: hitterStatsHelper)
                 }
                 
                 Spacer()

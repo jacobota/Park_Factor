@@ -26,18 +26,11 @@ Park Factor offers a personalized and interactive way to stay connected with Maj
   - Explore detailed pitch mechanics and shapes in 3D
   - View pitch arsenal and individual pitch animations
 
-### Live Game Updates
-
-- Real-time updates for ongoing games, including team performance and player stats
-- Game widgets on the home screen for quick access
-
 ### Additional Features
 
 - Heat Maps:
   - Strike zone and spray charts for hitters
   - Swing tendencies color-coded by frequency
-- Team of the Week:
-  - Highlight the best-performing team dynamically based on Win Probability %
 
 ## Tech Stack
 
@@ -55,6 +48,20 @@ Park Factor offers a personalized and interactive way to stay connected with Maj
 
 ### APIs
 
-- MLB Live Update API: Provides live game data
 - Sports News API: Delivers the latest MLB news
 - PyBaseball Integration: Fetches advanced player stats and performance metrics
+
+### Updates to pybaseball Library
+
+- Changed return for player_bios
+```
+player_info_data = {
+  'Position': fv[1],
+  'Bats': fv[3],
+  'Throws': fv[5],
+  'Height': fv[6].split(' ')[0]+"' "+fv[6].split(' ')[1], # Commented out because I determined that Pablo Sandoval has some weird formatting that ruins this. Uncomment for ht, wt of most players. 
+  'Weight': fv[7][0:3]+" lbs",
+  'Born': fv[14],
+  'Origin': fv[16]
+}
+```
