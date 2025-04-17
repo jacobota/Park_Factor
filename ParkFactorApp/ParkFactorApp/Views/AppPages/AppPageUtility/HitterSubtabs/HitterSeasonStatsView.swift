@@ -21,6 +21,7 @@ struct HitterSeasonStatsView: View {
                     HitterAdvancedStatsView(hitterStatsHelper: hitterStatsHelper)
                         .padding(.bottom, 10)
                     HitterPercentilesStatsView(player: player)
+                        .padding(.bottom, 10)
                 }
                 .padding(20)
             }

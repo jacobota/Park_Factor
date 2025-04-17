@@ -87,6 +87,7 @@ struct HitterPercentilesStatsView: View {
                 }
                 .background(Color.black)
                 .cornerRadius(10)
+                .padding(.bottom, 10)
                 
                 VStack {
                     HStack {
@@ -129,6 +130,7 @@ struct HitterPercentilesStatsView: View {
                 }
                 .background(Color.black)
                 .cornerRadius(10)
+                .padding(.bottom, 10)
                 
                 VStack {
                     HStack {

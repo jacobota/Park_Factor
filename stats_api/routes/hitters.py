@@ -133,7 +133,7 @@ def get_hitter_stats_this_season_preview():
 
         return jsonify({'hitter_preview_stats': bbref_hitter_record})
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'hitter_preview_stats': None})
 
 """Get stats for a hitter for their career. The stats will be returned for the player with the given playerid
 and start year and last (previous) year of their career. The playerid from fangraphs is required to get the 
@@ -168,20 +168,21 @@ def get_hitter_stats_career():
         fg_hitter_record = fg_hitter_data[fg_hitter_data['IDfg'] == key_fangraphs].to_dict('records')
         
         if not fg_hitter_record:
-            return jsonify({'career_stats': None})
+            return jsonify({'hitting_career_stats': None})
 
-         # Select specific attributes to return for batting, sprint speed, oaa stats
-        fg_hitter_record_selected_attributes = ['G', 'AVG', 'OBP', 'SLG', 'OPS', 'WAR', 'HR', 'R', 'H', 'RBI', 'SB', 'wOBA', 'EV', 'maxEV', 'Barrel%', 'HardHit%', 'Swing%', 'Z-Swing%', 'Contact%', 'WPA', 'BB%', 'K%', 'BB/K', 'BsR', 'CS', 'wSB', 'ISO', 'BABIP']
+        # Select specific attributes to return for batting, sprint speed, oaa stats
+        fg_hitter_record_selected_attributes = ['G', 'AVG', 'OBP', 'SLG', 'OPS', 'WAR', 'HR', 'R', 'H', 'RBI', 'SB', 'wOBA', 'EV', 'maxEV', 'Barrel%', 'HardHit%', 'Swing%', 'Z-Swing%', 'Contact%', 'WPA', 'BB%', 'K%', 'BB/K', 'BsR', 'CS', 'wSB', 'ISO', 'BABIP', 'wRC+']
         fg_selected_attribute_record = [
             {attr: hitter[attr] for attr in fg_hitter_record_selected_attributes if attr in hitter}
             for hitter in fg_hitter_record
         ]
 
         fg_selected_attribute_record = replace_nan_with_none(fg_selected_attribute_record)
+        
 
-        return jsonify({'career_stats': fg_selected_attribute_record})
+        return jsonify({'hitting_career_stats': fg_selected_attribute_record})
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'hitting_career_stats': None})
     
 
 @hitter_route.route('/api/hitter-stats/percentiles')
