@@ -92,6 +92,10 @@ def get_player_bio():
     try:
         # Get player-id from query parameters
         bbref_id = request.args.get('bbref-id')
+
+        # Shohei has bad data for this query
+        if bbref_id == 'ohtansh01':
+            return jsonify({'player_bio': None})
         
         # Player biographical info based on bbref id
         df, player_bio = pb.get_splits(bbref_id, player_info=True)
@@ -133,6 +137,10 @@ def get_player_bio():
             "Pitcher": "P",
             "Designated Hitter": "DH"
         }
+
+        # Origin fixes
+        if "Dominican" in player_bio['Origin']:
+            player_bio['Origin'] = 'D.R.'
 
         # Replace the full position names with their abbreviations
         for pos, posAbbr in position_mapping.items():

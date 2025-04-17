@@ -157,13 +157,16 @@ def get_pitcher_percentiles():
         current_year = pb.utils.most_recent_season()
         statcast_percentiles_data = pb.statcast_pitcher_percentile_ranks(current_year)
         statcast_percentiles_record = statcast_percentiles_data[statcast_percentiles_data['player_id'] == key_mlbam].to_dict('records')
+
+        if not statcast_percentiles_record:
+            return jsonify({'pitcher_percentile': None})
         
         # Replace NaN values with None
         statcast_percentiles_record = replace_nan_with_none(statcast_percentiles_record)
         
-        return jsonify({"percentile": statcast_percentiles_record})
+        return jsonify({"pitcher_percentile": statcast_percentiles_record})
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({"pitcher_percentile": None})
     
 @pitcher_route.route('/api/pitcher-stats/leaderboard')
 def get_pitcher_leaderboard():
