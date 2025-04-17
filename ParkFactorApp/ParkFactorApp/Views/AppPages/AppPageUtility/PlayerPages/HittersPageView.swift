@@ -14,7 +14,7 @@ struct HittersPageView: View {
     
     @State private var selectedTab: String = "Overview"
     
-    let subTabs = ["Overview", "Stats", "Career", "Visuals"]
+    let subTabs = ["Overview", "Season", "Career", "Visuals"]
     
     var body: some View {
         ZStack {
@@ -73,6 +73,8 @@ struct HittersPageView: View {
                 
                 if selectedTab == "Overview" {
                     HitterStatsOverviewView(player: player, hitterStatsHelper: hitterStatsHelper)
+                } else if selectedTab == "Season" {
+                    HitterSeasonStatsView(player: player, hitterStatsHelper: hitterStatsHelper)
                 }
                 
                 Spacer()
