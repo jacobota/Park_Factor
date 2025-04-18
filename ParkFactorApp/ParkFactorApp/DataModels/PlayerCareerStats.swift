@@ -41,7 +41,7 @@ struct HittingCareerStats: Codable {
     let war: Decimal?
     let wpa: Decimal?
     let zSwingPercent: Decimal?
-    let maxEv: Int?
+    let maxEv: Decimal?
     let woba: Decimal?
     let wrcPlus: Int?
     let wsb: Decimal?

@@ -14,6 +14,7 @@ struct HitterCareerStatsView: View {
     var player: Player
     
     @State private var hittingCareerStatsHelper: HittingCareerStatsHelper?
+    
     var body: some View {
         ZStack {
             Color.parkFactorAppPageBackground.ignoresSafeArea()
@@ -94,5 +95,5 @@ struct HitterCareerStatsView: View {
 }
 
 #Preview {
-    HitterCareerStatsView(player: Player(keyBbref: "troutmi01", keyFangraphs: 10155, keyMlbam: 545361, keyRetro: "troutm001", mlbPlayedFirst: 2011, mlbPlayedLast: 2024, nameFirst: "mike", nameLast: "trout"))
+    HitterCareerStatsView(player: Player(keyBbref: "judgeaa01", keyFangraphs: 15640, keyMlbam: 592450, keyRetro: "judga001", mlbPlayedFirst: 2016, mlbPlayedLast: 2024, nameFirst: "aaron", nameLast: "judge"))
 }
