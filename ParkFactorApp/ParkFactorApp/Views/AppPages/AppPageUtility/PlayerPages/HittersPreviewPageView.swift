@@ -36,7 +36,7 @@ struct HittersPreviewPageView: View {
                             ProgressView()
                         }
                         .padding(.horizontal, 20)
-                        VStack {
+                        VStack(alignment: .leading) {
                             Text(player.fullName)
                                 .foregroundStyle(Color.white)
                                 .font(.parkFactorFontSubtitleNorwester)
