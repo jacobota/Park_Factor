@@ -61,7 +61,7 @@ struct PitcherSeasonPreviewStatsView: View {
                             Text("")
                             
                             // Fourth Row with more stat categories
-                            Text("W - L")
+                            Text("W-L")
                                 .font(.parkFactorFontSmallText)
                                 .foregroundColor(Color.gray)
                             Text("H")
@@ -78,7 +78,7 @@ struct PitcherSeasonPreviewStatsView: View {
                                 .foregroundColor(Color.gray)
                             
                             // Second Row with above categories
-                            Text("\(pitchingPreviewStatsHelper.pitchingPreviewStats?[0].wins ?? 0) - \(pitchingPreviewStatsHelper.pitchingPreviewStats?[0].losses ?? 0)")
+                            Text("\(pitchingPreviewStatsHelper.pitchingPreviewStats?[0].wins ?? 0)-\(pitchingPreviewStatsHelper.pitchingPreviewStats?[0].losses ?? 0)")
                             Text("\(pitchingPreviewStatsHelper.pitchingPreviewStats?[0].hits ?? 0)")
                             Text("\(pitchingPreviewStatsHelper.pitchingPreviewStats?[0].strikeouts ?? 0)")
                             Text("\(pitchingPreviewStatsHelper.pitchingPreviewStats?[0].walks ?? 0)")

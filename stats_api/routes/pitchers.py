@@ -132,7 +132,7 @@ def get_pitcher_stats_career():
         fg_pitcher_record = fg_pitcher_data[fg_pitcher_data['IDfg'] == key_fangraphs].to_dict('records')
 
         if not fg_pitcher_record:
-            return jsonify({'career_stats': None})
+            return jsonify({'pitching_career_stats': None})
     
         fg_pitcher_record_selected_attributes = ['G', 'GS', 'CG', 'SV', 'W', 'L', 'ERA', 'IP', 'SO', 'BB', 'WHIP', 'WAR', 'Stuff+', 'Location+', 'Pitching+', 'xERA', 'SIERA', 'FIP', 'xFIP', 'K%', 'BB%', 'K-BB%', 'GB%', 'EV', 'HardHit%', 'Barrel%', 'BABIP', 'Stf+ CH', 'Stf+ CU', 'Stf+ FA', 'Stf+ FC', 'Stf+ FO', 'Stf+ FS', 'Stf+ KC', 'Stf+ SI', 'Stf+ SL', 'Loc+ CH', 'Loc+ CU', 'Loc+ FA', 'Loc+ FC', 'Loc+ FO', 'Loc+ FS', 'Loc+ KC', 'Loc+ SI', 'Loc+ SL', 'Pit+ CH', 'Pit+ CU', 'Pit+ FA', 'Pit+ FC', 'Pit+ FO', 'Pit+ FS', 'Pit+ KC', 'Pit+ SI', 'Pit+ SL', 'CH% (pi)', 'vCH (pi)', 'CU% (pi)', 'vCU (pi)', 'FA% (pi)', 'vFA (pi)', 'FC% (pi)', 'vFC (pi)', 'FO% (pi)', 'vFO (pi)', 'FS% (pi)', 'vFS (pi)', 'KC% (pi)', 'vKC (pi)', 'SI% (pi)', 'vSI (pi)', 'SL% (pi)', 'vSL (pi)', 'O-Swing% (pi)']
         fg_pitcher_record = [
@@ -142,9 +142,9 @@ def get_pitcher_stats_career():
 
         fg_pitcher_record = replace_nan_with_none(fg_pitcher_record)
 
-        return jsonify({'career_stats': fg_pitcher_record})
+        return jsonify({'pitching_career_stats': fg_pitcher_record})
     except Exception as e:
-        return jsonify({'error': str(e)}), 500    
+        return jsonify({'pitching_career_stats': None})
     
 @pitcher_route.route('/api/pitcher-stats/percentiles')
 def get_pitcher_percentiles():
