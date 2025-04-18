@@ -463,6 +463,82 @@ struct HitterPreviewStats: Codable {
         case team = "Tm"
         case mlbID = "mlbID"
     }
+    
+    var teamName: String? {
+        if level == "Maj-AL" {
+            switch team {
+            case "Los Angeles":
+                return "Angels"
+            case "Seattle":
+                return "Mariners"
+            case "Texas":
+                return "Rangers"
+            case "Houston":
+                return "Astros"
+            case "Oakland":
+                return "Athletics"
+            case "Chicago":
+                return "White Sox"
+            case "Minnesota":
+                return "Twins"
+            case "Kansas City":
+                return "Royals"
+            case "Detroit":
+                return "Tigers"
+            case "Cleveland":
+                return "Guardians"
+            case "New York":
+                return "Yankees"
+            case "Boston":
+                return "Red Sox"
+            case "Tampa Bay":
+                return "Rays"
+            case "Toronto":
+                return "Blue Jays"
+            case "Baltimore":
+                return "Orioles"
+            default:
+                return "Free Agent"
+            }
+        } else if level == "Maj-NL" {
+            switch team {
+            case "San Francisco":
+                return "Giants"
+            case "Los Angeles":
+                return "Dodgers"
+            case "San Diego":
+                return "Padres"
+            case "Arizona":
+                return "Diamondbacks"
+            case "Colorado":
+                return "Rockies"
+            case "Chicago":
+                return "Cubs"
+            case "Cincinnati":
+                return "Reds"
+            case "Pittsburgh":
+                return "Pirates"
+            case "Milwaukee":
+                return "Brewers"
+            case "St. Louis":
+                return "Cardinals"
+            case "New York":
+                return "Mets"
+            case "Washington":
+                return "Nationals"
+            case "Miami":
+                return "Marlins"
+            case "Atlanta":
+                return "Braves"
+            case "Philadelphia":
+                return "Phillies"
+            default:
+                return "Free Agent"
+            }
+        } else {
+            return "Free Agent"
+        }
+    }
 }
 
 struct PitchingPreviewStats: Codable {
@@ -550,5 +626,81 @@ struct PitchingPreviewStats: Codable {
         case wins = "W"
         case whip = "WHIP"
         case mlbID = "mlbID"
+    }
+    
+    var teamName: String? {
+        if level == "Maj-AL" {
+            switch team {
+            case "Los Angeles":
+                return "Angels"
+            case "Seattle":
+                return "Mariners"
+            case "Texas":
+                return "Rangers"
+            case "Houston":
+                return "Astros"
+            case "Oakland":
+                return "Athletics"
+            case "Chicago":
+                return "White Sox"
+            case "Minnesota":
+                return "Twins"
+            case "Kansas City":
+                return "Royals"
+            case "Detroit":
+                return "Tigers"
+            case "Cleveland":
+                return "Guardians"
+            case "New York":
+                return "Yankees"
+            case "Boston":
+                return "Red Sox"
+            case "Tampa Bay":
+                return "Rays"
+            case "Toronto":
+                return "Blue Jays"
+            case "Baltimore":
+                return "Orioles"
+            default:
+                return "Free Agent"
+            }
+        } else if level == "Maj-NL" {
+            switch team {
+            case "San Francisco":
+                return "Giants"
+            case "Los Angeles":
+                return "Dodgers"
+            case "San Diego":
+                return "Padres"
+            case "Arizona":
+                return "Diamondbacks"
+            case "Colorado":
+                return "Rockies"
+            case "Chicago":
+                return "Cubs"
+            case "Cincinnati":
+                return "Reds"
+            case "Pittsburgh":
+                return "Pirates"
+            case "Milwaukee":
+                return "Brewers"
+            case "St. Louis":
+                return "Cardinals"
+            case "New York":
+                return "Mets"
+            case "Washington":
+                return "Nationals"
+            case "Miami":
+                return "Marlins"
+            case "Atlanta":
+                return "Braves"
+            case "Philadelphia":
+                return "Phillies"
+            default:
+                return "Free Agent"
+            }
+        } else {
+            return "Free Agent"
+        }
     }
 }
