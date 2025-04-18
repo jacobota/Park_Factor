@@ -84,6 +84,73 @@ struct Team: Identifiable, Codable {
         }
     }
     
+    var teamCity: String {
+        switch teamIDBR {
+        case "LAA":
+            return "Los Angeles"
+        case "SEA":
+            return "Seattle"
+        case "TEX":
+            return "Texas"
+        case "HOU":
+            return "Houston"
+        case "OAK":
+            return "Sacramento"
+        case "CHW":
+            return "Chicago"
+        case "MIN":
+            return "Minnesota"
+        case "KCR":
+            return "Kansas City"
+        case "DET":
+            return "Detroit"
+        case "CLE":
+            return "Cleveland"
+        case "NYY":
+            return "New York"
+        case "BOS":
+            return "Boston"
+        case "TBR":
+            return "Tampa"
+        case "TOR":
+            return "Toronto"
+        case "BAL":
+            return "Baltimore"
+        case "SFG":
+            return "San Francisco"
+        case "LAD":
+            return "Los Angeles"
+        case "SDP":
+            return "San Diego"
+        case "ARI":
+            return "Arizona"
+        case "COL":
+            return "Colorado"
+        case "CHC":
+            return "Chicago"
+        case "CIN":
+            return "Cincinatti"
+        case "PIT":
+            return "Pittsburgh"
+        case "MIL":
+            return "Milwaukee"
+        case "STL":
+            return "St. Louis"
+        case "NYM":
+            return "New York"
+        case "WSN":
+            return "Washington"
+        case "MIA":
+            return "Miami"
+        case "ATL":
+            return "Atlanta"
+        case "PHI":
+            return "Philadelphia"
+        default:
+            return "Unknown City"
+        }
+    }
+    
     var teamMascot: String {
         switch teamIDBR {
         case "LAA":
@@ -147,7 +214,7 @@ struct Team: Identifiable, Codable {
         case "PHI":
             return "Phillies"
         default:
-            return "Unknown Team"
+            return "Unknown Name"
         }
     }
 }
