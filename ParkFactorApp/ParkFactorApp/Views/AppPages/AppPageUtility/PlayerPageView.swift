@@ -46,10 +46,7 @@ struct PlayerPageView: View {
             }
         }
         .onAppear {
-            retrieveHitterPreviewStats()
-            retrievePitcherPreviewStats()
             retrieveHitterStats()
-            retrievePitcherStats()
         }
     }
     
@@ -61,6 +58,7 @@ struct PlayerPageView: View {
             errorShow = true
             didRetrieveHitting = false
             checkIfStatsRetrieved()
+            retrievePitcherStats()
             return
         }
         
@@ -73,6 +71,7 @@ struct PlayerPageView: View {
                     errorShow = true
                     didRetrieveHitting = false
                     checkIfStatsRetrieved()
+                    retrievePitcherStats()
                 }
                 return
             }
@@ -83,6 +82,7 @@ struct PlayerPageView: View {
                     errorShow = true
                     didRetrieveHitting = false
                     checkIfStatsRetrieved()
+                    retrievePitcherStats()
                 }
                 return
             }
@@ -93,6 +93,7 @@ struct PlayerPageView: View {
                     errorShow = true
                     didRetrieveHitting = false
                     checkIfStatsRetrieved()
+                    retrievePitcherStats()
                 }
                 return
             }
@@ -103,6 +104,7 @@ struct PlayerPageView: View {
                     errorShow = true
                     didRetrieveHitting = false
                     checkIfStatsRetrieved()
+                    retrievePitcherStats()
                 }
                 return
             }
@@ -113,6 +115,7 @@ struct PlayerPageView: View {
                     hitterStatsHelper = decodedStats
                     didRetrieveHitting = true
                     checkIfStatsRetrieved()
+                    retrievePitcherStats()
                 }
             } catch let error {
                 DispatchQueue.main.async {
@@ -120,6 +123,7 @@ struct PlayerPageView: View {
                     errorShow = true
                     didRetrieveHitting = false
                     checkIfStatsRetrieved()
+                    retrievePitcherStats()
                 }
             }
         }
@@ -127,224 +131,244 @@ struct PlayerPageView: View {
     }
     
     private func retrievePitcherStats() {
-        // call the network request to retrieve pitcher preview stats
-        let baseUrl = Env.expressBaseURL
-        guard let url = URL(string: "\(baseUrl)/pitchers/stats/current-season/\(player.keyFangraphs ?? 0)/\(player.keyMlbam ?? 0)") else {
-            errorMessage = "Missing URL"
-            errorShow = true
-            didRetrievePitching = false
-            checkIfStatsRetrieved()
-            return
+        if !foundStat {
+            // call the network request to retrieve pitcher preview stats
+            let baseUrl = Env.expressBaseURL
+            guard let url = URL(string: "\(baseUrl)/pitchers/stats/current-season/\(player.keyFangraphs ?? 0)/\(player.keyMlbam ?? 0)") else {
+                errorMessage = "Missing URL"
+                errorShow = true
+                didRetrievePitching = false
+                checkIfStatsRetrieved()
+                retrieveHitterPreviewStats()
+                return
+            }
+            
+            let urlRequest = URLRequest(url: url)
+            
+            let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+                if let error = error {
+                    DispatchQueue.main.async {
+                        errorMessage = error.localizedDescription
+                        errorShow = true
+                        didRetrievePitching = false
+                        checkIfStatsRetrieved()
+                        retrieveHitterPreviewStats()
+                    }
+                    return
+                }
+                
+                guard let response = response as? HTTPURLResponse else {
+                    DispatchQueue.main.async {
+                        errorMessage = "Invalid response"
+                        errorShow = true
+                        didRetrievePitching = false
+                        checkIfStatsRetrieved()
+                        retrieveHitterPreviewStats()
+                    }
+                    return
+                }
+                
+                if response.statusCode != 200 {
+                    DispatchQueue.main.async {
+                        errorMessage = "Failed to fetch data: \(response.statusCode)"
+                        errorShow = true
+                        didRetrievePitching = false
+                        checkIfStatsRetrieved()
+                        retrieveHitterPreviewStats()
+                    }
+                    return
+                }
+                
+                guard let data = data else {
+                    DispatchQueue.main.async {
+                        errorMessage = "No data received"
+                        errorShow = true
+                        didRetrievePitching = false
+                        checkIfStatsRetrieved()
+                        retrieveHitterPreviewStats()
+                    }
+                    return
+                }
+                
+                do {
+                    let decodedStats = try JSONDecoder().decode(PitchingStatsHelper.self, from: data)
+                    DispatchQueue.main.async {
+                        pitchingStatsHelper = decodedStats
+                        didRetrievePitching = true
+                        checkIfStatsRetrieved()
+                        retrieveHitterPreviewStats()
+                    }
+                } catch let error {
+                    DispatchQueue.main.async {
+                        errorMessage = "Failed to decode data: \(error.localizedDescription)"
+                        errorShow = true
+                        didRetrievePitching = false
+                        checkIfStatsRetrieved()
+                        retrieveHitterPreviewStats()
+                    }
+                }
+            }
+            
+            dataTask.resume()
         }
-        
-        let urlRequest = URLRequest(url: url)
-        
-        let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
-            if let error = error {
-                DispatchQueue.main.async {
-                    errorMessage = error.localizedDescription
-                    errorShow = true
-                    didRetrievePitching = false
-                    checkIfStatsRetrieved()
-                }
-                return
-            }
-            
-            guard let response = response as? HTTPURLResponse else {
-                DispatchQueue.main.async {
-                    errorMessage = "Invalid response"
-                    errorShow = true
-                    didRetrievePitching = false
-                    checkIfStatsRetrieved()
-                }
-                return
-            }
-            
-            if response.statusCode != 200 {
-                DispatchQueue.main.async {
-                    errorMessage = "Failed to fetch data: \(response.statusCode)"
-                    errorShow = true
-                    didRetrievePitching = false
-                    checkIfStatsRetrieved()
-                }
-                return
-            }
-            
-            guard let data = data else {
-                DispatchQueue.main.async {
-                    errorMessage = "No data received"
-                    errorShow = true
-                    didRetrievePitching = false
-                    checkIfStatsRetrieved()
-                }
-                return
-            }
-            
-            do {
-                let decodedStats = try JSONDecoder().decode(PitchingStatsHelper.self, from: data)
-                DispatchQueue.main.async {
-                    pitchingStatsHelper = decodedStats
-                    didRetrievePitching = true
-                    checkIfStatsRetrieved()
-                }
-            } catch let error {
-                DispatchQueue.main.async {
-                    errorMessage = "Failed to decode data: \(error.localizedDescription)"
-                    errorShow = true
-                    didRetrievePitching = false
-                    checkIfStatsRetrieved()
-                }
-            }
-        }
-        
-        dataTask.resume()
     }
     
     private func retrieveHitterPreviewStats() {
-        // call the network request to retrieve hitter preview stats
-        let baseUrl = Env.expressBaseURL
-        guard let url = URL(string: "\(baseUrl)/hitters/stats/current-season-preview/\(player.keyMlbam ?? 0)") else {
-            errorMessage = "Missing URL"
-            errorShow = true
-            didRetrieveHittingPreview = false
-            checkIfStatsRetrieved()
-            return
+        if !foundStat {
+            // call the network request to retrieve hitter preview stats
+            let baseUrl = Env.expressBaseURL
+            guard let url = URL(string: "\(baseUrl)/hitters/stats/current-season-preview/\(player.keyMlbam ?? 0)") else {
+                errorMessage = "Missing URL"
+                errorShow = true
+                didRetrieveHittingPreview = false
+                checkIfStatsRetrieved()
+                retrievePitcherPreviewStats()
+                return
+            }
+            
+            let urlRequest = URLRequest(url: url)
+            
+            let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+                if let error = error {
+                    DispatchQueue.main.async {
+                        errorMessage = error.localizedDescription
+                        errorShow = true
+                        didRetrieveHittingPreview = false
+                        checkIfStatsRetrieved()
+                        retrievePitcherPreviewStats()
+                    }
+                    return
+                }
+                
+                guard let response = response as? HTTPURLResponse else {
+                    DispatchQueue.main.async {
+                        errorMessage = "Invalid response"
+                        errorShow = true
+                        didRetrieveHittingPreview = false
+                        checkIfStatsRetrieved()
+                        retrievePitcherPreviewStats()
+                    }
+                    return
+                }
+                
+                if response.statusCode != 200 {
+                    DispatchQueue.main.async {
+                        errorMessage = "Failed to fetch data: \(response.statusCode)"
+                        errorShow = true
+                        didRetrieveHittingPreview = false
+                        checkIfStatsRetrieved()
+                        retrievePitcherPreviewStats()
+                    }
+                    return
+                }
+                
+                guard let data = data else {
+                    DispatchQueue.main.async {
+                        errorMessage = "No data received"
+                        errorShow = true
+                        didRetrieveHittingPreview = false
+                        checkIfStatsRetrieved()
+                        retrievePitcherPreviewStats()
+                    }
+                    return
+                }
+                
+                do {
+                    let decodedStats = try JSONDecoder().decode(HitterPreviewStatsHelper.self, from: data)
+                    DispatchQueue.main.async {
+                        hitterPreviewStatsHelper = decodedStats
+                        didRetrieveHittingPreview = true
+                        checkIfStatsRetrieved()
+                        retrievePitcherPreviewStats()
+                    }
+                } catch let error {
+                    DispatchQueue.main.async {
+                        errorMessage = "Failed to decode data: \(error.localizedDescription)"
+                        errorShow = true
+                        didRetrieveHittingPreview = false
+                        checkIfStatsRetrieved()
+                        retrievePitcherPreviewStats()
+                    }
+                }
+            }
+            dataTask.resume()
         }
-        
-        let urlRequest = URLRequest(url: url)
-        
-        let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
-            if let error = error {
-                DispatchQueue.main.async {
-                    errorMessage = error.localizedDescription
-                    errorShow = true
-                    didRetrieveHittingPreview = false
-                    checkIfStatsRetrieved()
-                }
-                return
-            }
-            
-            guard let response = response as? HTTPURLResponse else {
-                DispatchQueue.main.async {
-                    errorMessage = "Invalid response"
-                    errorShow = true
-                    didRetrieveHittingPreview = false
-                    checkIfStatsRetrieved()
-                }
-                return
-            }
-            
-            if response.statusCode != 200 {
-                DispatchQueue.main.async {
-                    errorMessage = "Failed to fetch data: \(response.statusCode)"
-                    errorShow = true
-                    didRetrieveHittingPreview = false
-                    checkIfStatsRetrieved()
-                }
-                return
-            }
-            
-            guard let data = data else {
-                DispatchQueue.main.async {
-                    errorMessage = "No data received"
-                    errorShow = true
-                    didRetrieveHittingPreview = false
-                    checkIfStatsRetrieved()
-                }
-                return
-            }
-            
-            do {
-                let decodedStats = try JSONDecoder().decode(HitterPreviewStatsHelper.self, from: data)
-                DispatchQueue.main.async {
-                    hitterPreviewStatsHelper = decodedStats
-                    didRetrieveHittingPreview = true
-                    checkIfStatsRetrieved()
-                }
-            } catch let error {
-                DispatchQueue.main.async {
-                    errorMessage = "Failed to decode data: \(error.localizedDescription)"
-                    errorShow = true
-                    didRetrieveHittingPreview = false
-                    checkIfStatsRetrieved()
-                }
-            }
-        }
-        dataTask.resume()
     }
     
     private func retrievePitcherPreviewStats() {
-        // call the network request to retrieve pitcher preview stats
-        let baseUrl = Env.expressBaseURL
-        guard let url = URL(string: "\(baseUrl)/pitchers/stats/current-season-preview/\(player.keyMlbam ?? 0)") else {
-            errorMessage = "Missing URL"
-            errorShow = true
-            didRetrievePitchingPreview = false
-            checkIfStatsRetrieved()
-            return
+        if !foundStat {
+            // call the network request to retrieve pitcher preview stats
+            let baseUrl = Env.expressBaseURL
+            guard let url = URL(string: "\(baseUrl)/pitchers/stats/current-season-preview/\(player.keyMlbam ?? 0)") else {
+                errorMessage = "Missing URL"
+                errorShow = true
+                didRetrievePitchingPreview = false
+                checkIfStatsRetrieved()
+                return
+            }
+            
+            let urlRequest = URLRequest(url: url)
+            
+            let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
+                if let error = error {
+                    DispatchQueue.main.async {
+                        errorMessage = error.localizedDescription
+                        errorShow = true
+                        didRetrievePitchingPreview = false
+                        checkIfStatsRetrieved()
+                    }
+                    return
+                }
+                
+                guard let response = response as? HTTPURLResponse else {
+                    DispatchQueue.main.async {
+                        errorMessage = "Invalid response"
+                        errorShow = true
+                        didRetrievePitchingPreview = false
+                        checkIfStatsRetrieved()
+                    }
+                    return
+                }
+                
+                if response.statusCode != 200 {
+                    DispatchQueue.main.async {
+                        errorMessage = "Failed to fetch data: \(response.statusCode)"
+                        errorShow = true
+                        didRetrievePitchingPreview = false
+                        checkIfStatsRetrieved()
+                    }
+                    return
+                }
+                
+                guard let data = data else {
+                    DispatchQueue.main.async {
+                        errorMessage = "No data received"
+                        errorShow = true
+                        didRetrievePitchingPreview = false
+                        checkIfStatsRetrieved()
+                    }
+                    return
+                }
+                
+                do {
+                    let decodedStats = try JSONDecoder().decode(PitchingPreviewStatsHelper.self, from: data)
+                    DispatchQueue.main.async {
+                        pitchingPreviewStatsHelper = decodedStats
+                        didRetrievePitchingPreview = true
+                        checkIfStatsRetrieved()
+                    }
+                } catch let error {
+                    DispatchQueue.main.async {
+                        errorMessage = "Failed to decode data: \(error.localizedDescription)"
+                        errorShow = true
+                        didRetrievePitchingPreview = false
+                        checkIfStatsRetrieved()
+                    }
+                }
+            }
+            
+            dataTask.resume()
         }
-        
-        let urlRequest = URLRequest(url: url)
-        
-        let dataTask = URLSession.shared.dataTask(with: urlRequest) { (data, response, error) in
-            if let error = error {
-                DispatchQueue.main.async {
-                    errorMessage = error.localizedDescription
-                    errorShow = true
-                    didRetrievePitchingPreview = false
-                    checkIfStatsRetrieved()
-                }
-                return
-            }
-            
-            guard let response = response as? HTTPURLResponse else {
-                DispatchQueue.main.async {
-                    errorMessage = "Invalid response"
-                    errorShow = true
-                    didRetrievePitchingPreview = false
-                    checkIfStatsRetrieved()
-                }
-                return
-            }
-            
-            if response.statusCode != 200 {
-                DispatchQueue.main.async {
-                    errorMessage = "Failed to fetch data: \(response.statusCode)"
-                    errorShow = true
-                    didRetrievePitchingPreview = false
-                    checkIfStatsRetrieved()
-                }
-                return
-            }
-            
-            guard let data = data else {
-                DispatchQueue.main.async {
-                    errorMessage = "No data received"
-                    errorShow = true
-                    didRetrievePitchingPreview = false
-                    checkIfStatsRetrieved()
-                }
-                return
-            }
-            
-            do {
-                let decodedStats = try JSONDecoder().decode(PitchingPreviewStatsHelper.self, from: data)
-                DispatchQueue.main.async {
-                    pitchingPreviewStatsHelper = decodedStats
-                    didRetrievePitchingPreview = true
-                    checkIfStatsRetrieved()
-                }
-            } catch let error {
-                DispatchQueue.main.async {
-                    errorMessage = "Failed to decode data: \(error.localizedDescription)"
-                    errorShow = true
-                    didRetrievePitchingPreview = false
-                    checkIfStatsRetrieved()
-                }
-            }
-        }
-        
-        dataTask.resume()
     }
     
     private func checkIfStatsRetrieved() {
