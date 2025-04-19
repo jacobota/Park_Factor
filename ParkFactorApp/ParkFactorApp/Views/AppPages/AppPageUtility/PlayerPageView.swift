@@ -46,10 +46,10 @@ struct PlayerPageView: View {
             }
         }
         .onAppear {
-            retrieveHitterStats()
-            retrievePitcherStats()
             retrieveHitterPreviewStats()
             retrievePitcherPreviewStats()
+            retrieveHitterStats()
+            retrievePitcherStats()
         }
     }
     
