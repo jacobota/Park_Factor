@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 import pybaseball as pb
 import numpy as np
+from datetime import datetime
 
 # Set up Blueprint for pitcher_route
 pitcher_route = Blueprint('pitcher_route', __name__)
@@ -145,6 +146,38 @@ def get_pitcher_stats_career():
         return jsonify({'pitching_career_stats': fg_pitcher_record})
     except Exception as e:
         return jsonify({'pitching_career_stats': None})
+    
+@pitcher_route.route('/api/pitcher-stats/arsenal')
+def get_pitcher_arsenal():
+    try:
+        # Get mlbam key to filter a player
+        key_mlbam = request.args.get('mlbam-id')
+        current_year = pb.utils.most_recent_season()
+
+        if not key_mlbam:
+            return jsonify({'error': 'Savant ID required'}), 400
+        else:
+            key_mlbam = int(key_mlbam)
+
+        # Get Fangraphs pitching stats for the current season and filter by playerid
+        pitcher_arsenal_data = pb.statcast_pitcher_pitch_movement(current_year, minP=1, pitch_type= "ALL")
+        pitcher_arsenal_record = pitcher_arsenal_data[pitcher_arsenal_data["pitcher_id"] == key_mlbam].to_dict('records')
+
+        pitcher_arsenal_selected_attributes = ['avg_speed', 'diff_x', 'diff_y', 'league_break_x', 'league_break_y', 'pitch_hand', 'pitch_per', 'pitch_type', 'pitch_type_name', 'pitcher_break_z_induced', 'pitches_thrown']
+        pitcher_arsenal_record = [
+            {attr: pitcher[attr] for attr in pitcher_arsenal_selected_attributes if attr in pitcher}
+            for pitcher in pitcher_arsenal_record
+        ]
+
+        if not pitcher_arsenal_record:
+            return jsonify({'pitcher_arsenal': None})
+
+
+        pitcher_arsenal_record = replace_nan_with_none(pitcher_arsenal_record)
+
+        return jsonify({'pitcher_arsenal':pitcher_arsenal_record})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
     
 @pitcher_route.route('/api/pitcher-stats/percentiles')
 def get_pitcher_percentiles():
