@@ -177,7 +177,7 @@ def get_pitcher_arsenal():
 
         return jsonify({'pitcher_arsenal':pitcher_arsenal_record})
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return jsonify({'pitcher_arsenal': None})
     
 @pitcher_route.route('/api/pitcher-stats/percentiles')
 def get_pitcher_percentiles():

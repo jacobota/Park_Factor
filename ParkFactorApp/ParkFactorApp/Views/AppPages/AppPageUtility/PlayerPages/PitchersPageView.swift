@@ -79,6 +79,8 @@ struct PitchersPageView: View {
                     PitcherSeasonStatsView(player: player, pitchingStatsHelper: pitchingStatsHelper)
                 } else if selectedTab == "Career" {
                     PitcherCareerStatsView(player: player)
+                } else if selectedTab == "Visuals" {
+                    PitcherVisualsStatsView(player: player)
                 }
                 
                 Spacer()
