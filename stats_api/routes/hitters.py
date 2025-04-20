@@ -285,7 +285,7 @@ def get_hitter_spraychart():
             team_stadium = "angels"
         elif team == "HOU":
             team_stadium = "astros"
-        elif team == "OAK":
+        elif team == "ATH":
             team_stadium = "athletics"
         elif team == "TOR":
             team_stadium = "blue_jays"
@@ -315,7 +315,7 @@ def get_hitter_spraychart():
             team_stadium = "nationals"
         elif team == "BAL":
             team_stadium = "orioles"
-        elif team == "SDP":
+        elif team == "SD":
             team_stadium = "padres"
         elif team == "PHI":
             team_stadium = "phillies"
@@ -331,7 +331,7 @@ def get_hitter_spraychart():
             team_stadium = "reds"
         elif team == "COL":
             team_stadium = "rockies"
-        elif team == "KCR":
+        elif team == "KC":
             team_stadium = "royals"
         elif team == "DET":
             team_stadium = "tigers"

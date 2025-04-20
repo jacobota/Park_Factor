@@ -33,6 +33,10 @@ struct Env {
         return getValue("S3_BUCKET_REGION")
     }
     
+    static var flaskBaseUrl: String {
+        return getValue("FLASK_URL")
+    }
+    
     // Search the Env.plist file for the key and return the value
     private static func getValue(_ key: String) -> String {
         guard let filePath = Bundle.main.path(forResource: "Env", ofType: "plist"),
