@@ -53,7 +53,7 @@ Park Factor offers a personalized and interactive way to stay connected with Maj
 
 ### Updates to pybaseball Library
 
-- Changed return for player_bios
+- Changed return for player_bios function
 ```
 player_info_data = {
   'Position': fv[1],
@@ -65,3 +65,9 @@ player_info_data = {
   'Origin': fv[16]
 }
 ```
+
+- Added Pitcher functions that showed pitch movement and spin (__init__.py)
+'''
+statcast_pitcher_active_spin,
+statcast_pitcher_pitch_movement,
+'''

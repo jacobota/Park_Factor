@@ -1,6 +1,10 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, send_file
 import pybaseball as pb
 import numpy as np
+from datetime import datetime
+from io import BytesIO
+import matplotlib
+matplotlib.use('Agg')
 
 # Set up Blueprint for player_route
 hitter_route = Blueprint('hitter_route', __name__)
@@ -252,5 +256,102 @@ def get_hitter_leaderboard():
                 ]
         
         return jsonify(top_5_per_stat)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+    
+@hitter_route.route('/api/hitter-stats/spraychart')
+def get_hitter_spraychart():
+    try:
+        key_mlbam = request.args.get('mlbam-id')
+        team = request.args.get('team')
+        if not key_mlbam:
+            return jsonify({'error': 'Savant ID required'}), 400
+        else:
+            key_mlbam = int(key_mlbam)
+        
+        # Grab date of earliest month of games starting
+        current_year = pb.utils.most_recent_season()
+        start_date = f'{current_year}-03-01'
+        # Get today's date in YYYY-MM-DD format
+        end_date = datetime.now().strftime('%Y-%m-%d')
+        statcast_spraychart_data = pb.statcast_batter(start_date, end_date, key_mlbam)
+        sub_data = statcast_spraychart_data[statcast_spraychart_data['home_team'] == team]
+        sub_data = sub_data[sub_data['events'].notna()]
+        sub_data = sub_data[sub_data['events'].str.contains('single|double|triple|home_run')]
+
+        team_stadium = ""
+        # Get the team stadium
+        if team == "LAA":
+            team_stadium = "angels"
+        elif team == "HOU":
+            team_stadium = "astros"
+        elif team == "OAK":
+            team_stadium = "athletics"
+        elif team == "TOR":
+            team_stadium = "blue_jays"
+        elif team == "ATL":
+            team_stadium = "braves"
+        elif team == "MIL":
+            team_stadium = "brewers"
+        elif team == "STL":
+            team_stadium = "cardinals"
+        elif team == "CHC":
+            team_stadium = "cubs"
+        elif team == "ARI":
+            team_stadium = "diamondbacks"
+        elif team == "LAD":
+            team_stadium = "dodgers"
+        elif team == "SFG":  
+            team_stadium = "giants"
+        elif team == "CLE":
+            team_stadium = "indians"  
+        elif team == "SEA":
+            team_stadium = "mariners"
+        elif team == "MIA":
+            team_stadium = "marlins"
+        elif team == "NYM":
+            team_stadium = "mets"
+        elif team == "WSN":
+            team_stadium = "nationals"
+        elif team == "BAL":
+            team_stadium = "orioles"
+        elif team == "SDP":
+            team_stadium = "padres"
+        elif team == "PHI":
+            team_stadium = "phillies"
+        elif team == "PIT":
+            team_stadium = "pirates"
+        elif team == "TEX":
+            team_stadium = "rangers"
+        elif team == "TBR":
+            team_stadium = "rays"
+        elif team == "BOS":
+            team_stadium = "red_sox"
+        elif team == "CIN":
+            team_stadium = "reds"
+        elif team == "COL":
+            team_stadium = "rockies"
+        elif team == "KCR":
+            team_stadium = "royals"
+        elif team == "DET":
+            team_stadium = "tigers"
+        elif team == "MIN":
+            team_stadium = "twins"
+        elif team == "CHW":
+            team_stadium = "white_sox"
+        elif team == "NYY":
+            team_stadium = "yankees"
+        else:
+            team_stadium = "generic"
+        
+        spray_chart = pb.spraychart(sub_data, team_stadium)
+        
+        # Save the plot to a BytesIO object
+        figure = spray_chart.get_figure()
+        buf = BytesIO()
+        figure.savefig(buf, format="png")
+        buf.seek(0) 
+
+        return send_file(buf, mimetype='image/png')
     except Exception as e:
         return jsonify({'error': str(e)}), 500
