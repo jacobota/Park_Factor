@@ -8,9 +8,14 @@
 import SwiftUI
 
 struct PitchersPreviewPageView: View {
+    @AppStorage("accessToken") private var accessToken: String?
+    @State private var errorMessage: String = ""
+    @State private var errorShow: Bool = false
     var player: Player
     var pitchingPreviewStatsHelper: PitchingPreviewStatsHelper
     var savedUser: SavedUser
+    
+    @State var followingPlayers: [Player] = []
     
     @State private var selectedTab: String = "Season"
     
@@ -50,6 +55,24 @@ struct PitchersPreviewPageView: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         Spacer()
+                        Button(action: {
+                            Task {
+                                await togglePlayerSelection(player: player)
+                            }
+                        }) {
+                            if followingPlayers.contains(where: { $0.keyMlbam == player.keyMlbam }) {
+                                Image(systemName: "star.fill")
+                                    .foregroundStyle(Color.parkFactorPrimary)
+                                    .opacity(1)
+                                    .font(.system(size: 35))
+                            } else {
+                                Image(systemName: "star")
+                                    .foregroundStyle(Color.white)
+                                    .opacity(1)
+                                    .font(.system(size: 35))
+                            }
+                        }
+                        .padding(.trailing, 30)
                     }
                     ScrollView(.horizontal) {
                         HStack {
@@ -83,7 +106,61 @@ struct PitchersPreviewPageView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .padding(.bottom)
             .padding(.top, 10)
+            .onAppear {
+                setFollowingPlayersArray()
+            }
             
+        }
+    }
+    
+    private func setFollowingPlayersArray() {
+        followingPlayers = savedUser.user.followingPlayers
+    }
+    
+    private func togglePlayerSelection(player: Player) async {
+        if let index = followingPlayers.firstIndex(where: { $0.keyMlbam == player.keyMlbam }) {
+            followingPlayers.remove(at: index)
+        } else {
+            followingPlayers.append(player)
+        }
+        
+        // save the players to a Codable to be used by request
+        var followingPlayersRequest: FollowingPlayersStruct = FollowingPlayersStruct()
+        followingPlayersRequest.followingPlayers = followingPlayers
+        
+        // call the network request to save players to database
+        let baseUrl = Env.expressBaseURL
+        guard let encoded = try? JSONEncoder().encode(followingPlayersRequest) else {
+            errorMessage = "Failed to encode Following Players"
+            errorShow = true
+            return
+        }
+        
+        //create the url
+        let url = URL(string: "\(baseUrl)/users/update/followingPlayers")!
+        var request = URLRequest(url: url)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(accessToken!)", forHTTPHeaderField: "Authorization")
+        request.httpMethod = "PUT"
+        
+        do {
+            let (data, res) = try await URLSession.shared.upload(for: request, from: encoded)
+            
+            // handle the result if bad
+            if let httpResponse = res as? HTTPURLResponse {
+                // If the result of the http response is a 400 then the message of what went wrong will be returned and placed in errorMessage
+                if httpResponse.statusCode != 201 {
+                    let decodedNodeError = try JSONDecoder().decode(NodeError.self, from: data)
+                    errorMessage = decodedNodeError.message
+                    errorShow = true
+                    return
+                }
+            }
+            // save the players to UserDefaults
+            savedUser.user.followingPlayers = followingPlayers
+        } catch {
+            errorMessage = error.localizedDescription
+            errorShow = true
         }
     }
     

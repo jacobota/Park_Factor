@@ -8,12 +8,15 @@
 import SwiftUI
 
 struct RespectiveTeamPageView: View {
+    @AppStorage("accessToken") private var accessToken: String?
     @State private var errorMessage: String = ""
     @State private var errorShow: Bool = false
     var team: Team
     var savedUser: SavedUser
     
     @State private var teamStats: TeamStats?
+    
+    @State var followingTeams: [Team] = []
     
     @State private var selectedTab: String = "Hitting"
     
@@ -54,6 +57,24 @@ struct RespectiveTeamPageView: View {
                                 .minimumScaleFactor(0.3)
                         }
                         Spacer()
+                        Button(action: {
+                            Task {
+                                await toggleTeamSelection(team: team)
+                            }
+                        }) {
+                            if followingTeams.contains(where: { $0.teamIDBR == team.teamIDBR }) {
+                                Image(systemName: "star.fill")
+                                    .foregroundStyle(Color.parkFactorPrimary)
+                                    .opacity(1)
+                                    .font(.system(size: 35))
+                            } else {
+                                Image(systemName: "star")
+                                    .foregroundStyle(Color.white)
+                                    .opacity(1)
+                                    .font(.system(size: 35))
+                            }
+                        }
+                        .padding(.trailing, 30)
                     }
                     ScrollView(.horizontal) {
                         HStack {
@@ -93,7 +114,61 @@ struct RespectiveTeamPageView: View {
             .padding(.top, 10)
             .onAppear{
                 getTeamStats()
+                setFollowingTeamsArray()
             }
+        }
+    }
+    
+    private func setFollowingTeamsArray() {
+        followingTeams = savedUser.user.followingTeams
+    }
+    
+    private func toggleTeamSelection(team: Team) async {
+        // Check if the team is selected if it is then remove it from the selectedTeams array
+        // Else append it and sort it so the teams are in order
+        if let index = followingTeams.firstIndex(where: { $0.teamName == team.teamName }) {
+            followingTeams.remove(at: index)
+        } else {
+            followingTeams.append(team)
+        }
+        
+        // Send the new selectedTeam to the DB
+        var followingTeamsRequest: FollowingTeamsStruct = FollowingTeamsStruct()
+        followingTeamsRequest.followingTeams = followingTeams
+        
+        // call the network request to save teams to database
+        let baseUrl = Env.expressBaseURL
+        guard let encoded = try? JSONEncoder().encode(followingTeamsRequest) else {
+            errorMessage = "Failed to encode followingTeams"
+            errorShow = true
+            return
+        }
+        
+        //create the url
+        let url = URL(string: "\(baseUrl)/users/update/followingTeams")!
+        var request = URLRequest(url: url)
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(accessToken!)", forHTTPHeaderField: "Authorization")
+        request.httpMethod = "PUT"
+        
+        do {
+            let (data, res) = try await URLSession.shared.upload(for: request, from: encoded)
+            
+            // handle the result if bad
+            if let httpResponse = res as? HTTPURLResponse {
+                // If the result of the http response is a 400 then the message of what went wrong will be returned and placed in errorMessage
+                if httpResponse.statusCode != 201 {
+                    let decodedNodeError = try JSONDecoder().decode(NodeError.self, from: data)
+                    errorMessage = decodedNodeError.message
+                    errorShow = true
+                    return
+                }
+            }
+            // save the teams to UserDefaults
+            savedUser.user.followingTeams = followingTeams
+        } catch {
+            errorMessage = error.localizedDescription
+            errorShow = true
         }
     }
     

@@ -15,6 +15,7 @@ struct PlayersFollowingPageView: View {
     @State private var selectedPlayers: [Player] = []
     @State private var searchText: String = ""
     @State private var searchIsFocused: Bool = false
+    @State private var tempPlayers: [Player] = []
     
     var savedUser: SavedUser
     
@@ -46,7 +47,7 @@ struct PlayersFollowingPageView: View {
                             Section {
                                 Section {
                                     if searchText == "" {
-                                        ForEach(savedUser.user.followingPlayers) { player in
+                                        ForEach(tempPlayers) { player in
                                             FollowingPagePlayerCard(
                                                 player: player,
                                                 isSelected: true,
@@ -103,6 +104,7 @@ struct PlayersFollowingPageView: View {
             Task {
                 await fetchPlayers()
             }
+            tempPlayers = savedUser.user.followingPlayers
         }
     }
     

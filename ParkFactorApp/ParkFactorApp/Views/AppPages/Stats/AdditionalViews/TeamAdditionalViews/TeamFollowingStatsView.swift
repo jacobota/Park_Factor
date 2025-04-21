@@ -9,19 +9,20 @@ import SwiftUI
 
 struct TeamFollowingStatsView: View {
     var savedUser: SavedUser
+    @State private var tempTeams: [Team] = []
     var body: some View {
         ZStack {
             Color.parkFactorAppPageBackground.ignoresSafeArea()
             Section {
                 ScrollView {
                     VStack {
-                        if savedUser.user.followingTeams.isEmpty {
+                        if tempTeams.isEmpty {
                             Text("N/A")
                                 .font(.parkFactorFontBigTextNorwester)
                                 .foregroundStyle(Color.white)
                                 .padding(.top, 10)
                         } else {
-                            ForEach(savedUser.user.followingTeams) { team in
+                            ForEach(tempTeams) { team in
                                 TeamStatsCardView(savedUser: savedUser, team: team, isFollowing: true)
                                     .padding(.bottom, 10)
                             }
@@ -31,6 +32,9 @@ struct TeamFollowingStatsView: View {
                 .padding(.top, 20)
             }
             .padding()
+        }
+        .onAppear {
+            tempTeams = savedUser.user.followingTeams
         }
     }
 }
