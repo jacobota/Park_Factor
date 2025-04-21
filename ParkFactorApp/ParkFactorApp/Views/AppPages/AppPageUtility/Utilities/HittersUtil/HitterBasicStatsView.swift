@@ -10,6 +10,9 @@ import SwiftUI
 struct HitterBasicStatsView: View {
     var hitterStatsHelper: HitterStatsHelper
     
+    @State private var isSheetPresented: Bool = false
+    @State private var selectedStat: String = ""
+    
     var body: some View {
         VStack {
             HStack {
@@ -22,21 +25,46 @@ struct HitterBasicStatsView: View {
             .padding(20)
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 5), spacing: 5) {
                 // First Row with stat category
-                Text("G")
-                    .font(.parkFactorFontSmallText)
-                    .foregroundColor(Color.gray)
-                Text("BA")
-                    .font(.parkFactorFontSmallText)
-                    .foregroundColor(Color.gray)
-                Text("OBP")
-                    .font(.parkFactorFontSmallText)
-                    .foregroundColor(Color.gray)
-                Text("SLG")
-                    .font(.parkFactorFontSmallText)
-                    .foregroundColor(Color.gray)
-                Text("OPS")
-                    .font(.parkFactorFontSmallText)
-                    .foregroundColor(Color.gray)
+                Button(action: {
+                    selectedStat = "g"
+                    isSheetPresented.toggle()
+                }) {
+                    Text("G")
+                        .font(.parkFactorFontSmallText)
+                        .foregroundColor(Color.gray)
+                }
+                Button(action: {
+                    selectedStat = "ba"
+                    isSheetPresented.toggle()
+                }) {
+                    Text("BA")
+                        .font(.parkFactorFontSmallText)
+                        .foregroundColor(Color.gray)
+                }
+                Button(action: {
+                    selectedStat = "obp"
+                    isSheetPresented.toggle()
+                }) {
+                    Text("OBP")
+                        .font(.parkFactorFontSmallText)
+                        .foregroundColor(Color.gray)
+                }
+                Button(action: {
+                    selectedStat = "slg"
+                    isSheetPresented.toggle()
+                }) {
+                    Text("SLG")
+                        .font(.parkFactorFontSmallText)
+                        .foregroundColor(Color.gray)
+                }
+                Button(action: {
+                    selectedStat = "ops"
+                    isSheetPresented.toggle()
+                }) {
+                    Text("OPS")
+                        .font(.parkFactorFontSmallText)
+                        .foregroundColor(Color.gray)
+                }
                 
                 // Second Row with above categories
                 Text("\(hitterStatsHelper.hitterStats?.games ?? -1)")
@@ -53,21 +81,46 @@ struct HitterBasicStatsView: View {
                 Text("")
                 
                 // Fourth Row with more stat categories
-                Text("H")
-                    .font(.parkFactorFontSmallText)
-                    .foregroundColor(Color.gray)
-                Text("HR")
-                    .font(.parkFactorFontSmallText)
-                    .foregroundColor(Color.gray)
-                Text("R")
-                    .font(.parkFactorFontSmallText)
-                    .foregroundColor(Color.gray)
-                Text("RBI")
-                    .font(.parkFactorFontSmallText)
-                    .foregroundColor(Color.gray)
-                Text("SB")
-                    .font(.parkFactorFontSmallText)
-                    .foregroundColor(Color.gray)
+                Button(action: {
+                    selectedStat = "h"
+                    isSheetPresented.toggle()
+                }) {
+                    Text("H")
+                        .font(.parkFactorFontSmallText)
+                        .foregroundColor(Color.gray)
+                }
+                Button(action: {
+                    selectedStat = "hr"
+                    isSheetPresented.toggle()
+                }) {
+                    Text("HR")
+                        .font(.parkFactorFontSmallText)
+                        .foregroundColor(Color.gray)
+                }
+                Button(action: {
+                    selectedStat = "hitter_runs"
+                    isSheetPresented.toggle()
+                }) {
+                    Text("R")
+                        .font(.parkFactorFontSmallText)
+                        .foregroundColor(Color.gray)
+                }
+                Button(action: {
+                    selectedStat = "rbi"
+                    isSheetPresented.toggle()
+                }) {
+                    Text("RBI")
+                        .font(.parkFactorFontSmallText)
+                        .foregroundColor(Color.gray)
+                }
+                Button(action: {
+                    selectedStat = "sb"
+                    isSheetPresented.toggle()
+                }) {
+                    Text("SB")
+                        .font(.parkFactorFontSmallText)
+                        .foregroundColor(Color.gray)
+                }
                 
                 // Second Row with above categories
                 Text("\(hitterStatsHelper.hitterStats?.hits ?? -1)")
@@ -83,6 +136,9 @@ struct HitterBasicStatsView: View {
         }
         .background(Color.black)
         .cornerRadius(10)
+        .sheet(isPresented: $isSheetPresented) {
+            StatExplanationView(stat: selectedStat)
+        }
     }
 }
 

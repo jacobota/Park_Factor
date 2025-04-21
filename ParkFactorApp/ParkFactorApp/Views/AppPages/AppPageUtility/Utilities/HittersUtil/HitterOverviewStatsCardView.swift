@@ -11,6 +11,9 @@ struct HitterOverviewStatsCardView: View {
     var player: Player
     var hitterStatsHelper: HitterStatsHelper
     
+    @State private var isSheetPresented: Bool = false
+    @State private var selectedStat: String = ""
+    
     var body: some View {
         VStack {
             HStack {
@@ -23,21 +26,46 @@ struct HitterOverviewStatsCardView: View {
             .padding(20)
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 5), spacing: 5) {
                 // First Row with bio category
-                Text("G")
-                    .font(.parkFactorFontText)
-                    .foregroundColor(Color.gray)
-                Text("BA")
-                    .font(.parkFactorFontText)
-                    .foregroundColor(Color.gray)
-                Text("HR")
-                    .font(.parkFactorFontText)
-                    .foregroundColor(Color.gray)
-                Text("OPS")
-                    .font(.parkFactorFontText)
-                    .foregroundColor(Color.gray)
-                Text("WAR")
-                    .font(.parkFactorFontText)
-                    .foregroundColor(Color.gray)
+                Button(action: {
+                    selectedStat = "g"
+                    isSheetPresented.toggle()
+                }) {
+                    Text("G")
+                        .font(.parkFactorFontText)
+                        .foregroundColor(Color.gray)
+                }
+                Button(action: {
+                    selectedStat = "ba"
+                    isSheetPresented.toggle()
+                }) {
+                    Text("BA")
+                        .font(.parkFactorFontText)
+                        .foregroundColor(Color.gray)
+                }
+                Button(action: {
+                    selectedStat = "hr"
+                    isSheetPresented.toggle()
+                }) {
+                    Text("HR")
+                        .font(.parkFactorFontText)
+                        .foregroundColor(Color.gray)
+                }
+                Button(action: {
+                    selectedStat = "ops"
+                    isSheetPresented.toggle()
+                }) {
+                    Text("OPS")
+                        .font(.parkFactorFontText)
+                        .foregroundColor(Color.gray)
+                }
+                Button(action: {
+                    selectedStat = "hitter_owar"
+                    isSheetPresented.toggle()
+                }) {
+                    Text("WAR")
+                        .font(.parkFactorFontText)
+                        .foregroundColor(Color.gray)
+                }
                 
                 // Second Row with above categories
                 Text("\(hitterStatsHelper.hitterStats?.games ?? -1)")
@@ -53,6 +81,9 @@ struct HitterOverviewStatsCardView: View {
         }
         .background(Color.black)
         .cornerRadius(10)
+        .sheet(isPresented: $isSheetPresented) {
+            StatExplanationView(stat: selectedStat)
+        }
     }
 }
 
