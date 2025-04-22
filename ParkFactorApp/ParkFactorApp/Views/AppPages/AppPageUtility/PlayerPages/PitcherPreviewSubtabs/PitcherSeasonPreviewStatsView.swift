@@ -11,6 +11,9 @@ struct PitcherSeasonPreviewStatsView: View {
     var player: Player
     var pitchingPreviewStatsHelper: PitchingPreviewStatsHelper
     
+    @State private var isSheetPresented: Bool = false
+    @State private var selectedStat: String = ""
+    
     var body: some View {
         ZStack {
             Color.parkFactorAppPageBackground.ignoresSafeArea()
@@ -30,21 +33,41 @@ struct PitcherSeasonPreviewStatsView: View {
                         .padding(20)
                         LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 5), spacing: 5) {
                             // First Row with stat category
-                            Text("G")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
-                            Text("GS")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
-                            Text("IP")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
-                            Text("ERA")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
-                            Text("SV")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
+                            Button(action: {
+                                selectedStat = "pitcher_g"
+                            }) {
+                                Text("G")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
+                            Button(action: {
+                                selectedStat = "pitcher_gs"
+                            }) {
+                                Text("GS")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
+                            Button(action: {
+                                selectedStat = "pitcher_ip"
+                            }) {
+                                Text("IP")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
+                            Button(action: {
+                                selectedStat = "pitcher_era"
+                            }) {
+                                Text("ERA")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
+                            Button(action: {
+                                selectedStat = "pitcher_sv"
+                            }) {
+                                Text("SV")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
                             
                             // Second Row with above categories
                             Text("\(pitchingPreviewStatsHelper.pitchingPreviewStats?[0].games ?? 0)")
@@ -61,21 +84,41 @@ struct PitcherSeasonPreviewStatsView: View {
                             Text("")
                             
                             // Fourth Row with more stat categories
-                            Text("W-L")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
-                            Text("H")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
-                            Text("SO")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
-                            Text("BB")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
-                            Text("K/BB")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
+                            Button(action: {
+                                selectedStat = "pitcher_record"
+                            }) {
+                                Text("W-L")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
+                            Button(action: {
+                                selectedStat = "pitcher_hits"
+                            }) {
+                                Text("HA")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
+                            Button(action: {
+                                selectedStat = "pitcher_so"
+                            }) {
+                                Text("SO")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
+                            Button(action: {
+                                selectedStat = "pitcher_walks"
+                            }) {
+                                Text("BB")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
+                            Button(action: {
+                                selectedStat = "pitcher_walktostrikeout"
+                            }) {
+                                Text("K/BB")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
                             
                             // Second Row with above categories
                             Text("\(pitchingPreviewStatsHelper.pitchingPreviewStats?[0].wins ?? 0)-\(pitchingPreviewStatsHelper.pitchingPreviewStats?[0].losses ?? 0)")
@@ -92,21 +135,41 @@ struct PitcherSeasonPreviewStatsView: View {
                             Text("")
                             
                             // fifth Row with more stat categories
-                            Text("K/9")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
-                            Text("GB/FB")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
-                            Text("Strike%")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
-                            Text("WHIP")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
-                            Text("BAA")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
+                            Button(action: {
+                                selectedStat = "pitcher_kpernine"
+                            }) {
+                                Text("K/9")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
+                            Button(action: {
+                                selectedStat = "pitcher_gbtofb"
+                            }) {
+                                Text("GB/FB")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
+                            Button(action: {
+                                selectedStat = "pitcher_strikepercent"
+                            }) {
+                                Text("Strike%")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
+                            Button(action: {
+                                selectedStat = "pitcher_whip"
+                            }) {
+                                Text("WHIP")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
+                            Button(action: {
+                                selectedStat = "pitcher_baa"
+                            }) {
+                                Text("BAA")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
                             
                             // Second Row with above categories
                             Text(String(format: "%.2f", NSDecimalNumber(decimal: pitchingPreviewStatsHelper.pitchingPreviewStats?[0].strikeoutsPerNine ?? 0.0).doubleValue))
@@ -124,6 +187,12 @@ struct PitcherSeasonPreviewStatsView: View {
                     .cornerRadius(10)
                 }
                 .padding(20)
+                .onChange(of: selectedStat) {
+                    isSheetPresented = true
+                }
+                .sheet(isPresented: $isSheetPresented) {
+                    StatExplanationView(stat: selectedStat)
+                }
             }
         }
     }

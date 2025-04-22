@@ -58,7 +58,7 @@ struct PitcherPitchArsenalGraphView: View {
                         Text("Type")
                             .font(.parkFactorFontSmallText)
                             .foregroundColor(Color.gray)
-                        Text("Speed")
+                        Text("Velo")
                             .font(.parkFactorFontSmallText)
                             .foregroundColor(Color.gray)
                         Text("IVB")

@@ -11,6 +11,9 @@ struct HitterSeasonPreviewStatsView: View {
     var player: Player
     var hitterPreviewStatsHelper: HitterPreviewStatsHelper
     
+    @State private var isSheetPresented: Bool = false
+    @State private var selectedStat: String = ""
+    
     var body: some View {
         ZStack {
             Color.parkFactorAppPageBackground.ignoresSafeArea()
@@ -30,21 +33,41 @@ struct HitterSeasonPreviewStatsView: View {
                         .padding(20)
                         LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 5), spacing: 5) {
                             // First Row with stat category
-                            Text("G")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
-                            Text("BA")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
-                            Text("OBP")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
-                            Text("SLG")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
-                            Text("OPS")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
+                            Button(action: {
+                                selectedStat = "hitter_g"
+                            }) {
+                                Text("G")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
+                            Button(action: {
+                                selectedStat = "hitter_ba"
+                            }) {
+                                Text("BA")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
+                            Button(action: {
+                                selectedStat = "hitter_obp"
+                            }) {
+                                Text("OBP")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
+                            Button(action: {
+                                selectedStat = "hitter_slg"
+                            }) {
+                                Text("SLG")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
+                            Button(action: {
+                                selectedStat = "hitter_ops"
+                            }) {
+                                Text("OPS")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
                             
                             // Second Row with above categories
                             Text("\(hitterPreviewStatsHelper.hitterPreviewStats?[0].games ?? -1)")
@@ -61,21 +84,41 @@ struct HitterSeasonPreviewStatsView: View {
                             Text("")
                             
                             // Fourth Row with more stat categories
-                            Text("AB")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
-                            Text("H")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
-                            Text("2B")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
-                            Text("3B")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
-                            Text("HR")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
+                            Button(action: {
+                                selectedStat = "hitter_ab"
+                            }) {
+                                Text("AB")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
+                            Button(action: {
+                                selectedStat = "hitter_h"
+                            }) {
+                                Text("H")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
+                            Button(action: {
+                                selectedStat = "hitter_double"
+                            }) {
+                                Text("2B")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
+                            Button(action: {
+                                selectedStat = "hitter_triple"
+                            }) {
+                                Text("3B")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
+                            Button(action: {
+                                selectedStat = "hitter_hr"
+                            }) {
+                                Text("HR")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
                             
                             // Second Row with above categories
                             Text("\(hitterPreviewStatsHelper.hitterPreviewStats?[0].atBats ?? -1)")
@@ -92,21 +135,41 @@ struct HitterSeasonPreviewStatsView: View {
                             Text("")
                             
                             // Fifth Row for more categories
-                            Text("R")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
-                            Text("RBI")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
-                            Text("SB")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
-                            Text("SF")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
-                            Text("BB")
-                                .font(.parkFactorFontSmallText)
-                                .foregroundColor(Color.gray)
+                            Button(action: {
+                                selectedStat = "hitter_runs"
+                            }) {
+                                Text("R")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
+                            Button(action: {
+                                selectedStat = "hitter_rbi"
+                            }) {
+                                Text("RBI")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
+                            Button(action: {
+                                selectedStat = "hitter_sb"
+                            }) {
+                                Text("SB")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
+                            Button(action: {
+                                selectedStat = "hitter_sacfly"
+                            }) {
+                                Text("SF")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
+                            Button(action: {
+                                selectedStat = "hitter_bb"
+                            }) {
+                                Text("BB")
+                                    .font(.parkFactorFontSmallText)
+                                    .foregroundColor(Color.gray)
+                            }
                             
                             Text("\(hitterPreviewStatsHelper.hitterPreviewStats?[0].runs ?? -1)")
                             Text("\(hitterPreviewStatsHelper.hitterPreviewStats?[0].rbi ?? -1)")
@@ -123,6 +186,12 @@ struct HitterSeasonPreviewStatsView: View {
                     .cornerRadius(10)
                 }
                 .padding(20)
+                .onChange(of: selectedStat) {
+                    isSheetPresented = true
+                }
+                .sheet(isPresented: $isSheetPresented) {
+                    StatExplanationView(stat: selectedStat)
+                }
             }
         }
     }
