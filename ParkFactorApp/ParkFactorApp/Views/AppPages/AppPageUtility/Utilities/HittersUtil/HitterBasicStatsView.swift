@@ -26,40 +26,35 @@ struct HitterBasicStatsView: View {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 5), spacing: 5) {
                 // First Row with stat category
                 Button(action: {
-                    selectedStat = "g"
-                    isSheetPresented.toggle()
+                    selectedStat = "hitter_g"
                 }) {
                     Text("G")
                         .font(.parkFactorFontSmallText)
                         .foregroundColor(Color.gray)
                 }
                 Button(action: {
-                    selectedStat = "ba"
-                    isSheetPresented.toggle()
+                    selectedStat = "hitter_ba"
                 }) {
                     Text("BA")
                         .font(.parkFactorFontSmallText)
                         .foregroundColor(Color.gray)
                 }
                 Button(action: {
-                    selectedStat = "obp"
-                    isSheetPresented.toggle()
+                    selectedStat = "hitter_obp"
                 }) {
                     Text("OBP")
                         .font(.parkFactorFontSmallText)
                         .foregroundColor(Color.gray)
                 }
                 Button(action: {
-                    selectedStat = "slg"
-                    isSheetPresented.toggle()
+                    selectedStat = "hitter_slg"
                 }) {
                     Text("SLG")
                         .font(.parkFactorFontSmallText)
                         .foregroundColor(Color.gray)
                 }
                 Button(action: {
-                    selectedStat = "ops"
-                    isSheetPresented.toggle()
+                    selectedStat = "hitter_ops"
                 }) {
                     Text("OPS")
                         .font(.parkFactorFontSmallText)
@@ -82,16 +77,14 @@ struct HitterBasicStatsView: View {
                 
                 // Fourth Row with more stat categories
                 Button(action: {
-                    selectedStat = "h"
-                    isSheetPresented.toggle()
+                    selectedStat = "hitter_h"
                 }) {
                     Text("H")
                         .font(.parkFactorFontSmallText)
                         .foregroundColor(Color.gray)
                 }
                 Button(action: {
-                    selectedStat = "hr"
-                    isSheetPresented.toggle()
+                    selectedStat = "hitter_hr"
                 }) {
                     Text("HR")
                         .font(.parkFactorFontSmallText)
@@ -99,23 +92,20 @@ struct HitterBasicStatsView: View {
                 }
                 Button(action: {
                     selectedStat = "hitter_runs"
-                    isSheetPresented.toggle()
                 }) {
                     Text("R")
                         .font(.parkFactorFontSmallText)
                         .foregroundColor(Color.gray)
                 }
                 Button(action: {
-                    selectedStat = "rbi"
-                    isSheetPresented.toggle()
+                    selectedStat = "hitter_rbi"
                 }) {
                     Text("RBI")
                         .font(.parkFactorFontSmallText)
                         .foregroundColor(Color.gray)
                 }
                 Button(action: {
-                    selectedStat = "sb"
-                    isSheetPresented.toggle()
+                    selectedStat = "hitter_sb"
                 }) {
                     Text("SB")
                         .font(.parkFactorFontSmallText)
@@ -136,6 +126,9 @@ struct HitterBasicStatsView: View {
         }
         .background(Color.black)
         .cornerRadius(10)
+        .onChange(of: selectedStat) {
+            isSheetPresented = true
+        }
         .sheet(isPresented: $isSheetPresented) {
             StatExplanationView(stat: selectedStat)
         }

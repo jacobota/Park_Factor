@@ -27,40 +27,35 @@ struct HitterOverviewStatsCardView: View {
             LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 5), spacing: 5) {
                 // First Row with bio category
                 Button(action: {
-                    selectedStat = "g"
-                    isSheetPresented.toggle()
+                    selectedStat = "hitter_g"
                 }) {
                     Text("G")
                         .font(.parkFactorFontText)
                         .foregroundColor(Color.gray)
                 }
                 Button(action: {
-                    selectedStat = "ba"
-                    isSheetPresented.toggle()
+                    selectedStat = "hitter_ba"
                 }) {
                     Text("BA")
                         .font(.parkFactorFontText)
                         .foregroundColor(Color.gray)
                 }
                 Button(action: {
-                    selectedStat = "hr"
-                    isSheetPresented.toggle()
+                    selectedStat = "hitter_hr"
                 }) {
                     Text("HR")
                         .font(.parkFactorFontText)
                         .foregroundColor(Color.gray)
                 }
                 Button(action: {
-                    selectedStat = "ops"
-                    isSheetPresented.toggle()
+                    selectedStat = "hitter_ops"
                 }) {
                     Text("OPS")
                         .font(.parkFactorFontText)
                         .foregroundColor(Color.gray)
                 }
                 Button(action: {
-                    selectedStat = "hitter_owar"
-                    isSheetPresented.toggle()
+                    selectedStat = "hitter_war"
                 }) {
                     Text("WAR")
                         .font(.parkFactorFontText)
@@ -81,6 +76,9 @@ struct HitterOverviewStatsCardView: View {
         }
         .background(Color.black)
         .cornerRadius(10)
+        .onChange(of: selectedStat) {
+            isSheetPresented = true
+        }
         .sheet(isPresented: $isSheetPresented) {
             StatExplanationView(stat: selectedStat)
         }

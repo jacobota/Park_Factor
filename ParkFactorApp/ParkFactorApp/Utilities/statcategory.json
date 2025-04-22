@@ -1,447 +1,231 @@
 {
-    "drs": {
-      "name": "Defensive Runs Saved (DRS)",
-      "description": "Defensive Runs Saved (DRS) is a statistic that measures a player's overall defensive performance by quantifying the number of runs they save (or cost) compared to an average defender at their position.",
-      "why": "DRS is used to evaluate a player's ability to prevent runs through defense, including fielding, positioning, and throwing accuracy. A higher DRS indicates better defensive contributions.",
-      "formula": "DRS = (Outs Above Average) + (Plays Made vs. Expected) + (Position Adjustment)"
+    "hitter_g": {
+        "name": "Games (G)",
+        "description": "Total number of games in which the player has appeared.",
+        "why": "Tracks durability and playing time for a hitter over a season.",
+        "formula": "G = Total games played"
     },
-    "sb": {
-      "name": "Stolen Bases (SB)",
-      "description": "Stolen bases occur when a base runner successfully advances to the next base while the pitcher is delivering the ball to the plate, without being tagged out.",
-      "why": "Stolen bases are used to assess a player's baserunning, speed and ability to advance on the basepaths without the ball being put in play. A higher number of stolen bases indicates more aggressiveness and effectiveness on the basepaths.",
-      "formula": "Stolen Bases = Number of times a player steals a base successfully"
+    "hitter_ba": {
+        "name": "Batting Average (BA)",
+        "description": "Measures how often a hitter gets a hit per at-bat.",
+        "why": "Provides a basic measure of hitting success by showing how often a player gets a hit.",
+        "formula": "BA = Hits / At-Bats"
     },
-    "cs": {
-      "name": "Caught Stealing (CS)",
-      "description": "Caught stealing is a statistic that measures when a base runner attempts to steal a base but is thrown out by the catcher or another fielder.",
-      "why": "Caught stealing is used to assess a player's success rate and the effectiveness of the opposing team's defense, particularly the catcher’s ability to throw out runners and the pitcher’s ability to control the run-game.",
-      "formula": "Caught Stealing = Number of times a player is thrown out while attempting to steal a base"
+    "hitter_hr": {
+        "name": "Home Runs (HR)",
+        "description": "Number of times a player hits the ball out of the park in fair territory for an automatic score.",
+        "why": "Used to track a player's raw power and scoring potential.",
+        "formula": "HR = Total home runs hit"
     },
-    "so": {
-      "name": "Strikeouts (K)",
-      "description": "An out called when a batter accumulates three strikes.",
-      "why": "Strikeouts are used to measure a batter's inability to make contact with the ball and can also reflect a pitcher's ability to generate swing-and-miss.",
-      "formula": "Strikeouts = Number of strikeouts by the batter or pitcher"
+    "hitter_ops": {
+        "name": "On Base Plus Slugging (OPS)",
+        "description": "Combines a hitter's ability to get on base and to hit for power.",
+        "why": "Used to evaluate overall offensive performance by blending on-base and slugging skills.",
+        "formula": "OPS = OBP + SLG"
     },
-    "bb": {
-      "name": "Walks",
-      "description": "Walks are awarded to a batter when the pitcher throws four balls outside the strike zone, allowing the batter to reach first base without the need for a hit.",
-      "why": "Walks are used to evaluate a batter's patience, zone recognition and work the count in their favor. It also reflects the pitcher's control and ability to avoid giving free passes.",
-      "formula": "Walks = Number of times a batter receives a walk (four balls)"
+    "hitter_war": {
+        "name": "Wins Above Replacement (WAR)",
+        "description": "Estimates how many more wins a player is worth compared to a replacement-level player.",
+        "why": "Captures total player value by combining offense, defense, and base running.",
+        "formula": "WAR = (Player’s contribution in runs) / (Runs per win)"
     },
-    "era": {
-      "name": "Earned Run Average (ERA)",
-      "description": "ERA measures the average number of earned runs a pitcher allows per nine innings pitched.",
-      "why": "ERA is used to assess a pitcher's effectiveness in preventing earned runs. A lower ERA generally indicates better pitching performance, but does not account for luck, park factors or defense.",
-      "formula": "ERA = (Earned Runs × 9) / Innings Pitched"
+    "hitter_slg": {
+        "name": "Slugging Percentage (SLG)",
+        "description": "Measures the total number of bases a player records per at-bat.",
+        "why": "Used to evaluate a hitter’s power by weighing extra-base hits more heavily.",
+        "formula": "SLG = Total Bases / At-Bats"
     },
-    "ip": {
-      "name": "Innings Pitched (IP)",
-      "description": "Innings pitched measures the total number of innings a pitcher has completed during a game or season.",
-      "why": "Innings pitched is used to evaluate a pitcher's stamina and workload. More innings pitched indicates durability and effectiveness in staying in games.",
-      "formula": "Innings Pitched = Total number of innings a pitcher completes"
+    "hitter_obp": {
+        "name": "On Base Percentage (OBP)",
+        "description": "Measures how frequently a player reaches base per plate appearance.",
+        "why": "Helps assess a hitter’s ability to avoid making outs and keep innings alive.",
+        "formula": "OBP = (Hits + Walks + Hit By Pitch) / (At-Bats + Walks + Hit By Pitch + Sacrifice Flies)"
     },
-    "w": {
-      "name": "Wins (W)",
-      "description": "A win is credited to a pitcher when they are the pitcher of record when their team takes the lead and maintains it.",
-      "why": "Wins are used to measure a pitcher's ability to contribute to a team’s victory, though it can sometimes be influenced by factors outside the pitcher's control.",
-      "formula": "Wins = Number of games in which the pitcher is credited with the win"
+    "hitter_h": {
+        "name": "Hits (H)",
+        "description": "Number of times a player safely reaches base via a hit.",
+        "why": "A foundational stat that reflects how often a hitter successfully puts the ball in play for a base hit.",
+        "formula": "H = Total hits"
     },
-    "l": {
-      "name": "Losses (L)",
-      "description": "A loss is charged to a pitcher when their team is losing at the time the pitcher is removed from the game.",
-      "why": "Losses are used to measure a pitcher's effectiveness, though they can be impacted by the team's offensive support and other factors outside the pitcher’s control.",
-      "formula": "Losses = Number of games in which the pitcher is charged with the loss"
+    "hitter_runs": {
+        "name": "Runs (R)",
+        "description": "Total number of times a player crosses home plate to score.",
+        "why": "Indicates how often a hitter turns baserunning opportunities into actual runs scored.",
+        "formula": "R = Total runs scored"
     },
-    "whip": {
-      "name": "Walks and Hits per Inning Pitched (WHIP)",
-      "description": "WHIP measures the number of base runners a pitcher allows per inning pitched, combining walks and hits.",
-      "why": "WHIP is used to assess a pitcher's ability to prevent runners from reaching base. A lower WHIP generally indicates a better pitcher.",
-      "formula": "WHIP = (Walks + Hits) / Innings Pitched"
+    "hitter_rbi": {
+        "name": "Runs Batted In (RBI)",
+        "description": "Number of runs a player drives in with a hit or other offensive action.",
+        "why": "Evaluates how effective a hitter is in producing runs during scoring opportunities.",
+        "formula": "RBI = Runs driven in through plate appearances (excluding errors or double plays)"
     },
-    "baa": {
-      "name": "Batting Average Against (BAA)",
-      "description": "Batting Average Against measures how often batters get a hit off a pitcher.",
-      "why": "BAA is used to assess how effective a pitcher is in preventing opposing batters from getting hits.",
-      "formula": "BAA = Hits / At Bats Against"
+    "hitter_sb": {
+        "name": "Stolen Bases (SB)",
+        "description": "Number of times a player successfully steals a base.",
+        "why": "Highlights speed and base-running skill, especially the ability to advance without a hit.",
+        "formula": "SB = Total successful stolen base attempts"
     },
-    "qs": {
-      "name": "Quality Start (QS)",
-      "description": "A quality start occurs when a pitcher completes at least six innings and allows three or fewer earned runs.",
-      "why": "Quality starts are used to assess a pitcher’s ability to give their team a competitive chance by pitching deep into games and limiting earned runs.",
-      "formula": "Quality Start = If innings pitched ≥ 6 and earned runs ≤ 3"
-    },
-    "sv": {
-      "name": "Saves (SV)",
-      "description": "A save is awarded to a pitcher who finishes a game in which their team maintains a lead, while meeting specific criteria for the situation (e.g., pitching at least one inning).",
-      "why": "Saves are used to measure a relief pitcher’s effectiveness in closing out games and preserving a lead.",
-      "formula": "Save = (Pitcher finishes game with lead and pitches at least one inning; or enters game with a lead of no more than three runs and records at least one out)"
-    },
-    "bs": {
-      "name": "Blown Saves (BS)",
-      "description": "Blown saves occur when a pitcher fails to preserve a lead they are brought in to protect.",
-      "why": "Blown saves are used to measure a reliever's inability to successfully close a game, indicating missed opportunities to secure a win.",
-      "formula": "Blown Save = When a pitcher fails to hold a lead they were brought in to protect"
-    },
-    "er": {
-      "name": "Earned Runs (ER)",
-      "description": "Earned runs are runs that score as a direct result of the pitcher's actions, excluding runs due to errors or passed balls.",
-      "why": "Earned runs are used to measure a pitcher’s effectiveness in preventing scoring, as they reflect runs the pitcher is directly responsible for.",
-      "formula": "Earned Runs = Total number of runs allowed minus unearned runs due to errors or passed balls"
-    },
-    "ha": {
-      "name": "Hits Allowed (H)",
-      "description": "Hits allowed counts the number of hits a pitcher allows to batters during the course of a game.",
-      "why": "Hits allowed is used to assess how well a pitcher prevents batters from reaching base. A lower number of hits allowed generally indicates better performance.",
-      "formula": "Hits Allowed = Number of hits a pitcher allows"
-    },
-    "hitter_wrc_plus": {
-      "name": "Weighted Runs Created Plus (wRC+)",
-      "description": "wRC+ quantifies a player's offensive contributions while adjusting for league and park factors, with 100 being league average.",
-      "why": "wRC+ is used to evaluate a player's overall offensive performance while accounting for external factors like park and league variations. A score over 100 indicates better-than-average performance.",
-      "formula": "wRC+ = [(wOBA - League wOBA) / wOBA scale] + 100"
-    },
-    "hitter_woba": {
-      "name": "Weighted On-Base Average (wOBA)",
-      "description": "wOBA measures a player's overall offensive value by giving different weights to various types of events (single, double, walk, home run, etc.).",
-      "why": "wOBA is used to more accurately assess a player's offensive contributions compared to traditional stats like OBP. It values walks and extra-base hits more effectively.",
-      "formula": "wOBA = (0.69 × Singles + 0.72 × Doubles + 0.90 × Triples + 1.24 × Home Runs + 0.30 × Walks + 0.72 × Hit by Pitch) / (At Bats + Walks + Hit by Pitch + Sacrifice Flies)"
+    "hitter_wrcplus": {
+        "name": "Weighted Runs Created Plus (wRC+)",
+        "description": "Adjusts a hitter’s total offensive value by park and league, relative to league average (100).",
+        "why": "Enables fair comparison of hitters by normalizing for context, where 100 is league average.",
+        "formula": "wRC+ = (wRC / League Average wRC) × 100, adjusted for park and league"
     },
     "hitter_xwoba": {
-      "name": "Expected Weighted On-Base Average (xwOBA)",
-      "description": "xwOBA estimates a player's expected offensive performance based on the quality of contact they make (exit velocity, launch angle, etc.), without the influence of luck.",
-      "why": "xwOBA is used to assess how well a player is hitting the ball, independent of results like BABIP, providing a predictive measure of their true offensive ability.",
-      "formula": "xwOBA = wOBA based on Statcast data, considering exit velocity and launch angle."
+        "name": "Expected Weighted On Base Average (xwOBA)",
+        "description": "Estimates a player’s offensive value based on quality of contact and expected outcomes.",
+        "why": "Filters out luck and defense by evaluating what *should* have happened based on exit velocity and launch angle.",
+        "formula": "xwOBA = Expected value of batted ball events based on contact quality"
     },
-    "hitter_bb_percent": {
-      "name": "Walk Rate (BB%)",
-      "description": "Walk Rate (BB%) calculates the percentage of plate appearances in which a batter walks.",
-      "why": "Walk rate is used to measure a player's plate discipline and ability to avoid swinging at pitches outside the strike zone. A higher walk rate indicates a better ability to get on base.",
-      "formula": "BB% = (Walks / Plate Appearances) × 100"
+    "hitter_woba": {
+        "name": "Weighted On Base Average (wOBA)",
+        "description": "Weights offensive events (walks, singles, doubles, etc.) according to their actual run value.",
+        "why": "Provides a more precise offensive measure than batting average by accounting for the value of each outcome.",
+        "formula": "wOBA = (Weighted sum of all offensive outcomes) / (Plate Appearances)"
     },
-    "hitter_k_percent": {
-      "name": "Strikeout Rate (K%)",
-      "description": "Strikeout Rate (K%) calculates the percentage of plate appearances in which a batter strikes out.",
-      "why": "Strikeout rate is used to evaluate a player's plate discipline and contact ability. A lower strikeout rate indicates better contact skills.",
-      "formula": "K% = (Strikeouts / Plate Appearances) × 100"
+    "hitter_bbpercent": {
+        "name": "Walk Percentage (BB%)",
+        "description": "Percentage of plate appearances that result in a walk.",
+        "why": "Helps assess a player’s plate discipline and ability to extend at-bats.",
+        "formula": "BB% = (Walks / Plate Appearances) × 100"
+    },
+    "hitter_kpercent": {
+        "name": "Strikeout Percentage (K%)",
+        "description": "Percentage of plate appearances that result in a strikeout.",
+        "why": "Measures how often a hitter strikes out, which affects consistency and contact ability.",
+        "formula": "K% = (Strikeouts / Plate Appearances) × 100"
     },
     "hitter_babip": {
-      "name": "Batting Average on Balls in Play (BABIP)",
-      "description": "BABIP measures a player's batting average on balls put in play, excluding home runs, strikeouts, and walks.",
-      "why": "BABIP is used to assess a player's luck and batting skill when the ball is in play. A significantly high or low BABIP can indicate whether a player's performance is sustainable.",
-      "formula": "BABIP = (Hits - Home Runs) / (At Bats - Strikeouts - Home Runs + Sacrifice Flies)"
+        "name": "Batting Average on Balls in Play (BABIP)",
+        "description": "Measures how often a batted ball in play results in a hit, excluding home runs.",
+        "why": "Used to determine if a hitter is benefiting from luck or suffering from bad luck.",
+        "formula": "BABIP = (Hits - Home Runs) / (At-Bats - Strikeouts - Home Runs + Sacrifice Flies)"
     },
     "hitter_iso": {
-      "name": "Isolated Power (ISO)",
-      "description": "ISO measures a player's ability to hit for extra bases, reflecting their raw power by isolating slugging percentage from batting average.",
-      "why": "ISO is used to evaluate a player's power-hitting ability, with a higher ISO indicating more extra-base hits, such as doubles, triples, and home runs.",
-      "formula": "ISO = Slugging Percentage - Batting Average"
+        "name": "Isolated Power (ISO)",
+        "description": "Shows how often a player hits for extra bases, independent of batting average.",
+        "why": "Helps isolate a player’s raw power from singles and overall hit totals.",
+        "formula": "ISO = SLG - BA"
     },
-    "hitter_bb_k": {
-      "name": "Walk-to-Strikeout Ratio (BB/K)",
-      "description": "BB/K measures the ratio of walks to strikeouts for a batter, offering insight into a player's plate discipline and strike zone judgment.",
-      "why": "BB/K is used to evaluate a batter's ability to avoid strikeouts and demonstrate patience at the plate. A higher ratio indicates better discipline and decision-making.",
-      "formula": "BB/K = Walks / Strikeouts"
+    "hitter_drs": {
+        "name": "Defensive Runs Saved (DRS)",
+        "description": "Estimates how many runs a fielder saved or cost their team compared to an average defender.",
+        "why": "Quantifies defensive performance in terms of runs, offering a positional comparison.",
+        "formula": "DRS = Runs saved above average based on play difficulty and result"
     },
-    "hitter_tb": {
-      "name": "Total Bases (TB)",
-      "description": "Total Bases calculates the total number of bases a player accumulates via hits, including singles, doubles, triples, and home runs.",
-      "why": "Total bases is used to measure a player's overall power and offensive contribution. A higher total bases count indicates a player who generates more extra-base hits.",
-      "formula": "TB = Singles + (2 × Doubles) + (3 × Triples) + (4 × Home Runs)"
+    "hitter_oaa": {
+        "name": "Outs Above Average (OAA)",
+        "description": "Measures how many outs a fielder saved relative to the average based on play difficulty.",
+        "why": "Provides a range-based view of defensive value, focusing on fielding skill.",
+        "formula": "OAA = Outs made above or below the expected number"
     },
-    "hitter_owar": {
-      "name": "Offensive Wins Above Replacement (oWAR)",
-      "description": "oWAR quantifies a player's total offensive value, taking into account their batting, baserunning, and overall ability to contribute to the team's runs.",
-      "why": "oWAR is used to measure a player's overall offensive impact, adjusted for park and league factors. A higher oWAR indicates a more valuable offensive player.",
-      "formula": "oWAR = (wRAA / Runs per Win) + (Position Adjustment)"
+    "hitter_bsr": {
+        "name": "Base Runs (BsR)",
+        "description": "Comprehensive stat that measures a player’s base running value, including stealing and advancing.",
+        "why": "Captures the total value a player adds with smart, aggressive base running.",
+        "formula": "BsR = Sum of base running events converted to run value (stealing, advancing, etc.)"
+    },
+    "hitter_wpa": {
+        "name": "Win Probability Added (WPA)",
+        "description": "Measures the impact of a player's actions on their team’s win probability.",
+        "why": "Emphasizes clutch performance and context, not just raw stats.",
+        "formula": "WPA = Change in team win probability from before to after the player’s plate appearance"
+    },
+    "hitter_wsb": {
+        "name": "Weighted Stolen Base Runs (wSB)",
+        "description": "Estimates the number of runs a player adds or costs his team through stolen base attempts.",
+        "why": "Separates stolen base impact from general base running to isolate speed efficiency.",
+        "formula": "wSB = Runs added from stolen base performance above league average"
+    },
+    "hitter_bat_speed": {
+        "name": "Bat Speed",
+        "description": "Measures the speed of the bat at the point of contact with the ball.",
+        "why": "Higher bat speed can lead to harder contact and greater power potential.",
+        "formula": "Bat Speed = Velocity of the bat at point of contact (measured in mph)"
+    },
+    "hitter_barrels": {
+        "name": "Barrels",
+        "description": "Counts how many times a player hits a ball with ideal exit velocity and launch angle for expected high outcomes.",
+        "why": "Barrels are the most productive type of contact and correlate with extra-base hits and home runs.",
+        "formula": "Barrels = Number of batted balls meeting barrel classification (EV & LA thresholds)"
+    },
+    "hitter_barrelpercent": {
+        "name": "Barrel%",
+        "description": "Percentage of batted balls that qualify as barrels.",
+        "why": "Highlights a hitter’s consistency in making elite-level contact.",
+        "formula": "Barrel% = (Barrels / Batted Ball Events) × 100"
+    },
+    "hitter_chasepercent": {
+        "name": "Chase%",
+        "description": "Percentage of pitches outside the strike zone a hitter swings at.",
+        "why": "A lower Chase% indicates strong plate discipline and pitch recognition.",
+        "formula": "Chase% = (Swings at pitches outside zone / Total pitches outside zone) × 100"
+    },
+    "hitter_ev": {
+        "name": "Average Exit Velocity",
+        "description": "Measures the average speed of the ball off the bat across all batted balls.",
+        "why": "Higher average exit velocity is linked to stronger contact and greater offensive production.",
+        "formula": "EV = Sum of all batted ball velocities / Batted Ball Events"
+    },
+    "hitter_hardhitpercent": {
+        "name": "Hard Hit%",
+        "description": "Percentage of batted balls hit at 95 mph or greater.",
+        "why": "Demonstrates how often a player makes quality contact that leads to hits and extra bases.",
+        "formula": "Hard Hit% = (Hard Hit Balls / Batted Ball Events) × 100"
+    },
+    "hitter_maxev": {
+        "name": "Max Exit Velocity",
+        "description": "The hardest hit ball by a player in a given sample (e.g. season).",
+        "why": "Shows the peak power capability of a hitter on their best contact.",
+        "formula": "Max EV = Maximum recorded exit velocity"
+    },
+    "hitter_squarepercent": {
+        "name": "Square%",
+        "description": "Percentage of balls struck directly in the sweet spot of the bat face.",
+        "why": "Indicates a hitter's ability to make centered, efficient contact with the ball.",
+        "formula": "Square% = (Squared-up Balls / Batted Ball Events) × 100"
+    },
+    "hitter_whiffpercent": {
+        "name": "Whiff%",
+        "description": "Percentage of swings that result in a miss.",
+        "why": "Helps evaluate a hitter’s contact ability and vulnerability to strikeouts.",
+        "formula": "Whiff% = (Swinging Strikes / Total Swings) × 100"
     },
     "hitter_xba": {
         "name": "Expected Batting Average (xBA)",
-        "description": "xBA estimates a player's batting average based on the quality of contact they make, considering factors like exit velocity and launch angle, while removing the influence of luck.",
-        "why": "xBA is used to predict a player's future batting average, accounting for factors that affect ball placement and contact quality. It is a better measure of a player's true talent than traditional batting average.",
-        "formula": "xBA = Calculated based on exit velocity, launch angle, and the league’s expected outcomes on similar hits."
+        "description": "Estimates batting average based on quality of contact, strikeouts, and walks.",
+        "why": "Removes luck and defense from the equation to show how often a player should be getting hits.",
+        "formula": "xBA = Expected batting average based on exit velocity, launch angle, and strikeout rate"
+    },
+    "hitter_xiso": {
+        "name": "Expected Isolated Power (xISO)",
+        "description": "Estimates a player's raw power potential based on expected outcomes of contact.",
+        "why": "Projects power production independent of traditional hit outcomes.",
+        "formula": "xISO = xSLG - xBA"
+    },
+    "hitter_xobp": {
+        "name": "Expected On Base Percentage (xOBP)",
+        "description": "Estimates how often a player should reach base based on quality of contact and plate discipline.",
+        "why": "Provides a context-neutral version of OBP to reflect underlying skill.",
+        "formula": "xOBP = Predicted OBP using batted ball data and walk rate"
     },
     "hitter_xslg": {
         "name": "Expected Slugging Percentage (xSLG)",
-        "description": "xSLG estimates a player's slugging percentage based on the quality of contact they make, factoring in exit velocity and launch angle, excluding the influence of randomness.",
-        "why": "xSLG is used to predict a player's future slugging performance by assessing the quality of their hits, offering a more accurate forecast than actual slugging percentage.",
-        "formula": "xSLG = Calculated based on exit velocity and launch angle, considering league averages for similar batted balls."
+        "description": "Estimates slugging percentage based on the expected outcomes of batted balls.",
+        "why": "Predicts a player’s power production using contact quality, not results.",
+        "formula": "xSLG = Total expected bases / At-Bats"
     },
-    "hitter_avg_exit_velocity": {
-        "name": "Average Exit Velocity",
-        "description": "Average Exit Velocity measures the average speed of the ball as it leaves the bat, indicating how hard a player is hitting the ball on average.",
-        "why": "Average exit velocity is used to evaluate a player's raw power and ability to hit the ball with authority. Higher exit velocities generally lead to more extra-base hits.",
-        "formula": "Average Exit Velocity = (Sum of all exit velocities) / (Total number of batted balls)"
-    },
-    "hitter_barrel_percent": {
-        "name": "Barrel%",
-        "description": "Barrel% measures the percentage of a player's batted balls that result in barrels—batted balls hit with the optimal combination of exit velocity and launch angle.",
-        "why": "Barrel% is used to assess how often a player is making high-quality contact, as barrels are strongly correlated with offensive success. A higher barrel percentage indicates better power and contact ability.",
-        "formula": "Barrel% = (Number of barrels / Total batted balls) × 100"
-    },
-    "hitter_hardhit_percent": {
-        "name": "HardHit%",
-        "description": "HardHit% calculates the percentage of a player's batted balls that have an exit velocity of 95 mph or higher, indicating hard contact.",
-        "why": "HardHit% is used to assess a player's ability to consistently hit the ball hard. A higher hard-hit percentage generally correlates with better offensive output and more extra-base hits.",
-        "formula": "HardHit% = (Hard-hit balls / Total batted balls) × 100"
-    },
-    "hitter_chase_percent": {
-        "name": "Chase%",
-        "description": "Chase% measures the percentage of pitches outside the strike zone that a batter swings at.",
-        "why": "Chase% is used to evaluate a player's plate discipline, with a lower percentage indicating better pitch selection and the ability to avoid swinging at bad pitches.",
-        "formula": "Chase% = (Pitches swung at outside the strike zone / Total pitches outside the strike zone) × 100"
-    },
-    "hitter_whiff_percent": {
-        "name": "Whiff%",
-        "description": "Whiff% calculates the percentage of swings a batter takes that result in a miss (strikeout swing).",
-        "why": "Whiff% is used to assess a batter's ability to make contact with pitches. A lower whiff percentage indicates better contact skills and plate discipline.",
-        "formula": "Whiff% = (Swings and misses / Total swings) × 100"
-    },
-    "sb_percent": {
-        "name": "Stolen Base Percentage (SB%)",
-        "description": "Stolen Base Percentage measures a player's efficiency in stealing bases, calculated by the ratio of successful stolen bases to total steal attempts.",
-        "why": "SB% is used to assess a player's success rate when attempting to steal bases. A higher SB% indicates a more efficient base runner.",
-        "formula": "SB% = (Stolen Bases / (Stolen Bases + Caught Stealing)) × 100"
-    },
-    "sprint_speed": {
-        "name": "Sprint Speed",
-        "description": "Sprint Speed measures a player's maximum running speed over a certain distance, usually calculated based on a player's 90-foot sprint time.",
-        "why": "Sprint Speed is used to assess a player's raw speed, indicating how fast they can run from base to base, which directly impacts their ability to steal bases and cover ground defensively.",
-        "formula": "Sprint Speed = Maximum speed (feet per second) measured during a sprint over 90 feet"
-    },
-    "spd": {
-        "name": "Spd (Speed Score)",
-        "description": "Spd (Speed Score) is a composite measure of a player's overall speed, incorporating factors like stolen bases, runs, and the player's ability to take extra bases.",
-        "why": "Spd is used to evaluate a player's overall base-running ability, factoring in both stealing bases and taking extra bases on hits. A higher Spd indicates a faster player with good base-running instincts.",
-        "formula": "Spd = ((Stolen Bases × 2) + (Extra Bases Taken) - (Caught Stealing × 2)) / (Games Played)"
-    },
-    "bsr": {
-        "name": "BsR (Base Running Runs Above Average)",
-        "description": "BsR is a metric that measures a player's overall base-running value, including stolen bases, extra bases taken, and avoided outs on the bases.",
-        "why": "BsR is used to assess a player's base-running contributions to their team, accounting for all aspects of running the bases. A higher BsR indicates better base-running skills.",
-        "formula": "BsR = Total Base Running Runs Above Average (calculated using a detailed model based on various base-running events)"
-    },
-    "wgdp": {
-        "name": "wGDP (Weighted Grounded Into Double Plays)",
-        "description": "wGDP quantifies the number of double plays a player grounds into, weighted to reflect the impact of these outs on the team's run-scoring potential.",
-        "why": "wGDP is used to measure a player's ability to avoid grounding into double plays, which can hurt offensive potential. A lower wGDP value is better, indicating fewer impactful double plays.",
-        "formula": "wGDP = (Grounded into Double Plays × Weighting factor based on the game's context)"
-    },
-    "oaa": {
-        "name": "Outs Above Average (OAA)",
-        "description": "Outs Above Average calculates the number of outs a player records above the league average at their position, based on their fielding performance.",
-        "why": "OAA is used to evaluate a player's defensive value by determining how many more outs they make compared to an average fielder at their position. A positive OAA indicates a strong defender.",
-        "formula": "OAA = (Total Outs Made by Player - Expected Outs by League Average) + Park and Position Adjustments"
-    },
-    "uzr": {
-        "name": "Ultimate Zone Rating (UZR)",
-        "description": "UZR is a defensive metric that evaluates a player's fielding by comparing the number of plays they make with the number of plays an average fielder at their position would make.",
-        "why": "UZR is used to assess a player's defensive range and effectiveness at making plays, considering their positioning, zone coverage, and errors. A higher UZR indicates better defense.",
-        "formula": "UZR = (Plays Made - Plays Expected) + Adjustments for Park and Position"
-    },
-    "fielding_percent": {
-        "name": "Fielding Percentage (Fielding%)",
-        "description": "Fielding Percentage measures a player's defensive efficiency, calculated as the ratio of successful fielding attempts (putouts and assists) to total chances (putouts, assists, and errors).",
-        "why": "Fielding percentage is used to assess a player's basic ability to make plays without committing errors. However, it does not account for range or the difficulty of plays.",
-        "formula": "Fielding% = (Putouts + Assists) / (Putouts + Assists + Errors)"
-    },
-    "arm_strength": {
+    "hitter_arm": {
         "name": "Arm Strength",
-        "description": "Arm Strength measures the power of a player's throwing arm, particularly for infielders and outfielders, reflecting the ability to make strong, accurate throws over long distances.",
-        "why": "Arm strength is used to evaluate a player's ability to throw accurately and with velocity, which is crucial for preventing extra bases and turning double plays.",
-        "formula": "Arm Strength = Measured by velocity of throws, average arm strength score (e.g., mph of throws from outfield or infield)"
+        "description": "Measures the velocity of a player’s throws from fielding positions.",
+        "why": "Important for evaluating defensive tools, especially for outfielders and third basemen.",
+        "formula": "Arm Strength = Average throwing velocity (mph) on competitive throws"
     },
-    "outfield_assists": {
-        "name": "Outfield Assists",
-        "description": "Outfield Assists tracks the number of times an outfielder successfully throws out a runner attempting to advance to another base.",
-        "why": "Outfield assists are used to measure a player's defensive value in the outfield, particularly their ability to stop runners from advancing. More outfield assists indicate stronger defensive skills.",
-        "formula": "Outfield Assists = Total number of successful throws resulting in a runner being thrown out"
-    },
-    "errors": {
-        "name": "Errors",
-        "description": "Errors track the number of fielding mistakes made by a player, such as misplays, dropped balls, or throws that result in a base runner being safe when they should have been out.",
-        "why": "Errors are used to evaluate a player's defensive reliability. Fewer errors indicate better defense, although errors alone don’t provide a full picture of a player's overall defense.",
-        "formula": "Errors = Total number of mistakes or misplays by a player"
-    },
-    "dwar": {
-        "name": "Defensive WAR (dWAR)",
-        "description": "Defensive WAR measures a player's total defensive contribution to their team, calculating the number of wins they add through their defense, adjusted for position and league average.",
-        "why": "dWAR is used to assess the overall impact of a player's defense, providing a single number that reflects how much value they add to their team’s defensive performance.",
-        "formula": "dWAR = (Defensive Runs Above Average / Runs per Win) + Park and Position Adjustments"
-    },
-    "catcher_cera": {
-        "name": "Catcher's ERA (CERA)",
-        "description": "Catcher's ERA calculates the earned run average (ERA) for pitchers when a specific catcher is behind the plate. It measures the pitcher's performance with that catcher, providing insight into how the catcher handles the pitching staff.",
-        "why": "CERA is used to evaluate a catcher's ability to manage pitchers and prevent runs from scoring. A lower CERA suggests a catcher is effective in guiding pitchers to success.",
-        "formula": "CERA = (Earned Runs Allowed by Pitchers / Innings Pitched by Pitchers) × 9"
-    },
-    "catcher_fraa": {
-        "name": "Framing Runs Above Average (FRAA)",
-        "description": "Framing Runs Above Average measures how many runs a catcher saves or costs by receiving pitches in a way that influences the umpire's calls, especially on borderline pitches.",
-        "why": "FRAA is used to evaluate a catcher's ability to 'frame' pitches and turn borderline pitches into strikes, which can have a significant impact on a pitcher’s performance. A positive FRAA suggests a catcher is good at framing.",
-        "formula": "FRAA = (Strike calls on borderline pitches) - (Ball calls on borderline pitches)"
-    },
-    "catcher_cs_percent": {
-        "name": "Caught Stealing Percentage (CS%)",
-        "description": "Caught Stealing Percentage measures the percentage of runners caught attempting to steal a base compared to the total stolen base attempts.",
-        "why": "CS% is used to assess a catcher's ability to throw out base stealers. A higher CS% indicates a catcher with strong arm strength and good timing on throws.",
-        "formula": "CS% = (Caught Stealing / (Caught Stealing + Stolen Bases)) × 100"
-    },
-    "catcher_pop_time": {
-        "name": "Pop Time",
-        "description": "Pop Time measures the time it takes for a catcher to go from receiving a pitch to throwing it to second base on an attempted steal. It reflects the catcher's arm strength and release speed.",
-        "why": "Pop Time is used to evaluate a catcher's quickness and arm strength, which are crucial for throwing out runners attempting to steal bases.",
-        "formula": "Pop Time = Time (in seconds) from pitch reception to the throw reaching second base"
-    },
-    "catcher_block": {
-        "name": "Blocking Runs Above Average (BLOCK)",
-        "description": "Blocking Runs Above Average measures a catcher's ability to block pitches in the dirt and prevent runners from advancing. It quantifies the value a catcher adds by keeping balls in front of them.",
-        "why": "BLOCK is used to assess a catcher's skill in preventing wild pitches or passed balls that lead to runners advancing, which can affect the game’s outcome.",
-        "formula": "BLOCK = (Runs Saved by Blocking Pitches) - (Runs Allowed by Passed Balls and Wild Pitches)"
-    },
-    "catcher_rto": {
-        "name": "Runners Thrown Out (RTO)",
-        "description": "Runners Thrown Out tracks the total number of runners a catcher throws out attempting to steal a base, not factoring in those who reach safely.",
-        "why": "RTO is used to evaluate a catcher’s ability to control the running game by throwing out base stealers. It highlights a catcher's arm strength and timing.",
-        "formula": "RTO = Total number of runners caught stealing"
-    },
-    "catcher_sbrs": {
-        "name": "Stolen Base Runs Saved (SBRS)",
-        "description": "Stolen Base Runs Saved quantifies the number of runs a catcher saves by preventing stolen bases relative to the league average.",
-        "why": "SBRS is used to assess how effective a catcher is at preventing stolen bases, factoring in both the number of stolen bases prevented and the pitcher's performance while they are behind the plate.",
-        "formula": "SBRS = (Stolen Bases Prevented - League Average Stolen Bases) × (Runs per Stolen Base)"
-    },
-    "catcher_draa": {
-        "name": "Defensive Runs Above Average (dRAA) for Catchers",
-        "description": "Defensive Runs Above Average for catchers (dRAA) is a comprehensive metric that evaluates a catcher's overall defensive value, including pitch framing, throwing, blocking, and handling pitchers.",
-        "why": "dRAA is used to evaluate a catcher's total defensive contributions. A higher dRAA indicates a more valuable defensive catcher.",
-        "formula": "dRAA = (Total Defensive Runs Saved by Catcher) - (League Average Defensive Runs)"
-    },
-    "pitcher_siera": {
-        "name": "SIERA",
-        "description": "SIERA (Skill Interactive ERA) is an advanced pitching statistic that attempts to predict a pitcher's future ERA based on their skillset, including strikeouts, walks, and balls in play.",
-        "why": "SIERA is used to assess a pitcher's overall effectiveness, adjusting for factors like park and defense. A lower SIERA indicates better pitching performance.",
-        "formula": "SIERA = 4.5 + (13 × BB / (PA)) - (2 × K / (PA)) + (3 × GB / (PA)) + (c) (park adjusted)"
-    },
-    "pitcher_xera": {
-        "name": "xERA",
-        "description": "xERA (Expected ERA) is an advanced metric that estimates a pitcher's ERA based on factors like strikeouts, walks, and batted ball profile while adjusting for luck and defense.",
-        "why": "xERA is used to evaluate a pitcher's true skill by filtering out luck and defensive variability. It gives a better understanding of how a pitcher should perform based on their skills.",
-        "formula": "xERA = (Factors such as K%, BB%, GB%, Hard Contact Rate, and BABIP adjusted for defense)"
-    },
-    "pitcher_fip": {
-        "name": "FIP",
-        "description": "FIP (Fielding Independent Pitching) measures a pitcher's effectiveness based solely on events within their control: strikeouts, walks, and home runs, removing the influence of defense and fielding.",
-        "why": "FIP is used to evaluate a pitcher's true skill without the influence of fielders. A lower FIP indicates better pitching performance, as it focuses on controllable outcomes.",
-        "formula": "FIP = ((13 × HR) + (3 × BB) - (2 × K)) / IP + Constant"
-    },
-    "pitcher_xfip": {
-        "name": "xFIP",
-        "description": "xFIP (Expected Fielding Independent Pitching) is a variation of FIP that adjusts for the league's home run rate. It uses a normalized home run per fly ball rate to account for luck in home runs allowed.",
-        "why": "xFIP is used to provide a more stable estimate of a pitcher's performance by removing the randomness of home runs allowed. It predicts future performance more reliably than FIP.",
-        "formula": "xFIP = ((13 × HR+ - HR) + (3 × BB) - (2 × K)) / IP + Constant"
-    },
-    "pitcher_babip": {
-        "name": "BABIP",
-        "description": "BABIP (Batting Average on Balls in Play) measures how often a batter gets a hit on balls that are hit into the field of play, excluding home runs.",
-        "why": "BABIP is used to evaluate the randomness of a pitcher's results on balls in play. A low BABIP may indicate luck or good defense, while a high BABIP may suggest a lack of control or poor defensive support.",
-        "formula": "BABIP = (H - HR) / (AB - K - HR + SF)"
-    },
-    "pitcher_pitch_shapes": {
-        "name": "Pitch Shapes",
-        "description": "Pitch Shapes refer to the movement patterns of a pitch, including its break, speed, and trajectory. They help to analyze how pitches move and deceive batters.",
-        "why": "Pitch Shapes are used to assess a pitcher's ability to create movement with their pitches, influencing a batter's ability to make contact. Varied pitch shapes can make a pitcher more effective.",
-        "formula": "Pitch Shapes = Movement metrics for various pitches (e.g., horizontal break, vertical drop, speed)"
-    },
-    "pitcher_war": {
-        "name": "WAR (Wins Above Replacement)",
-        "description": "WAR is a comprehensive statistic that attempts to measure a player's overall contribution to their team, including batting, fielding, and pitching. For pitchers, it combines ERA, FIP, and other factors.",
-        "why": "WAR is used to quantify a pitcher's total value in one statistic. It compares the player's performance to a replacement-level player to determine how many wins they contribute to their team.",
-        "formula": "WAR = (Player's runs saved or created + Runs prevented) / (League's runs per win)"
-    },
-    "pitcher_lob_percent": {
-        "name": "LOB%",
-        "description": "LOB% (Left On Base Percentage) is the percentage of base runners a pitcher strands, i.e., the percentage of runners who do not score after reaching base.",
-        "why": "LOB% is used to evaluate a pitcher's ability to get out of jams and strand base runners. A high LOB% indicates effectiveness in high-leverage situations.",
-        "formula": "LOB% = (Innings Pitched - Earned Runs Allowed) / (Base Runners Allowed) × 100"
-    },
-    "pitcher_vfa": {
-        "name": "vFA (Velocity of Fastball)",
-        "description": "vFA measures the average velocity of a pitcher's fastball.",
-        "why": "vFA is used to assess a pitcher's fastball velocity, which can indicate the power of their arm and the potential for missing bats. A higher velocity generally makes it harder for batters to make solid contact.",
-        "formula": "vFA = Average velocity (mph) of the fastball pitches thrown"
-    },
-    "pitcher_k_percent": {
-        "name": "K%",
-        "description": "K% (Strikeout Percentage) measures the percentage of batters a pitcher strikes out, calculated as the number of strikeouts divided by the number of batters faced.",
-        "why": "K% is used to evaluate a pitcher's strikeout ability. A higher K% indicates a pitcher who is able to overpower batters and induce swings and misses.",
-        "formula": "K% = (Strikeouts / Batters Faced) × 100"
-    },
-    "pitcher_bb_percent": {
-        "name": "BB%",
-        "description": "BB% (Walk Percentage) measures the percentage of batters a pitcher walks, calculated as the number of walks divided by the number of batters faced.",
-        "why": "BB% is used to assess a pitcher's control and command. A lower BB% indicates a pitcher who is able to avoid issuing free passes.",
-        "formula": "BB% = (Walks / Batters Faced) × 100"
-    },
-    "pitcher_kbb_percent": {
-        "name": "K-BB%",
-        "description": "K-BB% is the difference between a pitcher's strikeout percentage (K%) and walk percentage (BB%), providing insight into their control and dominance on the mound.",
-        "why": "K-BB% is used to evaluate a pitcher's overall effectiveness by looking at their ability to miss bats and avoid walks. A higher K-BB% indicates better command and dominance.",
-        "formula": "K-BB% = K% - BB%"
-    },
-    "pitcher_gb_percent": {
-        "name": "GB%",
-        "description": "GB% (Ground Ball Percentage) measures the percentage of balls in play that are hit on the ground, as opposed to fly balls or line drives.",
-        "why": "GB% is used to evaluate a pitcher's ability to induce ground balls, which typically result in fewer extra-base hits and are often easier to turn into outs. A higher GB% is generally favorable for pitchers.",
-        "formula": "GB% = (Ground Balls / Balls in Play) × 100"
-    },
-    "pitcher_era_plus": {
-        "name": "ERA+",
-        "description": "ERA+ (Adjusted ERA) is a metric that adjusts a pitcher's ERA for the league average, park factors, and other external influences, with 100 being average and each point above or below representing a percentage better or worse than average.",
-        "why": "ERA+ is used to provide a league- and park-adjusted version of ERA, allowing for comparisons of pitchers across different contexts. A higher ERA+ indicates better-than-average pitching.",
-        "formula": "ERA+ = ((League ERA / Player's ERA) × 100) × Park Adjustment"
-    },
-    "wpa": {
-        "name": "WPA (Win Probability Added)",
-        "description": "WPA is a statistic that measures the change in a team's probability of winning a game as a result of a player's performance. It quantifies the impact of a player's actions on the outcome of a game by comparing the team's win probability before and after the event.",
-        "why": "WPA is used to assess a player's contributions to a team's likelihood of winning in specific moments. It is especially useful for evaluating a player's performance in high-leverage situations (e.g., late innings or close games).",
-        "formula": "WPA = (Win Probability After Event) - (Win Probability Before Event)"
-    },
-    "clutch_wpa": {
-        "name": "Clutch WPA",
-        "description": "Clutch WPA measures the change in win probability from a player's performance in high-leverage situations, where the game's outcome is more uncertain and has a higher impact on the final result.",
-        "why": "Clutch WPA is used to evaluate how a player performs in crucial situations, often with the game on the line. A positive Clutch WPA indicates a player who thrives under pressure.",
-        "formula": "Clutch WPA = WPA in High-Leverage Situations"
-    },
-    "wpa_per_li": {
-        "name": "WPA/LI (Win Probability Added per Leverage Index)",
-        "description": "WPA/LI normalizes WPA by the leverage of the situation. It provides a way to evaluate a player's impact on the game, adjusting for whether the situation was high or low-leverage. A higher WPA/LI suggests that a player had a significant impact in high-leverage moments.",
-        "why": "WPA/LI is used to assess a player's performance relative to the leverage of the situation, helping to distinguish players who impact games in critical moments from those who perform well in low-leverage situations.",
-        "formula": "WPA/LI = WPA / Leverage Index"
-    },
-    "gw_rbi": {
-        "name": "Game-Winning RBI (GW-RBI)",
-        "description": "Game-Winning RBI is a statistic that tracks the RBI that results in the go-ahead run for the winning team in a game. It is a way to evaluate a player's ability to drive in runs in crucial moments.",
-        "why": "GW-RBI is used to highlight a player's ability to produce runs when it matters most, particularly in moments where they contribute to the winning run.",
-        "formula": "GW-RBI = RBI that results in the go-ahead run in a win"
-    },
-    "stuff_plus": {
-        "name": "Stuff+",
-        "description": "Stuff+ is a statistic that measures the quality of a pitcher's raw pitching abilities, including pitch velocity, movement, and overall effectiveness. It adjusts for factors like park and league differences to provide a standardized evaluation of stuff across all pitchers.",
-        "why": "Stuff+ is used to evaluate a pitcher's pure stuff, focusing on the velocity and movement of their pitches. It is useful for comparing pitchers' raw skills while accounting for external factors like ballpark and league adjustments. A Stuff+ above 100 indicates above-average stuff.",
-        "formula": "Stuff+ = (Pitch Velocity + Pitch Movement) / (League Average) × 100"
-    },
-    "location_plus": {
-        "name": "Location+",
-        "description": "Location+ is a metric that quantifies a pitcher's command by evaluating how accurately they can locate their pitches in the strike zone. It adjusts for factors such as pitch type and batter handedness to provide a more nuanced evaluation of command and placement.",
-        "why": "Location+ is used to assess how well a pitcher can execute their pitches, specifically how well they hit their spots within the strike zone. A higher Location+ score indicates superior pitch command, meaning the pitcher places their pitches more effectively. A Location+ above 100 is considered better than league average.",
-        "formula": "Location+ = (Pitch Placement Relative to the Strike Zone) / (League Average Command) × 100"
-    },
-    "pitching_plus": {
-        "name": "Pitching+",
-        "description": "Pitching+ is a comprehensive statistic that combines a pitcher’s Stuff+ and Location+ to provide a more holistic view of their overall pitching ability. It factors in both the quality of their pitches (Stuff) and their ability to place them effectively (Location).",
-        "why": "Pitching+ is used to evaluate a pitcher's overall skill set by combining their raw pitch quality and their command. A higher Pitching+ score indicates a pitcher who excels in both stuff and location, making them more effective overall.",
-        "formula": "Pitching+ = (Stuff+ + Location+) / 2"
-        
+    "hitter_sprint": {
+        "name": "Sprint Speed",
+        "description": "Measures a player’s speed in feet per second during top-speed running plays.",
+        "why": "Reflects a player’s running ability and athleticism, important for both offense and defense.",
+        "formula": "Sprint Speed = Average top speed (ft/sec) on max-effort runs"
     }
 }
+

@@ -10,6 +10,9 @@ import SwiftUI
 struct HitterCareerBasicStatsView: View {
     var hittingCareerStatsHelper: HittingCareerStatsHelper?
     
+    @State private var isSheetPresented: Bool = false
+    @State private var selectedStat: String = ""
+    
     var body: some View {
         VStack {
             if let careerStats = hittingCareerStatsHelper?.hittingCareerStats {
@@ -24,21 +27,41 @@ struct HitterCareerBasicStatsView: View {
                     .padding(20)
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 5), spacing: 5) {
                         // First Row with stat category
-                        Text("G")
-                            .font(.parkFactorFontSmallText)
-                            .foregroundColor(Color.gray)
-                        Text("BA")
-                            .font(.parkFactorFontSmallText)
-                            .foregroundColor(Color.gray)
-                        Text("OBP")
-                            .font(.parkFactorFontSmallText)
-                            .foregroundColor(Color.gray)
-                        Text("SLG")
-                            .font(.parkFactorFontSmallText)
-                            .foregroundColor(Color.gray)
-                        Text("OPS")
-                            .font(.parkFactorFontSmallText)
-                            .foregroundColor(Color.gray)
+                        Button(action: {
+                            selectedStat = "hitter_g"
+                        }) {
+                            Text("G")
+                                .font(.parkFactorFontSmallText)
+                                .foregroundColor(Color.gray)
+                        }
+                        Button(action: {
+                            selectedStat = "hitter_ba"
+                        }) {
+                            Text("BA")
+                                .font(.parkFactorFontSmallText)
+                                .foregroundColor(Color.gray)
+                        }
+                        Button(action: {
+                            selectedStat = "hitter_obp"
+                        }) {
+                            Text("OBP")
+                                .font(.parkFactorFontSmallText)
+                                .foregroundColor(Color.gray)
+                        }
+                        Button(action: {
+                            selectedStat = "hitter_slg"
+                        }) {
+                            Text("SLG")
+                                .font(.parkFactorFontSmallText)
+                                .foregroundColor(Color.gray)
+                        }
+                        Button(action: {
+                            selectedStat = "hitter_ops"
+                        }) {
+                            Text("OPS")
+                                .font(.parkFactorFontSmallText)
+                                .foregroundColor(Color.gray)
+                        }
                         
                         // Second Row with above categories
                         Text("\(careerStats[0].g ?? -1)")
@@ -55,21 +78,41 @@ struct HitterCareerBasicStatsView: View {
                         Text("")
                         
                         // Fourth Row with more stat categories
-                        Text("H")
-                            .font(.parkFactorFontSmallText)
-                            .foregroundColor(Color.gray)
-                        Text("HR")
-                            .font(.parkFactorFontSmallText)
-                            .foregroundColor(Color.gray)
-                        Text("R")
-                            .font(.parkFactorFontSmallText)
-                            .foregroundColor(Color.gray)
-                        Text("RBI")
-                            .font(.parkFactorFontSmallText)
-                            .foregroundColor(Color.gray)
-                        Text("SB")
-                            .font(.parkFactorFontSmallText)
-                            .foregroundColor(Color.gray)
+                        Button(action: {
+                            selectedStat = "hitter_h"
+                        }) {
+                            Text("H")
+                                .font(.parkFactorFontSmallText)
+                                .foregroundColor(Color.gray)
+                        }
+                        Button(action: {
+                            selectedStat = "hitter_hr"
+                        }) {
+                            Text("HR")
+                                .font(.parkFactorFontSmallText)
+                                .foregroundColor(Color.gray)
+                        }
+                        Button(action: {
+                            selectedStat = "hitter_runs"
+                        }) {
+                            Text("R")
+                                .font(.parkFactorFontSmallText)
+                                .foregroundColor(Color.gray)
+                        }
+                        Button(action: {
+                            selectedStat = "hitter_rbi"
+                        }) {
+                            Text("RBI")
+                                .font(.parkFactorFontSmallText)
+                                .foregroundColor(Color.gray)
+                        }
+                        Button(action: {
+                            selectedStat = "hitter_sb"
+                        }) {
+                            Text("SB")
+                                .font(.parkFactorFontSmallText)
+                                .foregroundColor(Color.gray)
+                        }
                         
                         // Second Row with above categories
                         Text("\(careerStats[0].h ?? -1)")
@@ -85,6 +128,12 @@ struct HitterCareerBasicStatsView: View {
                 }
                 .background(Color.black)
                 .cornerRadius(10)
+                .onChange(of: selectedStat) {
+                    isSheetPresented = true
+                }
+                .sheet(isPresented: $isSheetPresented) {
+                    StatExplanationView(stat: selectedStat)
+                }
             } else {
                 VStack {
                     Text("Loading Career ...")
