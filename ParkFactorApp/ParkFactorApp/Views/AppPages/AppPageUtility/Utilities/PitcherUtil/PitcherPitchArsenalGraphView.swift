@@ -19,6 +19,8 @@ struct ArsenalDataPoint: Identifiable {
 struct PitcherPitchArsenalGraphView: View {
     @State private var errorMessage: String = ""
     @State private var errorShow: Bool = false
+    @State private var isSheetPresented: Bool = false
+    @State private var selectedStat: String = ""
     
     var player: Player
     
@@ -58,18 +60,34 @@ struct PitcherPitchArsenalGraphView: View {
                         Text("Type")
                             .font(.parkFactorFontSmallText)
                             .foregroundColor(Color.gray)
-                        Text("Velo")
-                            .font(.parkFactorFontSmallText)
-                            .foregroundColor(Color.gray)
-                        Text("IVB")
-                            .font(.parkFactorFontSmallText)
-                            .foregroundColor(Color.gray)
-                        Text("HB")
-                            .font(.parkFactorFontSmallText)
-                            .foregroundColor(Color.gray)
-                        Text("%")
-                            .font(.parkFactorFontSmallText)
-                            .foregroundColor(Color.gray)
+                        Button(action: {
+                            selectedStat = "pitcher_velo"
+                        }) {
+                            Text("Velo")
+                                .font(.parkFactorFontSmallText)
+                                .foregroundColor(Color.gray)
+                        }
+                        Button(action: {
+                            selectedStat = "pitcher_ivb"
+                        }) {
+                            Text("IVB")
+                                .font(.parkFactorFontSmallText)
+                                .foregroundColor(Color.gray)
+                        }
+                        Button(action: {
+                            selectedStat = "pitcher_hb"
+                        }) {
+                            Text("HB")
+                                .font(.parkFactorFontSmallText)
+                                .foregroundColor(Color.gray)
+                        }
+                        Button(action: {
+                            selectedStat = "pitcher_pitchpercentage"
+                        }) {
+                            Text("%")
+                                .font(.parkFactorFontSmallText)
+                                .foregroundColor(Color.gray)
+                        }
                         
                         Text("")
                         Text("")
@@ -100,6 +118,12 @@ struct PitcherPitchArsenalGraphView: View {
                 .background(Color.black)
                 .cornerRadius(10)
                 .padding(.bottom, 10)
+                .onChange(of: selectedStat) {
+                    isSheetPresented = true
+                }
+                .sheet(isPresented: $isSheetPresented) {
+                    StatExplanationView(stat: selectedStat)
+                }
             }
         }
         .onAppear {

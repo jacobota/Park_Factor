@@ -490,6 +490,18 @@
       "description": "Estimates a pitcher’s overall value in terms of wins added above a replacement-level player.",
       "why": "Provides a single number to evaluate overall contribution to team success.",
       "formula": "WAR = Composite calculation based on innings, FIP, and run environment"
+    },
+    "pitcher_velo": {
+      "name": "Pitch Velocity",
+      "description": "Pitch velocity refers to the speed at which a pitch is thrown, typically measured in miles per hour (mph). It's a critical factor in a pitcher's ability to overpower hitters and set up other pitches effectively.",
+      "why": "Tracking pitch velocity provides insight into a pitcher's raw power and helps evaluate pitch effectiveness, especially when combined with movement and location.",
+      "formula": "Pitch Velocity = Average speed (mph) of specific pitch types over total pitches thrown"
+    },
+    "pitcher_pitchpercentage": {
+      "name": "Pitch Thrown %",
+      "description": "Pitch Thrown Percentage measures how often a pitcher throws each pitch type (e.g., fastball, slider, curveball) as a proportion of their total pitches.",
+      "why": "Understanding pitch usage helps analyze a pitcher's strategic approach, pitch mix, and how often they rely on each offering.",
+      "formula": "Pitch Thrown % = (Number of specific pitch type / Total pitches) × 100"
     }
 }
 

@@ -10,6 +10,8 @@ import SwiftUI
 struct PitcherPercentilesStatsView: View {
     @State private var errorMessage: String = ""
     @State private var errorShow: Bool = false
+    @State private var isSheetPresented: Bool = false
+    @State private var selectedStat: String = ""
     
     var player: Player
     
@@ -32,43 +34,83 @@ struct PitcherPercentilesStatsView: View {
                         GridItem(.flexible())
                     ], spacing: 20) {
                         if percentiles[0].fbVelocity != nil {
-                            Text("FB Velo")
+                            Button(action: {
+                                selectedStat = "pitcher_fbvelo"
+                            }) {
+                                Text("FB Velo")
+                            }
                             PercentileView(percentile: percentiles[0].fbVelocity ?? 0)
                         }
                         if percentiles[0].fbSpin != nil {
-                            Text("FB Spin")
+                            Button(action: {
+                                selectedStat = "pitcher_fbspin"
+                            }) {
+                                Text("FB Spin")
+                            }
                             PercentileView(percentile: percentiles[0].fbSpin ?? 0)
                         }
                         if percentiles[0].bbPercent != nil {
-                            Text("BB%")
+                            Button(action: {
+                                selectedStat = "pitcher_bbpercent"
+                            }) {
+                                Text("BB%")
+                            }
                             PercentileView(percentile: percentiles[0].bbPercent ?? 0)
                         }
                         if percentiles[0].barrel != nil {
-                            Text("Barrels")
+                            Button(action: {
+                                selectedStat = "pitcher_barrels"
+                            }) {
+                                Text("Barrels")
+                            }
                             PercentileView(percentile: percentiles[0].barrel ?? 0)
                         }
                         if percentiles[0].chasePercent != nil {
-                            Text("Chase%")
+                            Button(action: {
+                                selectedStat = "pitcher_chasepercent"
+                            }) {
+                                Text("Chase%")
+                            }
                             PercentileView(percentile: percentiles[0].chasePercent ?? 0)
                         }
                         if percentiles[0].exitVelocity != nil {
-                            Text("EV")
+                            Button(action: {
+                                selectedStat = "pitcher_ev"
+                            }) {
+                                Text("EV")
+                            }
                             PercentileView(percentile: percentiles[0].exitVelocity ?? 0)
                         }
                         if percentiles[0].hardHitPercent != nil {
-                            Text("Hard Hit%")
+                            Button(action: {
+                                selectedStat = "pitcher_hardhitpercent"
+                            }) {
+                                Text("HH %")
+                            }
                             PercentileView(percentile: percentiles[0].hardHitPercent ?? 0)
                         }
                         if percentiles[0].kPercent != nil {
-                            Text("K%")
+                            Button(action: {
+                                selectedStat = "pitcher_kpercent"
+                            }) {
+                                Text("K%")
+                            }
                             PercentileView(percentile: percentiles[0].kPercent ?? 0)
                         }
                         if percentiles[0].maxEv != nil {
-                            Text("Max EV")
+                            Button(action: {
+                                selectedStat = "pitcher_maxev"
+                            }) {
+                                Text("Max EV")
+                            }
                             PercentileView(percentile: percentiles[0].maxEv ?? 0)
                         }
                         if percentiles[0].whiffPercent != nil {
-                            Text("Whiff%")
+                            Button(action: {
+                                selectedStat = "pitcher_whiffpercent"
+                            }) {
+                                Text("Whiff%")
+                            }
                             PercentileView(percentile: percentiles[0].whiffPercent ?? 0)
                         }
                     }
@@ -80,6 +122,12 @@ struct PitcherPercentilesStatsView: View {
                 .background(Color.black)
                 .cornerRadius(10)
                 .padding(.bottom, 10)
+                .onChange(of: selectedStat) {
+                    isSheetPresented = true
+                }
+                .sheet(isPresented: $isSheetPresented) {
+                    StatExplanationView(stat: selectedStat)
+                }
             }
         }
         .onAppear {

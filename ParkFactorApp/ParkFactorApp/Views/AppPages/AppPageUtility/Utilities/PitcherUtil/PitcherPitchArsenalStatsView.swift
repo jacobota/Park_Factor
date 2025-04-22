@@ -10,6 +10,9 @@ import SwiftUI
 struct PitcherPitchArsenalStatsView: View {
     var pitchingStatsHelper: PitchingStatsHelper
     
+    @State private var isSheetPresented: Bool = false
+    @State private var selectedStat: String = ""
+    
     var body: some View {
         VStack {
             HStack {
@@ -25,18 +28,34 @@ struct PitcherPitchArsenalStatsView: View {
                 Text("Type")
                     .font(.parkFactorFontSmallText)
                     .foregroundColor(Color.gray)
-                Text("Stuff+")
-                    .font(.parkFactorFontSmallText)
-                    .foregroundColor(Color.gray)
-                Text("Pitch+")
-                    .font(.parkFactorFontSmallText)
-                    .foregroundColor(Color.gray)
-                Text("Loc+")
-                    .font(.parkFactorFontSmallText)
-                    .foregroundColor(Color.gray)
-                Text("Velo")
-                    .font(.parkFactorFontSmallText)
-                    .foregroundColor(Color.gray)
+                Button(action: {
+                    selectedStat = "pitcher_stuffplus"
+                }) {
+                    Text("Stuff+")
+                        .font(.parkFactorFontSmallText)
+                        .foregroundColor(Color.gray)
+                }
+                Button(action: {
+                    selectedStat = "pitcher_locationplus"
+                }) {
+                    Text("Loc+")
+                        .font(.parkFactorFontSmallText)
+                        .foregroundColor(Color.gray)
+                }
+                Button(action: {
+                    selectedStat = "pitcher_pitchingplus"
+                }) {
+                    Text("Pitch+")
+                        .font(.parkFactorFontSmallText)
+                        .foregroundColor(Color.gray)
+                }
+                Button(action: {
+                    selectedStat = "pitcher_velo"
+                }) {
+                    Text("Velo")
+                        .font(.parkFactorFontSmallText)
+                        .foregroundColor(Color.gray)
+                }
                 
                 // Row for spacing
                 Text("")
@@ -51,8 +70,8 @@ struct PitcherPitchArsenalStatsView: View {
                         .font(.parkFactorFontSmallText)
                         .foregroundColor(Color.gray)
                     Text("\(pitchingStatsHelper.pitchingStats?[0].stuffPlusFastball ?? 0)")
-                    Text("\(pitchingStatsHelper.pitchingStats?[0].pitchPlusFastball ?? 0)")
                     Text("\(pitchingStatsHelper.pitchingStats?[0].locationPlusFastball ?? 0)")
+                    Text("\(pitchingStatsHelper.pitchingStats?[0].pitchPlusFastball ?? 0)")
                     Text(String(format: "%.1f", NSDecimalNumber(decimal: pitchingStatsHelper.pitchingStats?[0].velocityFastball ?? 0.0).doubleValue))
                     
                     // Row for spacing
@@ -189,6 +208,12 @@ struct PitcherPitchArsenalStatsView: View {
         }
         .background(Color.black)
         .cornerRadius(10)
+        .onChange(of: selectedStat) {
+            isSheetPresented = true
+        }
+        .sheet(isPresented: $isSheetPresented) {
+            StatExplanationView(stat: selectedStat)
+        }
     }
 }
 
