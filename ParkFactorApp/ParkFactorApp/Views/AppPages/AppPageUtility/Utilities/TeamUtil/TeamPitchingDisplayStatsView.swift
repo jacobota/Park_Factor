@@ -9,6 +9,10 @@ import SwiftUI
 
 struct TeamPitchingDisplayStatsView: View {
     var teamStats: TeamStats
+    
+    @State private var isSheetPresented: Bool = false
+    @State private var selectedStat: String = ""
+    
     var body: some View {
         VStack {
             VStack {
@@ -22,18 +26,34 @@ struct TeamPitchingDisplayStatsView: View {
                 .padding(20)
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 4), spacing: 5) {
                     // First Row with stat category
-                    Text("ERA")
-                        .font(.parkFactorFontSmallText)
-                        .foregroundColor(Color.gray)
-                    Text("RA")
-                        .font(.parkFactorFontSmallText)
-                        .foregroundColor(Color.gray)
-                    Text("BAA")
-                        .font(.parkFactorFontSmallText)
-                        .foregroundColor(Color.gray)
-                    Text("H")
-                        .font(.parkFactorFontSmallText)
-                        .foregroundColor(Color.gray)
+                    Button(action: {
+                        selectedStat = "teams_pitching_era"
+                    }) {
+                        Text("ERA")
+                            .font(.parkFactorFontSmallText)
+                            .foregroundColor(Color.gray)
+                    }
+                    Button(action: {
+                        selectedStat = "teams_pitching_ra"
+                    }) {
+                        Text("RA")
+                            .font(.parkFactorFontSmallText)
+                            .foregroundColor(Color.gray)
+                    }
+                    Button(action: {
+                        selectedStat = "teams_pitching_baa"
+                    }) {
+                        Text("BAA")
+                            .font(.parkFactorFontSmallText)
+                            .foregroundColor(Color.gray)
+                    }
+                    Button(action: {
+                        selectedStat = "teams_pitching_ha"
+                    }) {
+                        Text("HA")
+                            .font(.parkFactorFontSmallText)
+                            .foregroundColor(Color.gray)
+                    }
                     
                     // Second Row with above categories
                     Text(String(format: "%.2f", NSDecimalNumber(decimal: teamStats.teamPitching?[0].era ?? 0).doubleValue))
@@ -46,18 +66,34 @@ struct TeamPitchingDisplayStatsView: View {
                     Text("")
                     Text("")
                     
-                    Text("SO")
-                        .font(.parkFactorFontSmallText)
-                        .foregroundColor(Color.gray)
-                    Text("BB")
-                        .font(.parkFactorFontSmallText)
-                        .foregroundColor(Color.gray)
-                    Text("WHIP")
-                        .font(.parkFactorFontSmallText)
-                        .foregroundColor(Color.gray)
-                    Text("FB Velo")
-                        .font(.parkFactorFontSmallText)
-                        .foregroundColor(Color.gray)
+                    Button(action: {
+                        selectedStat = "teams_pitching_so"
+                    }) {
+                        Text("SO")
+                            .font(.parkFactorFontSmallText)
+                            .foregroundColor(Color.gray)
+                    }
+                    Button(action: {
+                        selectedStat = "teams_pitching_walks"
+                    }) {
+                        Text("BB")
+                            .font(.parkFactorFontSmallText)
+                            .foregroundColor(Color.gray)
+                    }
+                    Button(action: {
+                        selectedStat = "teams_pitching_whip"
+                    }) {
+                        Text("WHIP")
+                            .font(.parkFactorFontSmallText)
+                            .foregroundColor(Color.gray)
+                    }
+                    Button(action: {
+                        selectedStat = "teams_pitching_fbvelo"
+                    }) {
+                        Text("FB Velo")
+                            .font(.parkFactorFontSmallText)
+                            .foregroundColor(Color.gray)
+                    }
                     
                     Text("\(teamStats.teamPitching?[0].strikeouts ?? 0)")
                     Text("\(teamStats.teamPitching?[0].walks ?? 0)")
@@ -84,18 +120,34 @@ struct TeamPitchingDisplayStatsView: View {
                 .padding(20)
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 4), spacing: 5) {
                     // First Row with stat category
-                    Text("WAR")
-                        .font(.parkFactorFontSmallText)
-                        .foregroundColor(Color.gray)
-                    Text("FIP")
-                        .font(.parkFactorFontSmallText)
-                        .foregroundColor(Color.gray)
-                    Text("xFIP")
-                        .font(.parkFactorFontSmallText)
-                        .foregroundColor(Color.gray)
-                    Text("SIERA")
-                        .font(.parkFactorFontSmallText)
-                        .foregroundColor(Color.gray)
+                    Button(action: {
+                        selectedStat = "teams_pitching_war"
+                    }) {
+                        Text("WAR")
+                            .font(.parkFactorFontSmallText)
+                            .foregroundColor(Color.gray)
+                    }
+                    Button(action: {
+                        selectedStat = "teams_pitching_fip"
+                    }) {
+                        Text("FIP")
+                            .font(.parkFactorFontSmallText)
+                            .foregroundColor(Color.gray)
+                    }
+                    Button(action: {
+                        selectedStat = "teams_pitching_xfip"
+                    }) {
+                        Text("xFIP")
+                            .font(.parkFactorFontSmallText)
+                            .foregroundColor(Color.gray)
+                    }
+                    Button(action: {
+                        selectedStat = "teams_pitching_siera"
+                    }) {
+                        Text("SIERA")
+                            .font(.parkFactorFontSmallText)
+                            .foregroundColor(Color.gray)
+                    }
                     
                     // Second Row with above categories
                     Text(String(format: "%.1f", NSDecimalNumber(decimal: teamStats.teamPitching?[0].war ?? 0).doubleValue))
@@ -108,18 +160,34 @@ struct TeamPitchingDisplayStatsView: View {
                     Text("")
                     Text("")
                     
-                    Text("BB%")
-                        .font(.parkFactorFontSmallText)
-                        .foregroundColor(Color.gray)
-                    Text("K%")
-                        .font(.parkFactorFontSmallText)
-                        .foregroundColor(Color.gray)
-                    Text("K-BB%")
-                        .font(.parkFactorFontSmallText)
-                        .foregroundColor(Color.gray)
-                    Text("BABIP")
-                        .font(.parkFactorFontSmallText)
-                        .foregroundColor(Color.gray)
+                    Button(action: {
+                        selectedStat = "teams_pitching_bbpercent"
+                    }) {
+                        Text("BB%")
+                            .font(.parkFactorFontSmallText)
+                            .foregroundColor(Color.gray)
+                    }
+                    Button(action: {
+                        selectedStat = "teams_pitching_kpercent"
+                    }) {
+                        Text("K%")
+                            .font(.parkFactorFontSmallText)
+                            .foregroundColor(Color.gray)
+                    }
+                    Button(action: {
+                        selectedStat = "teams_pitching_kminusbbpercent"
+                    }) {
+                        Text("K-BB%")
+                            .font(.parkFactorFontSmallText)
+                            .foregroundColor(Color.gray)
+                    }
+                    Button(action: {
+                        selectedStat = "teams_pitching_babip"
+                    }) {
+                        Text("BABIP")
+                            .font(.parkFactorFontSmallText)
+                            .foregroundColor(Color.gray)
+                    }
                     
                     Text(String(format: "%.3f", NSDecimalNumber(decimal: teamStats.teamPitching?[0].bbPercentage ?? 0).doubleValue))
                     Text(String(format: "%.3f", NSDecimalNumber(decimal: teamStats.teamPitching?[0].kPercentage ?? 0).doubleValue))
@@ -146,28 +214,43 @@ struct TeamPitchingDisplayStatsView: View {
                 .padding(20)
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 5) {
                     // First Row with stat category
-                    Text("Stuff+")
-                        .font(.parkFactorFontSmallText)
-                        .foregroundColor(Color.gray)
-                    Text("Pitching+")
-                        .font(.parkFactorFontSmallText)
-                        .foregroundColor(Color.gray)
-                    Text("Location+")
-                        .font(.parkFactorFontSmallText)
-                        .foregroundColor(Color.gray)
+                    Button(action: {
+                        selectedStat = "teams_pitching_stuffplus"
+                    }) {
+                        Text("Stuff+")
+                            .foregroundColor(Color.gray)
+                    }
+                    Button(action: {
+                        selectedStat = "teams_pitching_locationplus"
+                    }) {
+                        Text("Location+")
+                            .foregroundColor(Color.gray)
+                    }
+                    Button(action: {
+                        selectedStat = "teams_pitching_pitchingplus"
+                    }) {
+                        Text("Pitching+")
+                            .foregroundColor(Color.gray)
+                    }
                     
                     // Second Row with above categories
                     Text("\(teamStats.teamPitching?[0].stuffPlus ?? 0)")
-                    Text("\(teamStats.teamPitching?[0].pitchingPlus ?? 0)")
                     Text("\(teamStats.teamPitching?[0].locationPlus ?? 0)")
+                    Text("\(teamStats.teamPitching?[0].pitchingPlus ?? 0)")
                 }
-                .font(.parkFactorFontSmallText)
+                .font(.parkFactorFontText)
                 .foregroundColor(.white)
                 .padding(.horizontal, 20)
                 .padding(.bottom, 20)
             }
             .background(Color.black)
             .cornerRadius(10)
+            .onChange(of: selectedStat) {
+                isSheetPresented = true
+            }
+            .sheet(isPresented: $isSheetPresented) {
+                StatExplanationView(stat: selectedStat)
+            }
         }
     }
 }

@@ -502,6 +502,240 @@
       "description": "Pitch Thrown Percentage measures how often a pitcher throws each pitch type (e.g., fastball, slider, curveball) as a proportion of their total pitches.",
       "why": "Understanding pitch usage helps analyze a pitcher's strategic approach, pitch mix, and how often they rely on each offering.",
       "formula": "Pitch Thrown % = (Number of specific pitch type / Total pitches) × 100"
+    },
+    "teams_hitting_ba": {
+      "name": "Team Batting Average (BA)",
+      "description": "The average number of hits per at-bat for a team.",
+      "why": "Team batting average helps gauge how consistently a team gets hits when at bat, reflecting overall offensive performance.",
+      "formula": "BA = Team Hits / Team At-Bats"
+    },
+    "teams_hitting_hits": {
+      "name": "Team Hits (H)",
+      "description": "The total number of hits recorded by all players on a team.",
+      "why": "Hits are a basic measure of team offensive output and are critical for scoring runs.",
+      "formula": "H = Sum of all individual hits by team players"
+    },
+    "teams_hitting_hr": {
+      "name": "Team Home Runs (HR)",
+      "description": "The total number of home runs hit by the team.",
+      "why": "Home runs are a major source of scoring and show a team's power-hitting ability.",
+      "formula": "HR = Total team home runs"
+    },
+    "teams_hitting_runs": {
+      "name": "Team Runs (R)",
+      "description": "The total number of runs scored by the team.",
+      "why": "Runs determine the outcome of the game and reflect a team's ability to capitalize on scoring opportunities.",
+      "formula": "R = Total number of runs scored by the team"
+    },
+    "teams_hitting_strikeouts": {
+      "name": "Team Strikeouts (K)",
+      "description": "Total number of times team batters struck out.",
+      "why": "Strikeouts indicate offensive struggles and lack of contact, and high numbers can be a concern.",
+      "formula": "K = Total strikeouts by all team batters"
+    },
+    "teams_hitting_walks": {
+      "name": "Team Walks (BB)",
+      "description": "Total number of walks earned by the team.",
+      "why": "Walks contribute to on-base percentage and are valuable for setting up scoring chances.",
+      "formula": "BB = Total walks earned by team batters"
+    },
+    "teams_hitting_obp": {
+      "name": "Team On Base Percentage (OBP)",
+      "description": "How often a team gets on base per plate appearance.",
+      "why": "OBP is key to evaluating a team's ability to generate baserunners and scoring chances.",
+      "formula": "OBP = (Hits + Walks + HBP) / (AB + BB + HBP + SF)"
+    },
+    "teams_hitting_slg": {
+      "name": "Team Slugging Percentage (SLG)",
+      "description": "Measures total bases per at-bat for the team.",
+      "why": "SLG shows how effectively a team hits for power and generates extra-base hits.",
+      "formula": "SLG = Total Bases / At-Bats"
+    },
+    "teams_hitting_war": {
+      "name": "Team Wins Above Replacement (WAR)",
+      "description": "Estimates how many more wins the team’s hitters generate compared to a replacement-level team.",
+      "why": "Team WAR aggregates individual WAR values to assess overall offensive contribution to winning.",
+      "formula": "WAR = Sum of all player WAR values on the team"
+    },
+    "teams_hitting_ops": {
+      "name": "Team On Base Plus Slugging (OPS)",
+      "description": "Combines OBP and SLG to evaluate overall team offensive production.",
+      "why": "OPS is a quick way to gauge a team’s ability to reach base and hit for power.",
+      "formula": "OPS = OBP + SLG"
+    },
+    "teams_hitting_woba": {
+      "name": "Team Weighted On Base Average (wOBA)",
+      "description": "Weights different offensive outcomes to measure overall offensive effectiveness.",
+      "why": "wOBA gives a more accurate picture of a team's offensive value than traditional stats.",
+      "formula": "wOBA = (wBB + wHBP + w1B + w2B + w3B + wHR) / (AB + BB - IBB + SF + HBP)"
+    },
+    "teams_hitting_wrcplus": {
+      "name": "Team Weighted Runs Created Plus (wRC+)",
+      "description": "Measures total offensive value while adjusting for park and league effects.",
+      "why": "wRC+ allows comparisons of team offenses across different environments. 100 is league average.",
+      "formula": "wRC+ = ((wRA / PA) / league wRA/PA) × 100"
+    },
+    "teams_hitting_babip": {
+      "name": "Team Batting Average on Balls in Play (BABIP)",
+      "description": "Measures how often balls put in play result in hits for the team.",
+      "why": "BABIP can indicate luck or quality of contact and defense faced.",
+      "formula": "BABIP = (Hits - HR) / (AB - K - HR + SF)"
+    },
+    "teams_hitting_iso": {
+      "name": "Team Isolated Power (ISO)",
+      "description": "Measures a team’s raw power by focusing on extra-base hits.",
+      "why": "ISO shows how often a team hits for extra bases, reflecting slugging efficiency.",
+      "formula": "ISO = SLG - BA"
+    },
+    "teams_hitting_bbpercent": {
+      "name": "Team Walk Percentage (BB%)",
+      "description": "Percentage of plate appearances that result in a walk.",
+      "why": "BB% reflects team discipline and ability to extend at-bats and get on base.",
+      "formula": "BB% = (BB / PA) × 100"
+    },
+    "teams_hitting_kpercent": {
+      "name": "Team Strikeout Percentage (K%)",
+      "description": "Percentage of plate appearances that result in strikeouts.",
+      "why": "K% highlights how often a team fails to put the ball in play, which can kill rallies.",
+      "formula": "K% = (K / PA) × 100"
+    },
+    "teams_fielding_drs": {
+      "name": "Team Defensive Runs Saved (DRS)",
+      "description": "Defensive Runs Saved quantifies the total number of runs a team’s defense saved or cost compared to an average defense.",
+      "why": "DRS provides a comprehensive view of team defense by evaluating how well fielders convert batted balls into outs, relative to league average. A positive number indicates a team that prevents more runs than average.",
+      "formula": "DRS = Sum of individual player DRS across team"
+    },
+    "teams_fielding_errors": {
+      "name": "Team Errors (E)",
+      "description": "Errors represent the number of misplays by the defense that allow a batter or runner to advance when an out could have been recorded.",
+      "why": "Tracking errors helps assess a team’s defensive reliability. Fewer errors generally indicate better fielding execution.",
+      "formula": "Errors = Total number of official scoring errors committed by the team"
+    },
+    "teams_fielding_fieldpercent": {
+      "name": "Team Fielding Percentage (FP)",
+      "description": "Fielding Percentage calculates the ratio of plays successfully made to total fielding chances (putouts + assists + errors).",
+      "why": "Fielding percentage is a basic measure of defensive reliability, reflecting how often a team fields the ball cleanly.",
+      "formula": "FP = (Putouts + Assists) / (Putouts + Assists + Errors)"
+    },
+    "teams_fielding_oaa": {
+      "name": "Team Outs Above Average (OAA)",
+      "description": "Outs Above Average quantifies the cumulative number of outs a team’s defense has made compared to the expected number, based on difficulty of play.",
+      "why": "OAA accounts for the quality of defensive plays and positioning, offering a deeper metric than traditional fielding stats.",
+      "formula": "OAA = Sum of individual player OAA across team"
+    },
+    "teams_pitching_era": {
+      "name": "Team Earned Run Average (ERA)",
+      "description": "Measures the average number of earned runs a team's pitchers allow per nine innings. It's a standard stat for gauging a team's overall pitching effectiveness.",
+      "why": "ERA gives a general sense of how well a pitching staff prevents scoring. Lower ERAs indicate stronger pitching.",
+      "formula": "ERA = (Earned Runs × 9) / Innings Pitched"
+    },
+    "teams_pitching_ra": {
+      "name": "Team Runs Allowed (RA)",
+      "description": "Tracks the total number of runs allowed by a team's pitching staff, regardless of whether they are earned or unearned.",
+      "why": "RA shows total scoring against a team, which affects win-loss records and reflects pitching and defensive performance.",
+      "formula": "RA = Total Runs Allowed"
+    },
+    "teams_pitching_baa": {
+      "name": "Team Batting Average Against (BAA)",
+      "description": "The batting average of opponents against a team's pitchers, indicating how well opposing batters hit against the team.",
+      "why": "BAA helps assess a pitching staff’s ability to limit base hits.",
+      "formula": "BAA = Hits Allowed / At-Bats Against"
+    },
+    "teams_pitching_ha": {
+      "name": "Team Hits Allowed (HA)",
+      "description": "Total number of hits allowed by a team’s pitching staff over the course of the season.",
+      "why": "Tracks how frequently opposing teams make contact and reach base via hits.",
+      "formula": "HA = Total Hits Allowed"
+    },
+    "teams_pitching_so": {
+      "name": "Team Strikeouts (SO)",
+      "description": "Total number of batters struck out by a team’s pitching staff.",
+      "why": "A higher strikeout total indicates strong pitching dominance and ability to get outs without allowing the ball in play.",
+      "formula": "SO = Total Strikeouts Recorded"
+    },
+    "teams_pitching_walks": {
+      "name": "Team Walks (BB)",
+      "description": "Total number of walks issued by a team’s pitchers.",
+      "why": "Walks allow opponents free baserunners and reflect control issues in a team’s pitching staff.",
+      "formula": "BB = Total Walks Issued"
+    },
+    "teams_pitching_whip": {
+      "name": "Team Walks Plus Hits Per Innings Pitched (WHIP)",
+      "description": "Measures the average number of base runners allowed per inning by a team’s pitching staff.",
+      "why": "WHIP evaluates how well a team keeps runners off base and complements ERA.",
+      "formula": "WHIP = (Walks + Hits) / Innings Pitched"
+    },
+    "teams_pitching_fbvelo": {
+      "name": "Team Average Fastball Velocity (FB Velo)",
+      "description": "Average velocity of all fastballs thrown by a team’s pitchers.",
+      "why": "Fastball velocity often correlates with power pitching and potential to generate strikeouts.",
+      "formula": "FB Velo = Avg. Fastball Speed (mph)"
+    },
+    "teams_pitching_war": {
+      "name": "Team Pitching Wins Above Replacement (WAR)",
+      "description": "Estimates the total number of wins a team’s pitching staff contributes over a replacement-level group.",
+      "why": "WAR is a comprehensive metric used to compare pitching contributions across teams and seasons.",
+      "formula": "WAR = Composite of multiple inputs including FIP, innings, and run environment"
+    },
+    "teams_pitching_fip": {
+      "name": "Team Fielding Independent Pitching (FIP)",
+      "description": "Estimates a team’s pitching performance based only on outcomes within the pitchers' control: strikeouts, walks, and home runs.",
+      "why": "FIP provides a defense-neutral evaluation of team pitching.",
+      "formula": "FIP = ((13 × HR) + (3 × BB) - (2 × K)) / IP + constant"
+    },
+    "teams_pitching_xfip": {
+      "name": "Team Expected Fielding Independent Pitching (xFIP)",
+      "description": "Adjusts FIP by replacing a team’s actual home run total with an expected home run rate based on fly balls.",
+      "why": "xFIP normalizes luck in home runs and gives a better projection of future performance.",
+      "formula": "xFIP = FIP with league average HR/FB ratio"
+    },
+    "teams_pitching_siera": {
+      "name": "Team Skill Interactive Earned Run Average (SIERA)",
+      "description": "Considers strikeouts, walks, and groundball rates to assess a team’s pitching skill more accurately than ERA.",
+      "why": "SIERA is one of the most predictive metrics for future team pitching performance.",
+      "formula": "SIERA = Based on BB%, K%, GB%, with park and environment adjustments"
+    },
+    "teams_pitching_bbpercent": {
+      "name": "Team Walk Percentage (BB%)",
+      "description": "Percentage of plate appearances resulting in a walk against a team.",
+      "why": "Highlights a pitching staff’s control and tendency to issue free passes.",
+      "formula": "BB% = (Walks / Batters Faced) × 100"
+    },
+    "teams_pitching_kpercent": {
+      "name": "Team Strikeout Precentage (K%)",
+      "description": "Percentage of batters struck out by the team’s pitchers.",
+      "why": "Demonstrates the team’s ability to get outs without the ball in play.",
+      "formula": "K% = (Strikeouts / Batters Faced) × 100"
+    },
+    "teams_pitching_kminusbbpercent": {
+      "name": "Team Strikeout Minus Walk Percentage (K-BB%)",
+      "description": "Difference between the team’s strikeout and walk percentages.",
+      "why": "K-BB% is a simple and powerful measure of pitching dominance and control.",
+      "formula": "K-BB% = K% - BB%"
+    },
+    "teams_pitching_babip": {
+      "name": "Team Batting Average for Balls in Play (BABIP)",
+      "description": "Measures how often balls in play fall for hits against a team.",
+      "why": "Used to evaluate a team’s luck, defense, and batted-ball management.",
+      "formula": "BABIP = (Hits - HR) / (AB - K - HR + SF)"
+    },
+    "teams_pitching_stuffplus": {
+      "name": "Team Stuff+",
+      "description": "Aggregate evaluation of pitch quality—velocity, spin, and movement—across the team’s pitchers.",
+      "why": "Helps identify overall raw talent in a team’s pitching arsenal.",
+      "formula": "Stuff+ = (Team Pitch Characteristics / League Avg) × 100"
+    },
+    "teams_pitching_locationplus": {
+      "name": "Team Location+",
+      "description": "Measures how well the team locates pitches relative to targets, adjusted for pitch type and batter handedness.",
+      "why": "Shows command quality across the team’s pitching staff.",
+      "formula": "Location+ = (Team Pitch Location Accuracy / League Avg) × 100"
+    },
+    "teams_pitching_pitchingplus": {
+      "name": "Team Pitching+",
+      "description": "Comprehensive stat combining Stuff+ and Location+ to summarize team pitching ability.",
+      "why": "Provides a holistic view of how effective a team is at both executing and commanding pitches.",
+      "formula": "Pitching+ = (Stuff+ + Location+) / 2"
     }
 }
 

@@ -145,21 +145,18 @@ struct PitcherCareerAdvancedStatsView: View {
                             selectedStat = "pitcher_stuffplus"
                         }) {
                             Text("Stuff+")
-                                .font(.parkFactorFontText)
                                 .foregroundColor(Color.gray)
                         }
                         Button(action: {
                             selectedStat = "pitcher_locationplus"
                         }) {
                             Text("Location+")
-                                .font(.parkFactorFontText)
                                 .foregroundColor(Color.gray)
                         }
                         Button(action: {
                             selectedStat = "pitcher_pitchingplus"
                         }) {
                             Text("Pitching+")
-                                .font(.parkFactorFontText)
                                 .foregroundColor(Color.gray)
                         }
                         
@@ -168,7 +165,7 @@ struct PitcherCareerAdvancedStatsView: View {
                         Text("\(careerStats[0].locationPlus ?? 0)")
                         Text("\(careerStats[0].pitchingPlus ?? 0)")
                     }
-                    .font(.parkFactorFontSmallText)
+                    .font(.parkFactorFontText)
                     .foregroundColor(.white)
                     .padding(.horizontal, 20)
                     .padding(.bottom, 20)
