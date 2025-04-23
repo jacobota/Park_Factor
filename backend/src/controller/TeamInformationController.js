@@ -35,4 +35,15 @@ router.get('/team-id/:teamAcronym', async (req, res) => {
     }
 });
 
+// Get Team schedule and results
+router.get('/team-schedule/:teamName', async (req, res) => {
+    try {
+        const response = await fetch(`${flaskUrl}/teams/api/mlb-team/schedule?team-name=${req.params.teamName}`);
+        const data = await response.json();
+        res.status(200).json(data);
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
+
 module.exports = router;

@@ -1,5 +1,6 @@
 from flask import Blueprint, jsonify, request
 import pybaseball as pb
+import numpy as np
 
 # Set up Blueprint for team_route
 team_route = Blueprint('team_route', __name__)
@@ -65,6 +66,7 @@ def get_team_schedule():
         
         schedule_data = pb.schedule_and_record(current_year, team_name)
         schedule_data_record = schedule_data.to_dict('records')
+        print(schedule_data_record)
 
         # Replace NaN values with None
         schedule_data_record = replace_nan_with_none(schedule_data_record)
