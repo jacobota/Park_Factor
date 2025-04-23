@@ -66,11 +66,23 @@ def get_team_schedule():
         
         schedule_data = pb.schedule_and_record(current_year, team_name)
         schedule_data_record = schedule_data.to_dict('records')
-        print(schedule_data_record)
 
         # Replace NaN values with None
         schedule_data_record = replace_nan_with_none(schedule_data_record)
 
-        return jsonify(schedule_data_record)
+        # Clean some data up for better output:
+        for record in schedule_data_record:
+            if "Date" in record and record["Date"]:
+                date_split = record["Date"].split(", ")
+                record["Date"] = date_split[1].strip()
+        
+            if "W/L" in record and record["W/L"]:
+                record["W/L"] = record["W/L"].split("-")[0].strip()
+
+            if "Home_Away" in record and record["Home_Away"]:
+                if record["Home_Away"] == "@":
+                    record["Home_Away"] = "Away"
+
+        return jsonify({"schedule_and_results": schedule_data_record})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
