@@ -103,7 +103,7 @@ struct RespectiveTeamPageView: View {
                 } else if selectedTab == "Pitching" {
                     TeamPitchingSeasonStatsView(teamStats: teamStats ?? TeamStats(teamBatting: [TeamBatting(average: nil, age: nil, babip: nil, walks: nil, bbPercentage: nil, bbToK: nil, bsr: nil, cs: nil, hits: nil, hr: nil, iso: nil, kPercentage: nil, obp: nil, ops: nil, runs: nil, sb: nil, slg: nil, strikeout: nil, war: nil, woba: nil, wrcPlus: nil, wsb: nil)], teamFielding: [TeamFielding(drs: nil, errors: nil, fieldingPercentage: nil, oaa: nil)], teamPitching:  [TeamPitching(average: nil, babip: nil, walks: nil, bbPercentage: nil, era: nil, fip: nil, gbPercentage: nil, hitsAllowed: nil, hrPerFb: nil, kPercentage: nil, kMinusBbPercentage: nil, losses: nil, lobPercentage: nil, locationPlus: nil, pitchingPlus: nil, runs: nil, siera: nil, strikeouts: nil, saves: nil, stuffPlus: nil, wins: nil, war: nil, whip: nil, vfaPi: nil, xfip: nil)]))
                 } else if selectedTab == "Schedule" {
-                    TeamScheduleStatsView()
+                    TeamScheduleStatsView(teamAbbr: team.teamIDBR)
                 }
                 
                 Spacer()
