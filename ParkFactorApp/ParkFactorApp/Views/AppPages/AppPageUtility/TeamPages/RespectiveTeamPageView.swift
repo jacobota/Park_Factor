@@ -18,9 +18,9 @@ struct RespectiveTeamPageView: View {
     
     @State var followingTeams: [Team] = []
     
-    @State private var selectedTab: String = "Hitting"
+    @State private var selectedTab: String = "Schedule"
     
-    let subTabs = ["Hitting", "Pitching", "Schedule"]
+    let subTabs = ["Schedule", "Hitting", "Pitching"]
     
     var body: some View {
         ZStack {

@@ -46,6 +46,7 @@ struct TeamScheduleStatsView: View {
                         DatePicker("", selection: $selectedDate, in: dateRange, displayedComponents: .date)
                             .frame(width: 125, height: 40, alignment: .trailing)
                             .background(Color.white)
+                            .accentColor(Color.blue)
                     }
                     .padding(10)
                     if selectedGameDetails != nil {

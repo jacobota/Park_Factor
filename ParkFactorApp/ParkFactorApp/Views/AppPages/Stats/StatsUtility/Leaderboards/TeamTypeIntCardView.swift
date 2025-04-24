@@ -141,6 +141,8 @@ struct TeamTypeIntCardView<T: TeamStatIntProtocol>: View {
             return "TBD"
         case "ATH":
             return "OAK"
+        case "MIA":
+            return "FLA"
         default:
             return abbr
         }

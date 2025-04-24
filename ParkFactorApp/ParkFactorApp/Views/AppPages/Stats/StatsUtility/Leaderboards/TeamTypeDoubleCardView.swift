@@ -75,7 +75,7 @@ struct TeamTypeDoubleCardView<T: TeamStatDoubleProtocol>: View {
             return "Rangers"
         case "HOU":
             return "Astros"
-        case "OAK":
+        case "ATH":
             return "Athletics"
         case "CHW":
             return "White Sox"
@@ -140,6 +140,8 @@ struct TeamTypeDoubleCardView<T: TeamStatDoubleProtocol>: View {
             return "TBD"
         case "ATH":
             return "OAK"
+        case "MIA":
+            return "FLA"
         default:
             return abbr
         }

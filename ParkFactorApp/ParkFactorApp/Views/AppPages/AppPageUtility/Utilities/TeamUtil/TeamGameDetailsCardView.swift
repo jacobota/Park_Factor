@@ -160,12 +160,15 @@ struct TeamGameDetailsCardView: View {
     }
     
     private func getTeamPicId(_ id: String) -> String {
-        print(id)
         switch id {
         case "ATH":
             return "OAK"
         case "LAA":
             return "ANA"
+        case "TBR":
+            return "TBD"
+        case "MIA":
+            return "FLA"
         default:
             return id
         }
@@ -173,7 +176,7 @@ struct TeamGameDetailsCardView: View {
 }
 
 #Preview {
-    TeamGameDetailsCardView(gameDetails: GameDetails(attendance: 39393, dayOrNight: "D", date: "Mar 27", gb: "1.0", homeAway: "Home", inn: 10, loss: "Long", opp: "CLE", origScheduled: nil, r: 4, ra: 7, rank: 3, save: "Sewald", streak: -1, time: "2:41", tm: "KCR", record: "0-1", wl: "L", win: "Clase", cli: "1.02"), previousGame: false)
+    TeamGameDetailsCardView(gameDetails: GameDetails(attendance: 39393, dayOrNight: "D", date: "Mar 27", gb: "1.0", homeAway: "Home", inn: 10, loss: "Long", opp: "TBR", origScheduled: nil, r: 4, ra: 7, rank: 3, save: "Sewald", streak: -1, time: "2:41", tm: "KCR", record: "0-1", wl: "L", win: "Clase", cli: "1.02"), previousGame: false)
 }
 
 //#Preview {
