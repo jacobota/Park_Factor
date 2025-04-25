@@ -52,8 +52,12 @@ struct PitchType: Codable, Identifiable {
         }
         
         let result: Decimal
-        // Add the values if both are negative, but normal math if they are any other condition
-        result = leagueX - diffX
+        // Add the values if both are positive or both are negative, but normal math if they are any other condition
+        if leagueX > 0 && diffX > 0 || leagueX < 0 && diffX < 0{
+            result = leagueX + diffX
+        } else {
+            result = leagueX - diffX
+        }
         
         
         // For the pitcher arsenal graph, need to flip the sign if the pitcher is Righty, for correctly orienting the points
