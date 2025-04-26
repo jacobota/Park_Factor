@@ -86,7 +86,7 @@ player_info_data = {
 ```
 
 - Added Pitcher functions that showed pitch movement and spin (__init__.py)
-'''
+```
 statcast_pitcher_active_spin,
 statcast_pitcher_pitch_movement,
-'''
+```
