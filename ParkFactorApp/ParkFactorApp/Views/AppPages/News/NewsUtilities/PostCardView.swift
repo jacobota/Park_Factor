@@ -152,7 +152,7 @@ struct PostCardView: View {
         .alert(isPresented: $showDeleteAlert) {
             Alert(
                 title: Text("Delete Post"),
-                message: Text("Are you sure you want to delete this post? \n\nThis action cannot is permanent."),
+                message: Text("Are you sure you want to delete this post? \n\nThis action is permanent."),
                 primaryButton: .destructive(Text("Delete")) {
                     Task {
                         await deletePost()

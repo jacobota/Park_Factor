@@ -18,7 +18,7 @@ struct HitterCareerAdvancedStatsView: View {
             if let careerStats = hittingCareerStatsHelper?.hittingCareerStats {
                 VStack {
                     HStack {
-                        Text("Standard")
+                        Text("Advanced")
                             .font(.parkFactorFontSubtitleNorwester)
                             .foregroundStyle(Color.white)
                         
