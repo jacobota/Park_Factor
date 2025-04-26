@@ -47,7 +47,30 @@ Park Factor offers a personalized and interactive way to stay connected with Maj
 - Sports News API: Delivers the latest MLB news
 - PyBaseball Integration: Fetches advanced player stats and performance metrics
 
-### Updates to pybaseball Library
+## Steps to Download and Run
+
+### Node
+
+- Must have Node installed
+- Start the node server from the backend directory
+   - `node app.js`
+ 
+### Flask
+
+- Have Python installed
+- Install venv
+- Install pybaseball package if not currently in venv profile
+- Activate venv with
+    - `source venv/bin/activate`
+- Start Flask
+    - `python app.py`
+ 
+### SwiftUI
+
+- Open up XCode
+- Either use `cmd-r` to start the simulator or go to ContentView.swift for the preview version
+
+## Updates to pybaseball Library
 
 - Changed return for player_bios function
 ```
