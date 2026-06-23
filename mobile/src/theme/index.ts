@@ -10,14 +10,17 @@ export const colors = {
   primary: '#00FEC5',
   // Color.parkFactorSecondary = .black
   secondary: '#000000',
-  // Color.parkFactorAppPageBackground = Color(red: 0.117, green: 0.115, blue: 0.115)
-  pageBackground: '#1E1D1D',
+  // Sleek "Concourse" look: true-black feed with subtly-elevated cards.
+  pageBackground: '#000000',
 
   white: '#FFFFFF',
   lightGray: '#AEAEB2', // iOS systemGray-ish, used for unselected tab tint
   gray: '#8E8E93',
   cardBackground: '#2C2B2B',
+  // Subtly-elevated card on a true-black feed (sleek "Concourse" look).
+  elevated: '#121316',
   border: '#3A3A3C',
+  hairline: '#26262A',
 
   // Continuous percentile gradient anchors (red -> yellow -> green)
   bad: '#E0245E',

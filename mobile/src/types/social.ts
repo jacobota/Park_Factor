@@ -82,6 +82,22 @@ export const formatLongDate = (iso?: string | null): string | null => {
   return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: '2-digit' });
 };
 
+/** Compact relative time ("3h", "2d", "1w") for feed meta rows; empty for invalid/missing. */
+export const timeAgo = (iso?: string | null): string => {
+  if (!iso) return '';
+  const then = new Date(iso).getTime();
+  if (isNaN(then)) return '';
+  const secs = Math.max(0, (Date.now() - then) / 1000);
+  if (secs < 60) return 'now';
+  const mins = secs / 60;
+  if (mins < 60) return `${Math.floor(mins)}m`;
+  const hours = mins / 60;
+  if (hours < 24) return `${Math.floor(hours)}h`;
+  const days = hours / 24;
+  if (days < 7) return `${Math.floor(days)}d`;
+  return `${Math.floor(days / 7)}w`;
+};
+
 /** NewsArticle.cleanedContent — strip leading dateline and trailing "[+N chars]". */
 export const cleanedContent = (content: string): string =>
   content

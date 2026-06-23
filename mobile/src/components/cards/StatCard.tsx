@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { getStatCategory } from '@/data/statCategories';
+import { Card } from '@/components/Card';
 import { ScreenContainer } from '@/components/ScreenContainer';
 import { colors, radius, spacing, typography } from '@/theme';
 
@@ -29,7 +30,7 @@ export function StatCard({
   const basis = `${100 / columns}%`;
 
   return (
-    <View style={styles.card}>
+    <Card style={styles.card}>
       <Text style={styles.title}>{title}</Text>
       <View style={styles.grid}>
         {cells.map((cell, i) => (
@@ -43,7 +44,7 @@ export function StatCard({
       </View>
 
       <StatExplanationModal statKey={selected} onClose={() => setSelected(null)} />
-    </View>
+    </Card>
   );
 }
 
@@ -86,8 +87,8 @@ const Section = ({ heading, body }: { heading: string; body: string }) => (
 );
 
 const styles = StyleSheet.create({
-  card: { backgroundColor: colors.secondary, borderRadius: radius.md, padding: spacing.lg, marginBottom: spacing.sm },
-  title: { ...typography.subtitleNorwester, color: colors.white, marginBottom: spacing.md },
+  card: { backgroundColor: colors.elevated, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.hairline, borderRadius: radius.md, padding: spacing.lg, marginBottom: spacing.lg },
+  title: { ...typography.smallTextNorwester, color: colors.lightGray, letterSpacing: 1.2, textTransform: 'uppercase', marginBottom: spacing.md },
   grid: { flexDirection: 'row', flexWrap: 'wrap', rowGap: spacing.md },
   cell: { alignItems: 'center' },
   label: { ...typography.smallText, color: colors.gray, marginBottom: 4 },

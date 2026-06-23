@@ -1,8 +1,12 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { colors, typography } from '@/theme';
+import { colors, fonts, radius } from '@/theme';
 
-/** Horizontal text toggle (the StatsView Teams/Players switch): active mint, inactive gray. */
+/**
+ * Horizontal segmented toggle. Uppercase, letter-spaced labels; the active tab is wrapped in a
+ * thin mint outline (the "Concourse" look). Inactive tabs keep a transparent border so heights
+ * stay aligned.
+ */
 export function SubTabBar({
   tabs,
   selected,
@@ -17,19 +21,25 @@ export function SubTabBar({
       horizontal
       showsHorizontalScrollIndicator={false}
       contentContainerStyle={styles.row}
-      scrollEnabled={false}
     >
-      {tabs.map((tab) => (
-        <TouchableOpacity key={tab} onPress={() => onSelect(tab)} style={styles.tab}>
-          <Text style={[styles.label, { color: selected === tab ? colors.primary : colors.gray }]}>{tab}</Text>
-        </TouchableOpacity>
-      ))}
+      {tabs.map((tab) => {
+        const active = selected === tab;
+        return (
+          <TouchableOpacity
+            key={tab}
+            onPress={() => onSelect(tab)}
+            style={[styles.tab, { borderColor: active ? colors.primary : 'transparent' }]}
+          >
+            <Text style={[styles.label, { color: active ? colors.primary : colors.gray }]}>{tab.toUpperCase()}</Text>
+          </TouchableOpacity>
+        );
+      })}
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  row: { paddingHorizontal: 16, alignItems: 'center' },
-  tab: { paddingVertical: 8, paddingHorizontal: 16 },
-  label: { ...typography.textNorwester },
+  row: { paddingHorizontal: 14, alignItems: 'center' },
+  tab: { paddingVertical: 5, paddingHorizontal: 11, marginRight: 8, borderRadius: radius.sm, borderWidth: 1 },
+  label: { fontFamily: fonts.norwester, fontSize: 13, letterSpacing: 1.2 },
 });

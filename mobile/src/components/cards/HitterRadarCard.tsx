@@ -1,7 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 import { RadarChart, RadarAxis } from '@/components/charts/RadarChart';
+import { Card } from '@/components/Card';
 import { getHitterPercentiles } from '@/api/stats';
 import { getStat } from '@/types';
 import { toNum } from '@/utils/format';
@@ -29,14 +30,14 @@ export function HitterRadarCard({ mlbamId, color }: { mlbamId: number; color: st
   const values = KEYS.map((k) => toNum(getStat(data, k)));
 
   return (
-    <View style={styles.card}>
+    <Card style={styles.card} accent={color}>
       <Text style={styles.title}>Player Summary</Text>
       <RadarChart axes={AXES} values={values} color={color} />
-    </View>
+    </Card>
   );
 }
 
 const styles = StyleSheet.create({
-  card: { backgroundColor: colors.secondary, borderRadius: radius.md, padding: spacing.lg, marginBottom: spacing.sm },
+  card: { backgroundColor: colors.elevated, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.hairline, borderRadius: radius.md, padding: spacing.lg, marginBottom: spacing.lg },
   title: { ...typography.subtitleNorwester, color: colors.white, marginBottom: spacing.md },
 });

@@ -2,6 +2,7 @@ import React from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 import { PlayerLeaderboardRow, TeamLeaderboardRow } from './LeaderboardRow';
+import { Card } from '@/components/Card';
 import type { LeaderboardStat } from '@/screens/stats/leaderboardConfig';
 import { colors, radius, spacing, typography } from '@/theme';
 import type { Leaderboard } from '@/types';
@@ -38,7 +39,7 @@ export function LeaderboardList({
         const entries = data[stat.key];
         if (!entries || entries.length === 0) return null;
         return (
-          <View key={stat.key} style={styles.card}>
+          <Card key={stat.key} style={styles.card}>
             <Text style={styles.title}>{stat.title}</Text>
             {entries.map((entry, index) =>
               variant === 'player' ? (
@@ -53,7 +54,7 @@ export function LeaderboardList({
                 <TeamLeaderboardRow key={index} index={index} entry={entry} decimals={stat.decimals} />
               ),
             )}
-          </View>
+          </Card>
         );
       })}
     </View>
@@ -62,13 +63,15 @@ export function LeaderboardList({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.elevated,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.hairline,
     borderRadius: radius.lg,
     padding: spacing.lg,
     marginHorizontal: spacing.lg,
     marginVertical: spacing.sm,
   },
-  title: { ...typography.subtitleNorwester, color: colors.primary, marginBottom: spacing.sm },
+  title: { ...typography.smallTextNorwester, color: colors.lightGray, letterSpacing: 1.2, textTransform: 'uppercase', marginBottom: spacing.sm },
   state: { marginTop: 40 },
   error: { ...typography.text, color: colors.bad, textAlign: 'center', marginTop: 40 },
 });

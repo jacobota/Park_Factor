@@ -1,4 +1,4 @@
-import type { Player, User } from '@/types';
+import type { NewsArticle, Player, Post, User } from '@/types';
 
 /** Auth flow stack (shown when logged out). */
 export type AuthStackParamList = {
@@ -21,4 +21,29 @@ export type ProfileStackParamList = {
 /** Stats tab stack. */
 export type StatsStackParamList = ProfileStackParamList & {
   StatsHome: undefined;
+};
+
+/** News / Concourse tab stack. */
+export type NewsStackParamList = {
+  NewsHome: undefined;
+  ArticleDetail: { article: NewsArticle };
+  UserProfile: { username: string };
+  EditPost: { post: Post };
+};
+
+/** Following tab stack — embeds the player/team profile destinations. */
+export type FollowingStackParamList = ProfileStackParamList & {
+  FollowingHome: undefined;
+};
+
+/** Account tab stack — profile destinations + settings detail screens. */
+export type AccountStackParamList = ProfileStackParamList & {
+  AccountHome: undefined;
+  UserProfile: { username: string };
+  EditPost: { post: Post };
+  ChangeEmail: undefined;
+  ChangePassword: undefined;
+  ChangeUserTag: undefined;
+  ChangeFavoriteTeam: undefined;
+  ChangeFavoritePlayer: undefined;
 };

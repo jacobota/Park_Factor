@@ -1,10 +1,11 @@
 import React from 'react';
-import { ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useQuery } from '@tanstack/react-query';
 import { StatGrid } from './StatGrid';
+import { Card } from '@/components/Card';
 import { getHitterSeasonStats, getPitcherSeasonStats } from '@/api/stats';
 import { getStat, playerFullName } from '@/types';
 import type { Player } from '@/types';
@@ -62,9 +63,9 @@ export function PlayerStatCard({ player, isFollowing }: { player: Player; isFoll
         : null;
 
   return (
-    <TouchableOpacity
+    <Card
       style={styles.card}
-      activeOpacity={0.8}
+      accent={team ? teamColorByFG(team) : undefined}
       onPress={() => navigation.push('PlayerPage', { player })}
     >
       <View style={styles.header}>
@@ -82,13 +83,13 @@ export function PlayerStatCard({ player, isFollowing }: { player: Player; isFoll
       ) : (
         cells && <StatGrid cells={cells} />
       )}
-    </TouchableOpacity>
+    </Card>
   );
 }
 
 const AVATAR = 50;
 const styles = StyleSheet.create({
-  card: { backgroundColor: colors.secondary, borderRadius: radius.md, marginBottom: spacing.sm },
+  card: { backgroundColor: colors.elevated, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.hairline, borderRadius: radius.md, marginBottom: spacing.lg },
   header: { flexDirection: 'row', alignItems: 'center', padding: 20 },
   avatar: { width: AVATAR, height: AVATAR, borderRadius: AVATAR / 2, overflow: 'hidden' },
   avatarImg: { width: AVATAR, height: AVATAR },

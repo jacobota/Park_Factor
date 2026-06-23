@@ -13,7 +13,7 @@ export function TabHeader({ title }: { title: string }) {
 }
 
 const styles = StyleSheet.create({
-  row: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 8 },
-  logo: { width: 48, height: 48, borderRadius: 8, marginRight: 8 },
-  title: { ...typography.title, color: colors.primary },
+  row: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, paddingTop: 4, paddingBottom: 8 },
+  logo: { width: 40, height: 40, borderRadius: 7, marginRight: 10 },
+  title: { ...typography.bigTextNorwester, fontSize: 25, color: colors.primary },
 });

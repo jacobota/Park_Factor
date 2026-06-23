@@ -1,15 +1,15 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { StatsScreen } from '@/screens/stats/StatsScreen';
+import { FollowingScreen } from '@/screens/following/FollowingScreen';
 import { PlayerPage } from '@/screens/profile/PlayerPage';
 import { TeamPage } from '@/screens/team/TeamPage';
 import { colors } from '@/theme';
-import type { StatsStackParamList } from './types';
+import type { FollowingStackParamList } from './types';
 
-const Stack = createNativeStackNavigator<StatsStackParamList>();
+const Stack = createNativeStackNavigator<FollowingStackParamList>();
 
-/** Stats tab stack — list screen plus the player/team profile destinations. */
-export function StatsNavigator() {
+/** Following tab stack — follow management plus the shared player/team profile destinations. */
+export function FollowingNavigator() {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -19,7 +19,7 @@ export function StatsNavigator() {
         contentStyle: { backgroundColor: colors.pageBackground },
       }}
     >
-      <Stack.Screen name="StatsHome" component={StatsScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="FollowingHome" component={FollowingScreen} options={{ headerShown: false }} />
       <Stack.Screen name="PlayerPage" component={PlayerPage} options={{ title: '' }} />
       <Stack.Screen name="TeamPage" component={TeamPage} options={{ title: '' }} />
     </Stack.Navigator>

@@ -181,3 +181,13 @@ batch overwrites the day's provisional numbers.
 - Hot store for live data: Postgres table vs. Redis cache
 - Serving API: extend existing Express backend vs. fresh Node service in the monorepo `apps/`
 - How aggressively to compute own (provisional) modeled metrics live vs. wait for Savant reconcile
+
+## Image uploads (deferred from Swift translation)
+
+Swift uploaded directly to S3 with client-side AWS creds (NOT ported). Rebuild via backend
+pre-signed URLs. Existing buckets (region `us-west-1`):
+- profile pics: `parkfactor-profilepictures`
+- post images: `parkfactor-postimages`
+
+⚠️ Rotate the AWS access key/secret that were committed in the old `Env.plist`.
+RN gaps to restore once uploads exist: profile-picture change, post/edit image attach.

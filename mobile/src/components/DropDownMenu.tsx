@@ -44,7 +44,9 @@ export function DropDownMenu({
 
 const styles = StyleSheet.create({
   wrapper: {
-    backgroundColor: colors.secondary,
+    backgroundColor: colors.elevated,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.hairline,
     borderRadius: radius.lg,
     marginHorizontal: 16,
     marginVertical: 8,

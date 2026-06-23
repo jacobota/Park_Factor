@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { PercentileBar } from './PercentileBar';
+import { Card } from '@/components/Card';
 import { StatExplanationModal } from '@/components/cards/StatCard';
 import { colors, radius, spacing, typography } from '@/theme';
 
@@ -16,7 +17,7 @@ export function PercentileCard({ title, rows }: { title: string; rows: Percentil
   if (rows.length === 0) return null;
 
   return (
-    <View style={styles.card}>
+    <Card style={styles.card}>
       <Text style={styles.title}>{title}</Text>
       {rows.map((row) => (
         <View key={row.catKey} style={styles.row}>
@@ -29,12 +30,12 @@ export function PercentileCard({ title, rows }: { title: string; rows: Percentil
         </View>
       ))}
       <StatExplanationModal statKey={selected} onClose={() => setSelected(null)} />
-    </View>
+    </Card>
   );
 }
 
 const styles = StyleSheet.create({
-  card: { backgroundColor: colors.secondary, borderRadius: radius.md, padding: spacing.lg, marginBottom: spacing.sm },
+  card: { backgroundColor: colors.elevated, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.hairline, borderRadius: radius.md, padding: spacing.lg, marginBottom: spacing.lg },
   title: { ...typography.subtitleNorwester, color: colors.white, marginBottom: spacing.md },
   row: { flexDirection: 'row', alignItems: 'center', marginBottom: spacing.md },
   labelBox: { width: 80 },

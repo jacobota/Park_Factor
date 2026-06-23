@@ -1,14 +1,15 @@
 import React from 'react';
-import { ActivityIndicator, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useQuery } from '@tanstack/react-query';
 import { StatGrid } from './StatGrid';
+import { Card } from '@/components/Card';
 import { getTeamSeasonStats } from '@/api/stats';
 import { getStat } from '@/types';
 import type { Team } from '@/types';
-import { teamByBR } from '@/utils/teams';
+import { teamByBR, teamColor } from '@/utils/teams';
 import { fmt, fmtInt, toNum } from '@/utils/format';
 import { colors, radius, spacing, typography } from '@/theme';
 import type { ProfileStackParamList } from '@/navigation/types';
@@ -40,9 +41,9 @@ export function TeamStatCard({ team, isFollowing }: { team: Team; isFollowing: b
       : null;
 
   return (
-    <TouchableOpacity
+    <Card
       style={styles.card}
-      activeOpacity={0.8}
+      accent={teamColor(teamByBR(team.teamIDBR))}
       onPress={() => navigation.push('TeamPage', { teamAbbr: team.teamIDBR })}
     >
       <View style={styles.header}>
@@ -64,13 +65,13 @@ export function TeamStatCard({ team, isFollowing }: { team: Team; isFollowing: b
       ) : (
         cells && <StatGrid cells={cells} />
       )}
-    </TouchableOpacity>
+    </Card>
   );
 }
 
 const LOGO = 50;
 const styles = StyleSheet.create({
-  card: { backgroundColor: colors.secondary, borderRadius: radius.md, marginBottom: spacing.sm },
+  card: { backgroundColor: colors.elevated, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.hairline, borderRadius: radius.md, marginBottom: spacing.lg },
   header: { flexDirection: 'row', alignItems: 'center', padding: 20 },
   logo: {
     width: LOGO,

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useQuery } from '@tanstack/react-query';
 import { PitchScatterChart } from '@/components/charts/PitchScatterChart';
+import { Card } from '@/components/Card';
 import { StatExplanationModal } from '@/components/cards/StatCard';
 import { getPitcherArsenal } from '@/api/stats';
 import { pitcherBreakX, pitchPercentage, pitchPoint, shortenedPitchName } from '@/types';
@@ -30,12 +31,12 @@ export function PitchArsenalCard({ mlbamId }: { mlbamId: number }) {
 
   return (
     <>
-      <View style={styles.card}>
+      <Card style={styles.card}>
         <Text style={styles.title}>Movement Profile</Text>
         <PitchScatterChart points={points} />
-      </View>
+      </Card>
 
-      <View style={styles.card}>
+      <Card style={styles.card}>
         <Text style={styles.title}>Summary</Text>
         <View style={styles.headerRow}>
           {SUMMARY_COLS.map((c) => (
@@ -54,7 +55,7 @@ export function PitchArsenalCard({ mlbamId }: { mlbamId: number }) {
             <Text style={[styles.col, styles.cell]}>{fmt(pitchPercentage(pitch), 2)}%</Text>
           </View>
         ))}
-      </View>
+      </Card>
 
       <StatExplanationModal statKey={selected} onClose={() => setSelected(null)} />
     </>
@@ -62,7 +63,7 @@ export function PitchArsenalCard({ mlbamId }: { mlbamId: number }) {
 }
 
 const styles = StyleSheet.create({
-  card: { backgroundColor: colors.secondary, borderRadius: radius.md, padding: spacing.lg, marginBottom: spacing.sm },
+  card: { backgroundColor: colors.elevated, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.hairline, borderRadius: radius.md, padding: spacing.lg, marginBottom: spacing.lg },
   title: { ...typography.subtitleNorwester, color: colors.white, marginBottom: spacing.md },
   headerRow: { flexDirection: 'row', marginBottom: spacing.sm },
   dataRow: { flexDirection: 'row', marginBottom: spacing.xs },

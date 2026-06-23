@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet } from 'react-native';
-import { ScreenContainer } from '@/components/ScreenContainer';
-import { TabHeader } from '@/components/TabHeader';
-import { SubTabBar } from '@/components/SubTabBar';
+import { TabScreen } from '@/components/TabScreen';
 import { PlayerStatsSection } from './PlayerStatsSection';
 import { TeamStatsSection } from './TeamStatsSection';
-import { colors } from '@/theme';
 
 const TABS = ['Teams', 'Players'];
 
@@ -14,16 +11,15 @@ export function StatsScreen() {
   const [tab, setTab] = useState('Teams');
 
   return (
-    <ScreenContainer background={colors.pageBackground}>
-      <TabHeader title="Stats" />
-      <SubTabBar tabs={TABS} selected={tab} onSelect={setTab} />
-      <ScrollView contentContainerStyle={styles.content}>
+    <TabScreen title="Stats" tabs={TABS} selected={tab} onSelect={setTab}>
+      <ScrollView style={styles.scroll} contentContainerStyle={styles.content}>
         {tab === 'Teams' ? <TeamStatsSection /> : <PlayerStatsSection />}
       </ScrollView>
-    </ScreenContainer>
+    </TabScreen>
   );
 }
 
 const styles = StyleSheet.create({
-  content: { paddingTop: 8, paddingBottom: 32 },
+  scroll: { flex: 1 },
+  content: { paddingBottom: 24 },
 });
