@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "Park Factor",
+    "slug": "park-factor",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "scheme": "parkfactor",
+    "userInterfaceStyle": "dark",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.parkfactor.app"
+    },
+    "android": {
+      "package": "com.parkfactor.app"
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-font",
+      "expo-asset"
+    ]
+  }
+}

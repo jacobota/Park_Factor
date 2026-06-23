@@ -21,4 +21,4 @@ app.register_blueprint(team_route, url_prefix='/teams')
 app.register_blueprint(team_stats_route, url_prefix='/team-stats')
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    app.run(debug=True, host='0.0.0.0', port=5000)
