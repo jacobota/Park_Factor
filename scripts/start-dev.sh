@@ -24,7 +24,8 @@ for arg in "$@"; do
   esac
 done
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# Repo root is one level up — this script lives in scripts/.
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 LOG_DIR="$ROOT/.dev-logs"
 mkdir -p "$LOG_DIR"
 
@@ -77,7 +78,7 @@ if [ -x "$ROOT/stats_api/venv/bin/python" ]; then
   FLASK_PY="$ROOT/stats_api/venv/bin/python"
 else
   echo "⚠️  stats_api/venv not found — falling back to system python3."
-  echo "   Create it with:  cd stats_api && python3 -m venv venv && venv/bin/pip install -r requirements.txt"
+  echo "   Run ./scripts/setup.sh once to create it (and build the DuckDB stats store)."
   FLASK_PY="$(command -v python3)"
 fi
 

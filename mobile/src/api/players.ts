@@ -27,22 +27,14 @@ export const getPlayerBio = async (bbrefId: string): Promise<PlayerBio | null> =
   };
 };
 
-/** GET /hitters/stats/career/:fgId/:firstYear/:lastYear — per-season career rows. */
-export const getHitterCareer = async (
-  fgId: number,
-  firstYear: number,
-  lastYear: number,
-): Promise<HittingCareerStats[]> =>
+/** GET /hitters/stats/career/:mlbamId — career totals (single aggregate row). */
+export const getHitterCareer = async (mlbamId: number): Promise<HittingCareerStats[]> =>
   (await api.get<{ hitting_career_stats?: HittingCareerStats[] | null }>(
-    `/hitters/stats/career/${fgId}/${firstYear}/${lastYear}`,
+    `/hitters/stats/career/${mlbamId}`,
   )).hitting_career_stats ?? [];
 
-/** GET /pitchers/stats/career/:fgId/:firstYear/:lastYear — per-season career rows. */
-export const getPitcherCareer = async (
-  fgId: number,
-  firstYear: number,
-  lastYear: number,
-): Promise<PitchingCareerStats[]> =>
+/** GET /pitchers/stats/career/:mlbamId — career totals (single aggregate row). */
+export const getPitcherCareer = async (mlbamId: number): Promise<PitchingCareerStats[]> =>
   (await api.get<{ pitching_career_stats?: PitchingCareerStats[] | null }>(
-    `/pitchers/stats/career/${fgId}/${firstYear}/${lastYear}`,
+    `/pitchers/stats/career/${mlbamId}`,
   )).pitching_career_stats ?? [];

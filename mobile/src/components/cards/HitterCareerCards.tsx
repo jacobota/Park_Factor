@@ -37,8 +37,8 @@ const advancedCells = (s: HittingCareerStats): StatCell[] => [
 
 export function HitterCareerCards({ player }: { player: Player }) {
   const { data, isLoading } = useQuery({
-    queryKey: ['hitter-career', player.keyFangraphs],
-    queryFn: () => getHitterCareer(player.keyFangraphs ?? 0, player.mlbPlayedFirst ?? 0, player.mlbPlayedLast ?? 0),
+    queryKey: ['hitter-career', player.keyMlbam],
+    queryFn: () => getHitterCareer(player.keyMlbam ?? 0),
   });
 
   const row = data?.[0];

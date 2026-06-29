@@ -6,6 +6,7 @@ from io import BytesIO
 import matplotlib
 matplotlib.use('Agg')
 from routes import savant_sources
+from store import read as store_read
 
 # Set up Blueprint for player_route
 hitter_route = Blueprint('hitter_route', __name__)
@@ -86,8 +87,10 @@ def get_hitter_stats_this_season_preview():
         else:
             key_mlbam = int(key_mlbam)
         
-        # Get BBREF batting stats for the current season and filter by playerid
-        bbref_hitter_data = pb.batting_stats_bref(current_year);
+        # Get BBREF batting stats for the current season and filter by playerid (store-first).
+        bbref_hitter_data = store_read.season_frame('bbref_batting', current_year)
+        if bbref_hitter_data is None or len(bbref_hitter_data) == 0:
+            bbref_hitter_data = pb.batting_stats_bref(current_year)
         bbref_hitter_record = bbref_hitter_data[bbref_hitter_data['mlbID'] == key_mlbam].to_dict('records')
 
         if not bbref_hitter_record:
@@ -99,52 +102,28 @@ def get_hitter_stats_this_season_preview():
     except Exception as e:
         return jsonify({'hitter_preview_stats': None})
 
-"""Get stats for a hitter for their career. The stats will be returned for the player with the given playerid
-and start year and last (previous) year of their career. The playerid from fangraphs is required to get the 
-stats.
+"""Get a hitter's career totals. FanGraphs career lines (pb.batting_stats) are Cloudflare-blocked,
+so this is built from the MLB Stats API career hydrate + career bWAR, keyed by MLBAM id.
+See routes/savant_sources.py.
 
-Return: 
-    JSON: The hitter stats for their career
+Return:
+    JSON: The hitter's career totals (single aggregate row)
 Throws:
-    Exception: If an error occurs while getting player stats or playerid, start year or end year is not given
+    Exception: If an error occurs while getting player stats or the id is not given
 """
 
 @hitter_route.route('/api/hitter-stats/career')
 def get_hitter_stats_career():
     try:
-        # Get hitter id from query parameters
-        key_fangraphs = request.args.get('fg-id')
-        start_year = request.args.get('start-year')
-        end_year = request.args.get('end-year')
-        
-        # Check if key_fangraphs is given or convert to int
-        if not key_fangraphs:
-            return jsonify({'error': 'Fangraph ID required'}), 400
-        else:
-            key_fangraphs = int(key_fangraphs)
+        key_mlbam = request.args.get('mlbam-id')
+        if not key_mlbam:
+            return jsonify({'error': 'Savant ID required'}), 400
+        key_mlbam = int(key_mlbam)
 
-        # Ensure start_year and end_year are present
-        if not start_year or not end_year:
-            return jsonify({'error': 'Start year and end year are required'}), 400
-
-        # Get Fangraphs batting stats for the current season and filter by playerid
-        fg_hitter_data = pb.batting_stats(start_year, end_year, qual=1, ind=0);
-        fg_hitter_record = fg_hitter_data[fg_hitter_data['IDfg'] == key_fangraphs].to_dict('records')
-        
-        if not fg_hitter_record:
+        record = savant_sources.hitter_career(key_mlbam)
+        if not record:
             return jsonify({'hitting_career_stats': None})
-
-        # Select specific attributes to return for batting, sprint speed, oaa stats
-        fg_hitter_record_selected_attributes = ['G', 'AVG', 'OBP', 'SLG', 'OPS', 'WAR', 'HR', 'R', 'H', 'RBI', 'SB', 'wOBA', 'EV', 'maxEV', 'Barrel%', 'HardHit%', 'Swing%', 'Z-Swing%', 'Contact%', 'WPA', 'BB%', 'K%', 'BB/K', 'BsR', 'CS', 'wSB', 'ISO', 'BABIP', 'wRC+']
-        fg_selected_attribute_record = [
-            {attr: hitter[attr] for attr in fg_hitter_record_selected_attributes if attr in hitter}
-            for hitter in fg_hitter_record
-        ]
-
-        fg_selected_attribute_record = replace_nan_with_none(fg_selected_attribute_record)
-        
-
-        return jsonify({'hitting_career_stats': fg_selected_attribute_record})
+        return jsonify({'hitting_career_stats': [replace_nan_with_none(record)]})
     except Exception as e:
         return jsonify({'hitting_career_stats': None})
     
@@ -158,7 +137,9 @@ def get_hitter_percentiles():
         else:
             key_mlbam = int(key_mlbam)
         current_year = pb.utils.most_recent_season()
-        statcast_percentiles_data = pb.statcast_batter_percentile_ranks(current_year)
+        statcast_percentiles_data = store_read.season_frame('savant_batter_percentiles', current_year)
+        if statcast_percentiles_data is None or len(statcast_percentiles_data) == 0:
+            statcast_percentiles_data = pb.statcast_batter_percentile_ranks(current_year)
         statcast_percentiles_record = statcast_percentiles_data[statcast_percentiles_data['player_id'] == key_mlbam].to_dict('records')
 
         if not statcast_percentiles_record:

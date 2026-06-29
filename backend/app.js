@@ -18,20 +18,21 @@ const PORT = 3000;
 // Middleware to parse JSON bodies
 app.use(express.json());
 
-app.listen(PORT, () => {
-    logger.info(`Started the server on Port ${PORT}`);
-});
-
 // Middleware that logs any incoming requests
 app.use((req, res, next) => {
     logger.info(`${req.method} ${req.url}`);
     next();
 });
 
-// HTTP Routes (TODO)
+// HTTP Routes
 app.use('/players', playerInformationController);
 app.use('/hitters', hitterStatsController);
 app.use('/pitchers', pitcherStatsController);
 app.use('/teams', teamInformationController);
 app.use('/teamStats', teamStatsController);
 app.use('/news', newsController);
+
+// Start the server once all middleware + routes are registered.
+app.listen(PORT, () => {
+    logger.info(`Started the server on Port ${PORT}`);
+});

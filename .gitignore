@@ -6,3 +6,5 @@ stats_api/venv/
 *Env.plist
 # Local dev stack logs
 .dev-logs/
+# DuckDB season-snapshot store (rebuilt from `python -m store.ingest backfill`)
+stats_api/data/

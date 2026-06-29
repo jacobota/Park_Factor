@@ -22,6 +22,10 @@ import numpy as np
 import pybaseball as pb
 from datetime import datetime
 
+# Persistent season-snapshot store (DuckDB). Loaders read from it first and fall back to a live
+# pybaseball/MLB-API pull when the store has no data for the season (e.g. before first ingest).
+from store import read as store_read
+
 # --- team identity --------------------------------------------------------------------------
 # The app keys team logos/colors/navigation off the FanGraphs abbreviation (see mobile teams.ts).
 # bbref uses ambiguous city names (two "Los Angeles") but carries league in `Lev`, so we
@@ -46,6 +50,16 @@ _MLB_ID_TO_FG = {
     119: 'LAD', 146: 'MIA', 158: 'MIL', 142: 'MIN', 121: 'NYM', 147: 'NYY', 143: 'PHI',
     134: 'PIT', 135: 'SDP', 137: 'SFG', 136: 'SEA', 138: 'STL', 139: 'TBR', 140: 'TEX',
     141: 'TOR', 120: 'WSN',
+}
+
+# FanGraphs numeric team id (pybaseball `team_ids`, what the app's Team.teamIDfg carries) -> MLB
+# Stats API team id. FanGraphs team ids 1..30 are stable, so the single-team stats endpoint can
+# bridge to the (unblocked) MLB Stats API.
+_FG_ID_TO_MLB_ID = {
+    1: 108, 2: 110, 3: 111, 4: 145, 5: 114, 6: 116, 7: 118, 8: 142, 9: 147, 10: 133,
+    11: 136, 12: 139, 13: 140, 14: 141, 15: 109, 16: 144, 17: 112, 18: 113, 19: 115,
+    20: 146, 21: 117, 22: 119, 23: 158, 24: 120, 25: 121, 26: 143, 27: 134, 28: 138,
+    29: 135, 30: 137,
 }
 
 
@@ -150,7 +164,10 @@ def _most_recent_season_with_data(loader):
 
 def _bbref_batting():
     def load():
-        _, df = _most_recent_season_with_data(lambda y: pb.batting_stats_bref(y))
+        season = pb.utils.most_recent_season()
+        df = store_read.season_frame('bbref_batting', season)
+        if df is None or len(df) == 0:
+            _, df = _most_recent_season_with_data(lambda y: pb.batting_stats_bref(y))
         if 'Lev' in df.columns:
             # bbref labels MLB rows 'Maj-AL' / 'Maj-NL' (and 'Maj-AL,Maj-NL' for traded players).
             df = df[df['Lev'].astype(str).str.contains('Maj', na=False)]
@@ -163,7 +180,10 @@ def _bbref_batting():
 
 def _bbref_pitching():
     def load():
-        _, df = _most_recent_season_with_data(lambda y: pb.pitching_stats_bref(y))
+        season = pb.utils.most_recent_season()
+        df = store_read.season_frame('bbref_pitching', season)
+        if df is None or len(df) == 0:
+            _, df = _most_recent_season_with_data(lambda y: pb.pitching_stats_bref(y))
         if 'Lev' in df.columns:
             # bbref labels MLB rows 'Maj-AL' / 'Maj-NL' (and 'Maj-AL,Maj-NL' for traded players).
             df = df[df['Lev'].astype(str).str.contains('Maj', na=False)]
@@ -174,24 +194,28 @@ def _bbref_pitching():
     return _cached('bbref_pit', load)
 
 
+def _store_or_live(table, live):
+    """Current-season snapshot frame, or a live pull (current year, else prior) if absent."""
+    season = pb.utils.most_recent_season()
+    df = store_read.season_frame(table, season)
+    if df is None or len(df) == 0:
+        try:
+            df = live(season)
+        except Exception:
+            df = live(season - 1)
+    return df
+
+
 def _savant_batter_ev():
     def load():
-        year = pb.utils.most_recent_season()
-        try:
-            df = pb.statcast_batter_exitvelo_barrels(year)
-        except Exception:
-            df = pb.statcast_batter_exitvelo_barrels(year - 1)
+        df = _store_or_live('savant_batter_exitvelo', pb.statcast_batter_exitvelo_barrels)
         return {int(r['player_id']): r for r in df.to_dict('records') if r.get('player_id') is not None}
     return _cached('savant_bat_ev', load)
 
 
 def _savant_pitcher_ev():
     def load():
-        year = pb.utils.most_recent_season()
-        try:
-            df = pb.statcast_pitcher_exitvelo_barrels(year)
-        except Exception:
-            df = pb.statcast_pitcher_exitvelo_barrels(year - 1)
+        df = _store_or_live('savant_pitcher_exitvelo', pb.statcast_pitcher_exitvelo_barrels)
         return {int(r['player_id']): r for r in df.to_dict('records') if r.get('player_id') is not None}
     return _cached('savant_pit_ev', load)
 
@@ -199,11 +223,7 @@ def _savant_pitcher_ev():
 def _savant_batter_xstats():
     """Expected stats (xwOBA via est_woba) keyed by MLBAM id."""
     def load():
-        year = pb.utils.most_recent_season()
-        try:
-            df = pb.statcast_batter_expected_stats(year)
-        except Exception:
-            df = pb.statcast_batter_expected_stats(year - 1)
+        df = _store_or_live('savant_batter_expected', pb.statcast_batter_expected_stats)
         return {int(r['player_id']): r for r in df.to_dict('records') if r.get('player_id') is not None}
     return _cached('savant_bat_x', load)
 
@@ -211,11 +231,7 @@ def _savant_batter_xstats():
 def _savant_pitcher_xstats():
     """Expected stats (xERA, est_woba allowed) keyed by MLBAM id."""
     def load():
-        year = pb.utils.most_recent_season()
-        try:
-            df = pb.statcast_pitcher_expected_stats(year)
-        except Exception:
-            df = pb.statcast_pitcher_expected_stats(year - 1)
+        df = _store_or_live('savant_pitcher_expected', pb.statcast_pitcher_expected_stats)
         return {int(r['player_id']): r for r in df.to_dict('records') if r.get('player_id') is not None}
     return _cached('savant_pit_x', load)
 
@@ -223,23 +239,22 @@ def _savant_pitcher_xstats():
 def _savant_positions():
     """Primary fielding position (e.g. SS, CF) keyed by MLBAM id, from the OAA leaderboard."""
     def load():
-        year = pb.utils.most_recent_season()
-        try:
-            df = pb.statcast_outs_above_average(year, 'all')
-        except Exception:
-            df = pb.statcast_outs_above_average(year - 1, 'all')
+        df = _store_or_live('savant_oaa', lambda y: pb.statcast_outs_above_average(y, 'all'))
         return {int(r['player_id']): r.get('primary_pos_formatted')
                 for r in df.to_dict('records') if r.get('player_id') is not None}
     return _cached('savant_pos', load)
 
 
 def _mlb_team_stats(group):
-    """Official per-team season aggregates from the MLB Stats API (unblocked, exact, proper ids)."""
+    """Official per-team season aggregates from the MLB Stats API (unblocked, exact, proper ids).
+    Served from the snapshot store; falls back to a live API call if absent."""
     def load():
         year = pb.utils.most_recent_season()
-        url = (f'https://statsapi.mlb.com/api/v1/teams/stats'
-               f'?stats=season&group={group}&season={year}&sportIds=1')
-        splits = requests.get(url, timeout=20).json()['stats'][0]['splits']
+        splits = store_read.team_stats_splits(year, group)
+        if splits is None:
+            url = (f'https://statsapi.mlb.com/api/v1/teams/stats'
+                   f'?stats=season&group={group}&season={year}&sportIds=1')
+            splits = requests.get(url, timeout=20).json()['stats'][0]['splits']
         return splits
     return _cached(f'mlb_team_{group}', load)
 
@@ -375,6 +390,83 @@ def team_pitching_leaderboard():
     return _build_top5(records, stats, ascending=ascending, key_fields=['Team'])
 
 
+def _team_split(group, mlb_id):
+    """The MLB Stats API season stat dict for one team in a stat group, or None."""
+    return next((sp['stat'] for sp in _mlb_team_stats(group)
+                 if sp.get('team', {}).get('id') == mlb_id), None)
+
+
+def _team_fielding_stat(mlb_id):
+    """Team season fielding stat dict (errors, fielding%) — fetched live; not in the snapshot store."""
+    def load():
+        year = pb.utils.most_recent_season()
+        url = (f'https://statsapi.mlb.com/api/v1/teams/stats'
+               f'?stats=season&group=fielding&season={year}&sportIds=1')
+        try:
+            splits = requests.get(url, timeout=20).json()['stats'][0]['splits']
+        except Exception:
+            return None
+        return next((sp['stat'] for sp in splits if sp.get('team', {}).get('id') == mlb_id), None)
+    return _cached(f'team_field_{mlb_id}', load)
+
+
+def team_season_stats(team_fg_id):
+    """Single team's batting / pitching / fielding season aggregates from the MLB Stats API
+    (FanGraphs team_batting/pitching/fielding are Cloudflare-blocked). FanGraphs-proprietary team
+    metrics (wOBA/wRC+/WAR/Stuff+/DRS/OAA …) have no free source and are omitted; the cards render
+    only the keys present. Returns the {team_batting, team_pitching, team_fielding} list shape the
+    old route used (each a single-element list)."""
+    mlb_id = _FG_ID_TO_MLB_ID.get(team_fg_id)
+    if not mlb_id:
+        return None
+
+    batting = None
+    b = _team_split('hitting', mlb_id)
+    if b:
+        pa, ab = _num(b.get('plateAppearances')) or 0, _num(b.get('atBats')) or 0
+        bb, so = _num(b.get('baseOnBalls')) or 0, _num(b.get('strikeOuts')) or 0
+        h, hr, sf = _num(b.get('hits')) or 0, _num(b.get('homeRuns')) or 0, _num(b.get('sacFlies')) or 0
+        avg, slg = _num(b.get('avg')), _num(b.get('slg'))
+        babip_den = ab - so - hr + sf
+        batting = {
+            'AVG': avg, 'OBP': _num(b.get('obp')), 'SLG': slg, 'OPS': _num(b.get('ops')),
+            'R': _num(b.get('runs')), 'H': h, 'HR': hr, 'BB': bb, 'SO': so,
+            'BB%': (bb / pa) if pa else None, 'K%': (so / pa) if pa else None,
+            'ISO': (slg - avg) if (slg is not None and avg is not None) else None,
+            'BABIP': ((h - hr) / babip_den) if babip_den > 0 else None,
+        }
+
+    pitching = None
+    p = _team_split('pitching', mlb_id)
+    if p:
+        ip = _ip_to_outs(p.get('inningsPitched')) / 3
+        bf = _num(p.get('battersFaced')) or 0
+        so, bb, hbp = _num(p.get('strikeOuts')) or 0, _num(p.get('baseOnBalls')) or 0, _num(p.get('hitBatsmen')) or 0
+        hr, h, ab = _num(p.get('homeRuns')) or 0, _num(p.get('hits')) or 0, _num(p.get('atBats')) or 0
+        sf = _num(p.get('sacFlies')) or 0
+        babip_den = ab - so - hr + sf
+        pitching = {
+            'ERA': _num(p.get('era')), 'WHIP': _num(p.get('whip')), 'AVG': _num(p.get('avg')),
+            'R': _num(p.get('runs')), 'H': h, 'BB': bb, 'SO': so,
+            'W': _num(p.get('wins')), 'L': _num(p.get('losses')),
+            'K%': (so / bf) if bf else None, 'BB%': (bb / bf) if bf else None,
+            'K-BB%': ((so - bb) / bf) if bf else None,
+            'FIP': ((13 * hr + 3 * (bb + hbp) - 2 * so) / ip + _FIP_CONSTANT) if ip else None,
+            'BABIP': ((h - hr) / babip_den) if babip_den > 0 else None,
+        }
+
+    fielding = None
+    f = _team_fielding_stat(mlb_id)
+    if f:
+        fielding = {'E': _num(f.get('errors')), 'FP': _num(f.get('fielding'))}
+
+    return {
+        'team_batting': [batting] if batting else [],
+        'team_pitching': [pitching] if pitching else [],
+        'team_fielding': [fielding] if fielding else [],
+    }
+
+
 # === player-page sources (single-player season lines + bio) =================================
 # Rebuilds the FanGraphs-blocked season-stat endpoints from bbref + Savant + bWAR + computed
 # metrics, keyed by MLBAM id. FIP is computed; xERA/Barrel%/EV come from Savant. Stuff+/Command
@@ -395,12 +487,15 @@ def _bbref_row_map(loader, cache_key):
     return _cached(cache_key, build)
 
 
-def _bwar_map(loader, cache_key):
-    """{mlbam_id: total WAR} for the current season (summed across stints)."""
+def _bwar_map(table, live_loader, cache_key):
+    """{mlbam_id: total WAR} for the current season (summed across stints). Store-first, with a
+    live bWAR pull (filtered to the season) as fallback."""
     def build():
         year = pb.utils.most_recent_season()
-        df = loader(return_all=True)
-        df = df[df['year_ID'] == year]
+        df = store_read.bwar_year(table, year)
+        if df is None or len(df) == 0:
+            df = live_loader(return_all=True)
+            df = df[df['year_ID'] == year]
         out = {}
         for r in df.to_dict('records'):
             mid = _mlbam(r.get('mlb_ID'))
@@ -449,7 +544,7 @@ def pitcher_season(mlbam):
         'K-BB%': ((so - bb) / bf) if bf else None,
         'HR/9': (hr * 9 / ip) if ip else None,
         'FIP': ((13 * hr + 3 * (bb + hbp) - 2 * so) / ip + _FIP_CONSTANT) if ip else None,
-        'WAR': _bwar_map(pb.bwar_pitch, 'bwar_pit').get(mlbam),
+        'WAR': _bwar_map('bwar_pitch', pb.bwar_pitch, 'bwar_pit').get(mlbam),
     }
     xs = _savant_pitcher_xstats().get(mlbam)
     if xs:
@@ -479,7 +574,7 @@ def hitter_season(mlbam):
         'K%': (so / pa) if pa else None,
         'ISO': (slg - avg) if (slg is not None and avg is not None) else None,
         'BABIP': ((h - hr) / babip_den) if babip_den > 0 else None,
-        'WAR': _bwar_map(pb.bwar_bat, 'bwar_bat').get(mlbam),
+        'WAR': _bwar_map('bwar_bat', pb.bwar_bat, 'bwar_bat').get(mlbam),
     }
     xs = _savant_batter_xstats().get(mlbam)
     if xs:
@@ -494,6 +589,88 @@ def hitter_season(mlbam):
         out['Barrel%'] = _pct(ev.get('brl_percent'))
         out['HardHit%'] = _pct(ev.get('ev95percent'))
     return out
+
+
+# === career totals ==========================================================================
+# FanGraphs career lines (pb.batting_stats/pitching_stats, ind=0) are Cloudflare-blocked, so career
+# aggregates come from the MLB Stats API's official career hydrate (unblocked, exact, keyed by
+# MLBAM — same source as player_bio) plus career bWAR summed from the store. FanGraphs-proprietary
+# career metrics (wRC+/wOBA/BsR/SIERA/Stuff+ …) have no free source and are omitted; the career
+# cards render only the keys present.
+
+def _mlb_career_stat(mlbam, group):
+    """The MLB Stats API career-aggregate stat dict for a player ({avg, homeRuns, ...}), or None."""
+    def load():
+        url = (f'https://statsapi.mlb.com/api/v1/people/{mlbam}'
+               f'?hydrate=stats(group=[{group}],type=[career])')
+        try:
+            people = requests.get(url, timeout=15).json().get('people', [])
+            splits = people[0]['stats'][0]['splits']
+            return splits[0]['stat'] if splits else None
+        except Exception:
+            return None
+    return _cached(f'career_{group}_{mlbam}', load)
+
+
+def _bwar_career_map(table, live_loader, cache_key):
+    """{mlbam_id: career WAR} summed across every season in the all-years bWAR snapshot (store-first,
+    live `return_all` fallback)."""
+    def build():
+        df = store_read.bwar_all(table)
+        if df is None or len(df) == 0:
+            df = live_loader(return_all=True)
+        out = {}
+        for r in df.to_dict('records'):
+            mid = _mlbam(r.get('mlb_ID'))
+            if mid is None:
+                continue
+            out[mid] = out.get(mid, 0.0) + (_num(r.get('WAR')) or 0.0)
+        return out
+    return _cached(cache_key, build)
+
+
+def hitter_career(mlbam):
+    s = _mlb_career_stat(mlbam, 'hitting')
+    if not s:
+        return None
+    pa, ab = _num(s.get('plateAppearances')) or 0, _num(s.get('atBats')) or 0
+    bb, so = _num(s.get('baseOnBalls')) or 0, _num(s.get('strikeOuts')) or 0
+    h, hr, sf = _num(s.get('hits')) or 0, _num(s.get('homeRuns')) or 0, _num(s.get('sacFlies')) or 0
+    avg, slg = _num(s.get('avg')), _num(s.get('slg'))
+    babip_den = ab - so - hr + sf
+    return {
+        'G': _num(s.get('gamesPlayed')), 'PA': pa, 'AB': ab,
+        'H': h, 'HR': hr, 'R': _num(s.get('runs')), 'RBI': _num(s.get('rbi')), 'SB': _num(s.get('stolenBases')),
+        'AVG': avg, 'OBP': _num(s.get('obp')), 'SLG': slg, 'OPS': _num(s.get('ops')),
+        'BB%': (bb / pa) if pa else None,
+        'K%': (so / pa) if pa else None,
+        'ISO': (slg - avg) if (slg is not None and avg is not None) else None,
+        'BABIP': ((h - hr) / babip_den) if babip_den > 0 else None,
+        'WAR': _bwar_career_map('bwar_bat', pb.bwar_bat, 'bwar_bat_career').get(mlbam),
+    }
+
+
+def pitcher_career(mlbam):
+    s = _mlb_career_stat(mlbam, 'pitching')
+    if not s:
+        return None
+    ip = _ip_to_outs(s.get('inningsPitched')) / 3
+    bf = _num(s.get('battersFaced')) or 0
+    so, bb, hbp = _num(s.get('strikeOuts')) or 0, _num(s.get('baseOnBalls')) or 0, _num(s.get('hitBatsmen')) or 0
+    hr = _num(s.get('homeRuns')) or 0
+    return {
+        'G': _num(s.get('gamesPlayed')), 'GS': _num(s.get('gamesStarted')),
+        'CG': _num(s.get('completeGames')), 'SV': _num(s.get('saves')),
+        'W': _num(s.get('wins')), 'L': _num(s.get('losses')),
+        'IP': _num(s.get('inningsPitched')),  # baseball .1/.2 notation, shown verbatim
+        'SO': so, 'BB': bb, 'HR': hr,
+        'ERA': _num(s.get('era')), 'WHIP': _num(s.get('whip')),
+        'K%': (so / bf) if bf else None,
+        'BB%': (bb / bf) if bf else None,
+        'K-BB%': ((so - bb) / bf) if bf else None,
+        'FIP': ((13 * hr + 3 * (bb + hbp) - 2 * so) / ip + _FIP_CONSTANT) if ip else None,
+        'WAR': _bwar_career_map('bwar_pitch', pb.bwar_pitch, 'bwar_pit_career').get(mlbam),
+    }
 
 
 def _mean(series):

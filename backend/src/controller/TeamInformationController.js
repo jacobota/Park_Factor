@@ -1,7 +1,5 @@
 // imports
 const express = require("express");
-// in case I want authentication
-const { authenticateToken } = require("../util/token");
 const dotenv = require('dotenv');
 const path = require('path');
 
@@ -27,7 +25,7 @@ router.get('/mlb-teams', async (req, res) => {
 // Get ID for MLB Team by Team Acronym
 router.get('/team-id/:teamAcronym', async (req, res) => {
     try {
-        const response = await fetch(`${flaskUrl}/teams//api/mlb-team-id?team-name=${req.params.teamAcronym}`);
+        const response = await fetch(`${flaskUrl}/teams/api/mlb-team-id?team-name=${req.params.teamAcronym}`);
         const data = await response.json();
         res.status(200).json(data);
     } catch (err) {

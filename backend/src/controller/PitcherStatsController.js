@@ -1,7 +1,5 @@
 // imports
 const express = require("express");
-// in case I want authentication
-const { authenticateToken } = require("../util/token");
 const dotenv = require('dotenv');
 const path = require('path');
 
@@ -35,10 +33,10 @@ router.get('/stats/current-season-preview/:mlbamId', async (req, res) => {
     }
 });
 
-// get MLB pitcher stats for career
-router.get('/stats/career/:fgId/:startDate/:endDate', async (req, res) => {
+// get MLB pitcher stats for career (career totals are keyed by MLBAM id)
+router.get('/stats/career/:mlbamId', async (req, res) => {
     try {
-        const response = await fetch(`${flaskUrl}/pitchers/api/pitcher-stats/career?fg-id=${req.params.fgId}&start-year=${req.params.startDate}&end-year=${req.params.endDate}`);
+        const response = await fetch(`${flaskUrl}/pitchers/api/pitcher-stats/career?mlbam-id=${req.params.mlbamId}`);
         const data = await response.json();
         res.status(200).json(data);
     } catch (err) {
