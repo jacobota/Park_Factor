@@ -1,21 +1,24 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { api } from '@/api/client';
-import { clearSavedUser, clearToken, getToken, setSavedUser, setToken } from '@/api/storage';
+import { supabase } from '@/api/supabaseClient';
+import { fetchProfile } from '@/api/auth';
+import { clearSavedUser, clearToken, setSavedUser, setToken } from '@/api/storage';
 import type { User } from '@/types';
 
 /**
- * Auth state — replaces the @Observable SavedUser class and the ContentView token check.
- * Persists the user to AsyncStorage on every change (mirrors SavedUser.didSet).
+ * Auth state, backed by the Supabase session. supabase-js persists/refreshes the session in
+ * AsyncStorage; we mirror the access token into our storage so any remaining Express/Flask calls
+ * can still send a Bearer header. The signIn/signOut/setUser surface is unchanged so the auth
+ * screens and onboarding flow keep working.
  */
 
 interface AuthContextValue {
   user: User | null;
   isLoggedIn: boolean;
   isBootstrapping: boolean;
-  /** Store token + user after a successful login. */
+  /** Store user (+ token) after a successful login/onboarding. */
   signIn: (user: User, token: string) => Promise<void>;
   signOut: () => Promise<void>;
-  /** Replace the current user and persist (mirrors SavedUser.user = ...). */
+  /** Replace the current user and persist. */
   setUser: (user: User) => Promise<void>;
 }
 
@@ -25,32 +28,53 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUserState] = useState<User | null>(null);
   const [isBootstrapping, setIsBootstrapping] = useState(true);
 
-  // ContentView.checkLoginStatus: if a token exists, fetch the profile to validate it.
   useEffect(() => {
+    let active = true;
+
+    // Restore an existing session on launch.
     (async () => {
       try {
-        const token = await getToken();
-        if (!token) return;
-        const profile = await api.get<User>('/users/profile', { auth: true });
-        setUserState(profile);
-        await setSavedUser(profile);
+        const { data } = await supabase.auth.getSession();
+        if (data.session) {
+          await setToken(data.session.access_token);
+          const profile = await fetchProfile();
+          if (active) {
+            setUserState(profile);
+            await setSavedUser(profile);
+          }
+        }
       } catch {
-        await clearToken();
-        await clearSavedUser();
-        setUserState(null);
+        /* no valid session — stay logged out */
       } finally {
-        setIsBootstrapping(false);
+        if (active) setIsBootstrapping(false);
       }
     })();
+
+    // Keep the mirrored token fresh; clear everything on sign-out.
+    const { data: sub } = supabase.auth.onAuthStateChange(async (_event, session) => {
+      if (session) {
+        await setToken(session.access_token);
+      } else {
+        await clearToken();
+        await clearSavedUser();
+        if (active) setUserState(null);
+      }
+    });
+
+    return () => {
+      active = false;
+      sub.subscription.unsubscribe();
+    };
   }, []);
 
   const signIn = useCallback(async (u: User, token: string) => {
-    await setToken(token);
+    if (token) await setToken(token);
     await setSavedUser(u);
     setUserState(u);
   }, []);
 
   const signOut = useCallback(async () => {
+    await supabase.auth.signOut();
     await clearToken();
     await clearSavedUser();
     setUserState(null);

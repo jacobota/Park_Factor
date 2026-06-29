@@ -1,9 +1,12 @@
 # Park Factor — Future Architecture (Proposal)
 
-> **Status: proposal / not yet implemented.** This captures a direction discussed for the
-> backend + data layer. Nothing here is built yet. The current repo still runs Node/Express +
-> DynamoDB (`backend/`) and a Flask + PyBaseball service (`stats_api/`).
+> **Status: mixed.** The **auth + social layer is now being implemented on Supabase**
+> (Postgres + Auth + Storage) — DynamoDB is being retired. See `DATASWITCH.md`, `ARCHITECTURE.md`,
+> and `docs/SUPABASE_SETUP.md`. The **stats track** below (MotherDuck/DuckDB ingestion) remains a
+> proposal — not built yet; `stats_api/` still runs Flask + PyBaseball.
 > See `CLAUDE.md` for product scope and `.claude/plans/Park_Factor_Plan_1.0.md` for the full plan.
+>
+> ⚠️ **Pre-launch checklist lives at the bottom** (#email-confirmation) — re-enable email confirmation.
 
 ## TL;DR
 
@@ -191,3 +194,63 @@ pre-signed URLs. Existing buckets (region `us-west-1`):
 
 ⚠️ Rotate the AWS access key/secret that were committed in the old `Env.plist`.
 RN gaps to restore once uploads exist: profile-picture change, post/edit image attach.
+
+---
+
+## Email confirmation (re-enable before launch)  ⚠️ launch blocker {#email-confirmation}
+
+During Supabase setup we **turned OFF** Authentication → "Confirm email" so signup logs in
+immediately in dev. **Turn it back ON before launch** so accounts must verify a real email (blocks
+throwaway/bot signups and typo'd addresses).
+
+**To re-enable:** Supabase → Authentication → Providers → Email → enable **Confirm email**. Then set
+up **custom SMTP** (Authentication → Emails → SMTP) so mail comes from your own domain (deliverability
++ branding) instead of Supabase's shared sender.
+
+**Code impact:** once ON, `supabase.auth.signUp()` no longer returns an active session until the user
+clicks the link. The current Signup → auto-login → onboarding flow
+(`mobile/src/screens/auth/SignupScreen.tsx` → `OnboardingTeams`) must change to a "check your email"
+state, and onboarding should run **after** the first confirmed login. Plan this before flipping it.
+
+### Professional confirmation email template
+Paste into Supabase → Authentication → **Emails → Confirm signup** (HTML). Supabase substitutes
+`{{ .ConfirmationURL }}`. Branding: true-black bg, mint `#2ED47A` accent.
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <body style="margin:0;padding:0;background:#000000;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#000000;padding:32px 0;">
+      <tr><td align="center">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:480px;background:#0B0B0B;border:1px solid #1A1A1A;border-radius:16px;overflow:hidden;">
+          <tr><td style="padding:32px 32px 8px 32px;">
+            <p style="margin:0;font-size:14px;letter-spacing:2px;text-transform:uppercase;color:#2ED47A;font-weight:700;">Park Factor</p>
+          </td></tr>
+          <tr><td style="padding:8px 32px 0 32px;">
+            <h1 style="margin:0;font-size:26px;line-height:1.2;color:#FFFFFF;font-weight:800;">Confirm your email</h1>
+            <p style="margin:16px 0 0 0;font-size:15px;line-height:1.6;color:#B0B0B0;">
+              Welcome to Park Factor — baseball analytics, done better. Tap below to verify your email
+              and start following your team.
+            </p>
+          </td></tr>
+          <tr><td style="padding:28px 32px;">
+            <a href="{{ .ConfirmationURL }}" style="display:inline-block;background:#2ED47A;color:#000000;font-size:16px;font-weight:700;text-decoration:none;padding:14px 28px;border-radius:10px;">Confirm my email</a>
+          </td></tr>
+          <tr><td style="padding:0 32px 32px 32px;">
+            <p style="margin:0;font-size:13px;line-height:1.6;color:#777777;">
+              If the button doesn't work, paste this link into your browser:<br />
+              <a href="{{ .ConfirmationURL }}" style="color:#2ED47A;word-break:break-all;">{{ .ConfirmationURL }}</a>
+            </p>
+            <p style="margin:20px 0 0 0;font-size:12px;line-height:1.6;color:#555555;">
+              Didn't create a Park Factor account? You can safely ignore this email.
+            </p>
+          </td></tr>
+        </table>
+        <p style="margin:20px 0 0 0;font-size:11px;color:#444444;">© Park Factor</p>
+      </td></tr>
+    </table>
+  </body>
+</html>
+```
+
+> Mirror this style for the **Reset password** and **Magic link** templates when those ship.

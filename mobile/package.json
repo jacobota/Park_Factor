@@ -15,6 +15,7 @@
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/native": "^7.0.14",
     "@react-navigation/native-stack": "^7.2.0",
+    "@supabase/supabase-js": "^2.108.2",
     "@tanstack/react-query": "^5.66.0",
     "babel-preset-expo": "~54.0.10",
     "expo": "^54.0.35",
@@ -28,7 +29,8 @@
     "react-native": "0.81.5",
     "react-native-safe-area-context": "~5.6.0",
     "react-native-screens": "~4.16.0",
-    "react-native-svg": "15.12.1"
+    "react-native-svg": "15.12.1",
+    "react-native-url-polyfill": "^3.0.0"
   },
   "devDependencies": {
     "@types/react": "~19.1.0",

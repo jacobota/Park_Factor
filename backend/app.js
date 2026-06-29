@@ -2,9 +2,8 @@
 const express = require("express");
 const { logger } = require("./src/util/logger");
 
-// Routers (TODO)
-const usersController = require('./src/controller/UsersController');
-const verifiedPostsController = require('./src/controller/VerifiedPostsController');
+// Routers — users/auth + verified posts now live on Supabase (see DATASWITCH.md); this service
+// remains the gateway for stats (proxied to Flask) + news.
 const playerInformationController = require('./src/controller/PlayerInformationController');
 const hitterStatsController = require('./src/controller/HitterStatsController');
 const pitcherStatsController = require('./src/controller/PitcherStatsController');
@@ -30,8 +29,6 @@ app.use((req, res, next) => {
 });
 
 // HTTP Routes (TODO)
-app.use('/users', usersController);
-app.use('/verifiedPosts', verifiedPostsController);
 app.use('/players', playerInformationController);
 app.use('/hitters', hitterStatsController);
 app.use('/pitchers', pitcherStatsController);

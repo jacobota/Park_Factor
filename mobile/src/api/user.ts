@@ -1,45 +1,75 @@
-import { api } from './client';
+import { supabase } from './supabaseClient';
+import { ApiError } from './client';
+import { profileToUser, type ProfileRow } from './profileMap';
 import type { Player, Team, User } from '@/types';
 
-/** PUT /users/update/followingPlayers — persist the user's followed-players list. */
+/**
+ * Profile mutations against public.profiles (RLS restricts each user to their own row). Email and
+ * password go through Supabase Auth. Likes live in posts.ts (post_likes join table).
+ */
+
+async function currentUserId(): Promise<string> {
+  const { data } = await supabase.auth.getUser();
+  if (!data.user) throw new ApiError(401, 'Not authenticated');
+  return data.user.id;
+}
+
+async function updateProfile(patch: Record<string, unknown>): Promise<void> {
+  const id = await currentUserId();
+  const { error } = await supabase.from('profiles').update(patch).eq('id', id);
+  if (error) throw new ApiError(400, error.message);
+}
+
+/** Followed players (stored as JSONB Player[]). */
 export const updateFollowingPlayers = (followingPlayers: Player[]) =>
-  api.put('/users/update/followingPlayers', { auth: true, body: { followingPlayers } });
+  updateProfile({ following_players: followingPlayers });
 
-/** PUT /users/update/followingTeams — persist the user's followed-teams list. */
+/** Followed teams (stored as JSONB Team[]). */
 export const updateFollowingTeams = (followingTeams: Team[]) =>
-  api.put('/users/update/followingTeams', { auth: true, body: { followingTeams } });
+  updateProfile({ following_teams: followingTeams });
 
-/** PUT /users/update/favoriteTeam — set (or clear, with null) the favorite team. */
+/** Set (or clear with null) the favorite team. */
 export const updateFavoriteTeam = (favoriteTeam: Team | null) =>
-  api.put('/users/update/favoriteTeam', { auth: true, body: { favoriteTeam } });
+  updateProfile({ favorite_team: favoriteTeam });
 
-/** PUT /users/update/favoritePlayer — set (or clear, with null) the favorite player. */
+/** Set (or clear with null) the favorite player. */
 export const updateFavoritePlayer = (favoritePlayer: Player | null) =>
-  api.put('/users/update/favoritePlayer', { auth: true, body: { favoritePlayer } });
+  updateProfile({ favorite_player: favoritePlayer });
 
-/** PUT /users/update/userBiography — update the profile bio (≤255 chars). */
+/** Update the profile bio (≤255 chars). */
 export const updateUserBiography = (userBiography: string) =>
-  api.put('/users/update/userBiography', { auth: true, body: { userBiography } });
+  updateProfile({ user_biography: userBiography });
 
-/** PUT /users/update/userTag — update the @-style user tag. */
-export const updateUserTag = (userTag: string) =>
-  api.put('/users/update/userTag', { auth: true, body: { userTag } });
+/** Update the @-style user tag. */
+export const updateUserTag = (userTag: string) => updateProfile({ user_tag: userTag });
 
-/** PUT /users/update/email — change the account email. */
-export const updateEmail = (email: string) =>
-  api.put('/users/update/email', { auth: true, body: { email } });
+/** Change the account email (via Supabase Auth). */
+export async function updateEmail(email: string): Promise<void> {
+  const { error } = await supabase.auth.updateUser({ email });
+  if (error) throw new ApiError(error.status ?? 400, error.message);
+}
 
-/** PUT /users/update/password — change the account password. */
-export const updatePassword = (password: string) =>
-  api.put('/users/update/password', { auth: true, body: { password } });
+/** Change the account password (via Supabase Auth). */
+export async function updatePassword(password: string): Promise<void> {
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) throw new ApiError(error.status ?? 400, error.message);
+}
 
-/** PUT /users/update/userLikedPosts — persist the user's liked-post id list. */
-export const updateLikedPosts = (likedPosts: string[]) =>
-  api.put('/users/update/userLikedPosts', { auth: true, body: { likedPosts } });
+/** Another user's public profile (email is not exposed for other users). */
+export async function getUserProfile(username: string): Promise<User> {
+  const { data, error } = await supabase.from('profiles').select('*').eq('username', username).single();
+  if (error) throw new ApiError(404, error.message);
+  return profileToUser(data as ProfileRow, '', []);
+}
 
-/** GET /users/profile/:username — another user's public profile. */
-export const getUserProfile = (username: string) =>
-  api.get<User>(`/users/profile/${username}`, { auth: true });
-
-/** DELETE /users/delete — permanently delete the signed-in account. */
-export const deleteAccount = () => api.delete('/users/delete', { auth: true });
+/**
+ * Delete the signed-in account. Removing the profile cascades the user's posts/likes; full removal
+ * of the auth.users row needs the Admin API (TODO: Edge Function) — we sign out here so the session
+ * doesn't linger.
+ */
+export async function deleteAccount(): Promise<void> {
+  const id = await currentUserId();
+  const { error } = await supabase.from('profiles').delete().eq('id', id);
+  if (error) throw new ApiError(400, error.message);
+  await supabase.auth.signOut();
+}

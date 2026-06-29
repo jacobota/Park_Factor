@@ -26,9 +26,9 @@ export function SignupScreen({ navigation }: Props) {
   const onSignup = async () => {
     try {
       setError('');
-      // Register, then auto-login so the user can pick favorites during onboarding.
+      // Register, then auto-login (by email) so the user can pick favorites during onboarding.
       await register(username, email, password);
-      const res = await login(username, password);
+      const res = await login(email, password);
       // Store the token now (onboarding makes authed calls) but defer sign-in until
       // onboarding finishes, so the auth gate keeps us in the onboarding flow.
       await setToken(res.token);

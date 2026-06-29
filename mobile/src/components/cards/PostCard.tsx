@@ -3,8 +3,7 @@ import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-na
 import { Ionicons } from '@expo/vector-icons';
 import { Avatar } from '@/components/Avatar';
 import { Card } from '@/components/Card';
-import { deletePost as deletePostApi } from '@/api/posts';
-import { updateLikedPosts } from '@/api/user';
+import { deletePost as deletePostApi, likePost, unlikePost } from '@/api/posts';
 import { useAuth } from '@/context/AuthContext';
 import type { Post } from '@/types';
 import { colors, fonts, radius, spacing, typography } from '@/theme';
@@ -33,11 +32,11 @@ export function PostCard({
     if (!user) return;
     const current = user.userLikedPosts ?? [];
     const next = liked ? current.filter((id) => id !== post.postId) : [...current, post.postId];
-    await setUser({ ...user, userLikedPosts: next });
+    await setUser({ ...user, userLikedPosts: next }); // optimistic
     try {
-      await updateLikedPosts(next);
+      await (liked ? unlikePost(post.postId) : likePost(post.postId));
     } catch {
-      await setUser({ ...user, userLikedPosts: current });
+      await setUser({ ...user, userLikedPosts: current }); // revert on failure
     }
   };
 

@@ -14,16 +14,16 @@ type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
 
 export function LoginScreen({ navigation }: Props) {
   const { signIn } = useAuth();
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const isFormValid = username.length > 0 && password.length > 0;
+  const isFormValid = email.length > 0 && password.length > 0;
 
   const onLogin = async () => {
     try {
       setError('');
-      const res = await login(username, password);
+      const res = await login(email, password);
       await signIn(res.user, res.token);
     } catch (e) {
       setError(e instanceof ApiError ? e.message : 'Something went wrong. Please try again.');
@@ -38,7 +38,13 @@ export function LoginScreen({ navigation }: Props) {
       {!!error && <Text style={styles.error}>{error}</Text>}
 
       <View style={styles.form}>
-        <LabeledInput label="Username" value={username} onChangeText={setUsername} />
+        <LabeledInput
+          label="Email"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
         <LabeledInput label="Password" value={password} onChangeText={setPassword} secureTextEntry />
         <PrimaryButton title="Login" onPress={onLogin} disabled={!isFormValid} style={styles.button} />
       </View>
