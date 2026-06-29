@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify, request
 import pybaseball as pb
 import numpy as np
+from routes import savant_sources
 
 # Set up Blueprint for team_route
 team_stats_route = Blueprint('team_stats_route', __name__)
@@ -73,94 +74,17 @@ def get_team_stats():
     
 @team_stats_route.route('/api/stats/leaderboard/hitting')
 def get_team_hitting_leaderboard():
+    # FanGraphs (pb.team_batting) is Cloudflare-blocked; built from the MLB Stats API instead
+    # (exact official per-team totals with proper team identity). See routes/savant_sources.py.
     try:
-        # Get the leaderboard from the current year
-        current_year = pb.utils.most_recent_season()
-        team_hitting_data = pb.team_batting(current_year, league='all')
-        # Define the stats the leaderboard will present
-        leaderboard_stats = ['AVG', 'OBP', 'SLG', 'OPS', 'WAR', 'HR', 'R', 'H', 'RBI', 'SB', 'EV', 'Barrel%', 'BB%', 'K%', 'BsR', 'wRC+']
-        team_hitting_leaderboard_records = team_hitting_data.to_dict('records')
-
-         # Replace NaN values with None
-        team_hitting_leaderboard_records = replace_nan_with_none(team_hitting_leaderboard_records)
-
-        top_5_per_stat = {}
-        for stat in leaderboard_stats:
-            # If the stat is K%, we want the lowest values
-            if stat == 'K%':
-                top_5_per_stat[stat] = [
-                    {
-                        "Team": team_hitting["Team"],
-                        stat: team_hitting[stat]
-                    }
-                    for team_hitting in sorted(
-                        # Run a lambda function to sort each record of players by stat, take bottom 5
-                        (record for record in team_hitting_leaderboard_records if stat in record and record[stat] is not None),
-                        key=lambda x: x[stat]
-                    )[:5]
-                ]
-            else:
-                # Sort the stat and take the top 5 for the remaining stats
-                top_5_per_stat[stat] = [
-                    {
-                        "Team": team_hitting["Team"],
-                        stat: team_hitting[stat]
-                    }
-                    for team_hitting in sorted(
-                        # Run a lambda function to sort each record of players by stat, take top 5
-                        (record for record in team_hitting_leaderboard_records if stat in record and record[stat] is not None),
-                        key=lambda x: x[stat],
-                        reverse=True
-                    )[:5]
-                ]
-        
-        return jsonify(top_5_per_stat)
+        return jsonify(savant_sources.team_hitting_leaderboard())
     except Exception as e:
         return jsonify({'error': str(e)}), 500
-    
+
 @team_stats_route.route('/api/stats/leaderboard/pitching')
 def get_team_pitching_leaderboard():
+    # FanGraphs (pb.team_pitching) is Cloudflare-blocked; built from the MLB Stats API instead.
     try:
-        # Get the leaderboard from the current year
-        current_year = pb.utils.most_recent_season()
-        team_pitching_data = pb.team_pitching(current_year, league='all')
-        # Define the stats the leaderboard will present
-        leaderboard_stats = ['AVG', 'BB', 'R', 'H', 'HR', 'SV', 'ERA', 'SO', 'WHIP', 'WAR', 'SIERA', 'K%', 'BB%', 'GB%', 'EV', 'vFA (pi)']
-        team_pitching_leaderboard_records = team_pitching_data.to_dict('records')
-
-        # Replace NaN values with None
-        team_pitching_leaderboard_records = replace_nan_with_none(team_pitching_leaderboard_records)
-
-        top_5_per_stat = {}
-        for stat in leaderboard_stats:
-            # If the stat is K%, we want the lowest values
-            if stat == 'AVG' or stat == 'BB' or stat == 'R' or stat == 'H' or stat == 'HR' or stat == 'ERA' or stat == 'WHIP' or stat == 'xERA' or stat == 'SIERA' or stat == 'BB%' or stat == 'EV':
-                top_5_per_stat[stat] = [
-                    {
-                        "Team": team_pitching["Team"],
-                        stat: team_pitching[stat]
-                    }
-                    for team_pitching in sorted(
-                        # Run a lambda function to sort each record of players by stat, take bottom 5
-                        (record for record in team_pitching_leaderboard_records if stat in record and record[stat] is not None),
-                        key=lambda x: x[stat]
-                    )[:5]
-                ]
-            else:
-                # Sort the stat and take the top 5 for the remaining stats
-                top_5_per_stat[stat] = [
-                    {
-                        "Team": team_pitching["Team"],
-                        stat: team_pitching[stat]
-                    }
-                    for team_pitching in sorted(
-                        # Run a lambda function to sort each record of players by stat, take top 5
-                        (record for record in team_pitching_leaderboard_records if stat in record and record[stat] is not None),
-                        key=lambda x: x[stat],
-                        reverse=True
-                    )[:5]
-                ]
-        
-        return jsonify(top_5_per_stat)
+        return jsonify(savant_sources.team_pitching_leaderboard())
     except Exception as e:
         return jsonify({'error': str(e)}), 500

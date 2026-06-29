@@ -4,3 +4,5 @@ backend/node_modules/
 stats_api/venv/
 *.DS_Store
 *Env.plist
+# Local dev stack logs
+.dev-logs/

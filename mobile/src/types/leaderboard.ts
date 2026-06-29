@@ -10,6 +10,7 @@ export interface LeaderboardEntry {
   team: string;
   value: number;
   name?: string;
+  pos?: string;
 }
 
 export type RawLeaderboardEntry = Record<string, string | number>;
@@ -29,6 +30,7 @@ export const normalizeLeaderboard = (raw: RawLeaderboard | null | undefined): Le
       team: String(e.Team ?? ''),
       value: Number(e[statKey] ?? 0),
       name: e.Name != null ? String(e.Name) : undefined,
+      pos: e.Pos != null ? String(e.Pos) : undefined,
     }));
   }
   return out;

@@ -39,6 +39,19 @@ const cap = (s: string) => (s ? s.charAt(0).toUpperCase() + s.slice(1) : s);
 export const playerFullName = (p: Player): string =>
   `${cap(p.nameFirst ?? '')} ${cap(p.nameLast ?? '')}`.trim();
 
+/** Header/bio from the MLB Stats API people endpoint (richer than the bbref bio). */
+export interface PlayerPeople {
+  fullName?: string | null;
+  number?: string | null;
+  position?: string | null;
+  bats?: string | null;
+  throws?: string | null;
+  height?: string | null;
+  weight?: number | null;
+  born?: string | null;
+  age?: number | null;
+}
+
 /** Player biographical info — backend wraps as { player_bio: {...} } with TitleCase keys. */
 export interface PlayerBio {
   battingSide?: string | null; // "Bats"

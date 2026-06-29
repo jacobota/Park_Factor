@@ -20,6 +20,55 @@ export interface PitchPoint {
   pitchName: string;
 }
 
+/**
+ * Per-pitch arsenal row from the event-level endpoint (/pitchers/stats/arsenal-full).
+ * Richer than {@link PitchType}: pre-computed usage, velo, break (already in inches), spin,
+ * extension, and a run-value-derived Action+ proxy (100 = league avg, higher is better).
+ */
+export interface ArsenalPitch {
+  pitch_type: string;
+  pitch_name: string;
+  usage: number; // 0..1
+  velo: number | null;
+  ivb: number | null; // induced vertical break, inches
+  hb: number | null; // horizontal break, inches (catcher POV, signed)
+  ext: number | null;
+  spin: number | null;
+  action_plus: number;
+  count: number;
+}
+
+/** Per-pitch color + short name identity, keyed by Statcast 2-letter pitch code. */
+export const PITCH_META: Record<string, { name: string; color: string }> = {
+  FF: { name: '4-Seam', color: '#FF4D4D' },
+  FT: { name: '2-Seam', color: '#FF7043' },
+  SI: { name: 'Sinker', color: '#FF8C42' },
+  FC: { name: 'Cutter', color: '#C0392B' },
+  SL: { name: 'Slider', color: '#B06BE0' },
+  ST: { name: 'Sweeper', color: '#F2C14E' },
+  SV: { name: 'Slurve', color: '#9B59B6' },
+  CU: { name: 'Curveball', color: '#4D9DE0' },
+  KC: { name: 'Knuckle Curve', color: '#5E72E4' },
+  CS: { name: 'Slow Curve', color: '#3D7DC0' },
+  CH: { name: 'Changeup', color: '#2ED47A' },
+  FS: { name: 'Splitter', color: '#1ABC9C' },
+  FO: { name: 'Forkball', color: '#16A085' },
+  SC: { name: 'Screwball', color: '#E67E22' },
+  EP: { name: 'Eephus', color: '#95A5A6' },
+  KN: { name: 'Knuckleball', color: '#7F8C8D' },
+  PO: { name: 'Pitchout', color: '#95A5A6' },
+};
+
+export const arsenalMeta = (code: string): { name: string; color: string } =>
+  PITCH_META[code] ?? { name: code, color: '#AEAEB2' };
+
+/** Plottable movement point for an arsenal-full pitch (break is already in inches). */
+export const arsenalPoint = (p: ArsenalPitch): PitchPoint | null => {
+  if (p.hb == null || p.ivb == null) return null;
+  const m = arsenalMeta(p.pitch_type);
+  return { x: p.hb, y: p.ivb, color: m.color, pitchName: m.name };
+};
+
 /** pitch_per * 100 */
 export const pitchPercentage = (p: PitchType): number | null =>
   p.pitch_per == null ? null : p.pitch_per * 100;

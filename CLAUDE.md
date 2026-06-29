@@ -1,7 +1,9 @@
 # Park Factor
 
 > Source of truth for product scope and decisions: `.claude/plans/Park_Factor_Plan_1.0.md`.
-> This file is the distilled summary — read the plan for full interview rationale.
+> Source of truth for **data architecture & where every stat comes from**: `.claude/plans/Park_Factor_Data_Architecture_1.0.md`
+> (FanGraphs is Cloudflare-blocked; the data layer is built on Statcast event-level data + bbref).
+> This file is the distilled summary — read the plans for full rationale.
 
 ## What it is
 

@@ -6,7 +6,7 @@ import { Card } from '@/components/Card';
 import { playerHeadshotUrl } from '@/utils/images';
 import { playerFullName } from '@/types';
 import type { User } from '@/types';
-import { colors, radius, spacing, typography } from '@/theme';
+import { colors, fonts, radius, spacing, typography } from '@/theme';
 
 /**
  * Account overview block (AccountPageView / AccountFromPostView header): avatar, username +
@@ -69,14 +69,15 @@ const styles = StyleSheet.create({
   headerRow: { flexDirection: 'row', alignItems: 'center' },
   identity: { marginLeft: spacing.lg, flex: 1 },
   usernameRow: { flexDirection: 'row', alignItems: 'center' },
-  username: { ...typography.usernameNorwester, color: colors.white, flexShrink: 1 },
+  // Archivo Narrow renders accented names/usernames; Norwester lacks those glyphs.
+  username: { ...typography.usernameNorwester, fontFamily: fonts.archivo, color: colors.white, flexShrink: 1 },
   badge: { marginLeft: 6 },
-  tag: { ...typography.smallTextNorwester, color: colors.white, opacity: 0.5, marginTop: spacing.xs },
+  tag: { ...typography.smallTextNorwester, fontFamily: fonts.archivo, color: colors.white, opacity: 0.5, marginTop: spacing.xs },
   divider: { height: StyleSheet.hairlineWidth, backgroundColor: colors.border, marginVertical: spacing.md },
   favorites: { flexDirection: 'row', justifyContent: 'space-around' },
   favorite: { alignItems: 'center' },
   favLabel: { ...typography.smallTextNorwester, color: colors.white, opacity: 0.5, marginBottom: spacing.sm },
   disc: { width: DISC, height: DISC, borderRadius: DISC / 2, backgroundColor: colors.white, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
   discImg: { width: DISC, height: DISC },
-  favName: { ...typography.smallTextNorwester, color: colors.white, opacity: 0.8, marginTop: spacing.sm },
+  favName: { ...typography.smallTextNorwester, fontFamily: fonts.archivo, color: colors.white, opacity: 0.8, marginTop: spacing.sm },
 });

@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 import pybaseball as pb
 import numpy as np
 from datetime import datetime
+from routes import savant_sources
 
 # Set up Blueprint for pitcher_route
 pitcher_route = Blueprint('pitcher_route', __name__)
@@ -47,24 +48,13 @@ def get_pitcher_stats_this_season():
             return jsonify({'error': 'Savant ID required'}), 400
         else:
             key_mlbam = int(key_mlbam)
-        
-        # Get Fangraphs pitching stats for the current season and filter by playerid
-        fg_pitcher_data = pb.pitching_stats(current_year, qual=1);
-        fg_pitcher_record = fg_pitcher_data[fg_pitcher_data['IDfg'] == key_fangraphs].to_dict('records')
-        
-        if not fg_pitcher_record:
+
+        # FanGraphs (pb.pitching_stats) is Cloudflare-blocked; built from bbref + Savant + bWAR.
+        # See routes/savant_sources.py and .claude/plans/Park_Factor_Data_Architecture_1.0.md.
+        record = savant_sources.pitcher_season(key_mlbam)
+        if not record:
             return jsonify({'pitcher_stats': None})
-
-        # Select specific attributes to return for pitching, sprint speed, oaa stats
-        fg_pitcher_record_selected_attributes = ['Team', 'G', 'GS', 'CG', 'SV', 'W', 'L', 'ERA', 'IP', 'SO', 'BB', 'WHIP', 'WAR', 'Stuff+', 'Location+', 'Pitching+', 'xERA', 'SIERA', 'FIP', 'xFIP', 'K%', 'BB%', 'K-BB%', 'GB%', 'EV', 'HardHit%', 'Barrel%', 'BABIP', 'Stf+ CH', 'Stf+ CU', 'Stf+ FA', 'Stf+ FC', 'Stf+ FO', 'Stf+ FS', 'Stf+ KC', 'Stf+ SI', 'Stf+ SL', 'Loc+ CH', 'Loc+ CU', 'Loc+ FA', 'Loc+ FC', 'Loc+ FO', 'Loc+ FS', 'Loc+ KC', 'Loc+ SI', 'Loc+ SL', 'Pit+ CH', 'Pit+ CU', 'Pit+ FA', 'Pit+ FC', 'Pit+ FO', 'Pit+ FS', 'Pit+ KC', 'Pit+ SI', 'Pit+ SL', 'CH% (pi)', 'vCH (pi)', 'CU% (pi)', 'vCU (pi)', 'FA% (pi)', 'vFA (pi)', 'FC% (pi)', 'vFC (pi)', 'FO% (pi)', 'vFO (pi)', 'FS% (pi)', 'vFS (pi)', 'KC% (pi)', 'vKC (pi)', 'SI% (pi)', 'vSI (pi)', 'SL% (pi)', 'vSL (pi)', 'O-Swing% (pi)']
-        fg_pitcher_record = [
-            {attr: pitcher[attr] for attr in fg_pitcher_record_selected_attributes if attr in pitcher}
-            for pitcher in fg_pitcher_record
-        ]
-
-        fg_pitcher_record = replace_nan_with_none(fg_pitcher_record)
-        
-        return jsonify({'pitcher_stats': fg_pitcher_record})
+        return jsonify({'pitcher_stats': [replace_nan_with_none(record)]})
     except Exception as e:
         return jsonify({'pitcher_stats': None})
     
@@ -179,6 +169,22 @@ def get_pitcher_arsenal():
     except Exception as e:
         return jsonify({'pitcher_arsenal': None})
     
+@pitcher_route.route('/api/pitcher-stats/arsenal-full')
+def get_pitcher_arsenal_full():
+    # Per-pitch-type arsenal (velo/IVB/HB/ext/spin/usage + run-value Action+ proxy) built from a
+    # single season Statcast event pull. See routes/savant_sources.py.
+    try:
+        key_mlbam = request.args.get('mlbam-id')
+        if not key_mlbam:
+            return jsonify({'error': 'Savant ID required'}), 400
+        start_year = request.args.get('start-year')
+        start_year = int(start_year) if start_year else None
+        record = savant_sources.pitcher_arsenal_full(int(key_mlbam), start_year)
+        return jsonify({'pitcher_arsenal_full': replace_nan_with_none(record)})
+    except Exception as e:
+        return jsonify({'pitcher_arsenal_full': None})
+
+
 @pitcher_route.route('/api/pitcher-stats/percentiles')
 def get_pitcher_percentiles():
     try:
@@ -203,50 +209,9 @@ def get_pitcher_percentiles():
     
 @pitcher_route.route('/api/pitcher-stats/leaderboard')
 def get_pitcher_leaderboard():
+    # FanGraphs (pb.pitching_stats) is Cloudflare-blocked; built from bbref + Savant instead.
+    # See routes/savant_sources.py and .claude/plans/Park_Factor_Data_Architecture_1.0.md.
     try:
-        # Get pitcher id from query parameters and most recent year from pybaseball
-        current_year = pb.utils.most_recent_season()
-        statcast_leaderboard = pb.pitching_stats(current_year, qual=1)
-
-        # Define the stats the leaderboard will represent
-        leaderboard_stats = ['AVG', 'BB', 'R', 'H', 'W', 'L', 'IP', 'HR', 'SV', 'ERA', 'SO', 'WHIP', 'WAR', 'SIERA', 'K%', 'BB%', 'GB%', 'EV', 'vFA (pi)']
-        leaderboard_records = statcast_leaderboard.to_dict('records')
-
-        # Replace NaN values with None
-        leaderboard_records = replace_nan_with_none(leaderboard_records)
-
-        top_5_per_stat = {}
-        for stat in leaderboard_stats:
-            # If the stat is K%, we want the lowest values
-            if stat == 'AVG' or stat == 'BB' or stat == 'R' or stat == 'H' or stat == 'HR' or stat == 'L' or stat == 'ERA' or stat == 'WHIP' or stat == 'SIERA' or stat == 'BB%' or stat == 'EV':
-                top_5_per_stat[stat] = [
-                    {
-                        "Team": pitcher["Team"],
-                        "Name": pitcher["Name"],
-                        stat: pitcher[stat]
-                    }
-                    for pitcher in sorted(
-                        # Run a lambda function to sort each record of players by stat, take bottom 5
-                        (record for record in leaderboard_records if stat in record and record[stat] is not None),
-                        key=lambda x: x[stat]
-                    )[:5]
-                ]
-            else:
-                # Sort the stat and take the top 5 for the remaining stats
-                top_5_per_stat[stat] = [
-                    {
-                        "Team": pitcher["Team"],
-                        "Name": pitcher["Name"],
-                        stat: pitcher[stat]
-                    }
-                    for pitcher in sorted(
-                        # Run a lambda function to sort each record of players by stat, take top 5
-                        (record for record in leaderboard_records if stat in record and record[stat] is not None),
-                        key=lambda x: x[stat],
-                        reverse=True
-                    )[:5]
-                ]
-        
-        return jsonify(top_5_per_stat)
+        return jsonify(savant_sources.pitcher_leaderboard())
     except Exception as e:
         return jsonify({'error': str(e)}), 500

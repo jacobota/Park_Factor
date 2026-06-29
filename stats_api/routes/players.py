@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from pybaseball.playerid_lookup import _get_client
 import pybaseball as pb
 import numpy as np
+from routes import savant_sources
 
 # Get an instance of PlayerSearchClient using _get_client
 player_search = _get_client()
@@ -151,3 +152,15 @@ def get_player_bio():
         return jsonify({'player_bio': player_bio})
     except Exception as e:
         return jsonify({'player_bio': None})
+
+
+@player_route.route('/api/people')
+def get_player_people():
+    """Header/bio from the MLB Stats API (number, B/T, height, weight, born, age)."""
+    try:
+        key_mlbam = request.args.get('mlbam-id')
+        if not key_mlbam:
+            return jsonify({'player_people': None})
+        return jsonify({'player_people': savant_sources.player_bio(int(key_mlbam))})
+    except Exception:
+        return jsonify({'player_people': None})

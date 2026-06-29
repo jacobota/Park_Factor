@@ -8,16 +8,32 @@ import { getStat } from '@/types';
 import { toNum } from '@/utils/format';
 import { colors, radius, spacing, typography } from '@/theme';
 
-// Hitter radar axes (HitterSpiderGraphView: xwOBA, EV, Barrel%, K%, BB%, OAA), all 0-100 percentiles.
+// 10-axis hitter radar — every axis is a Savant percentile (0-100, higher = better), so a fuller
+// polygon reads as a better hitter. All values come from statcast_batter_percentile_ranks.
 const AXES: RadarAxis[] = [
   { label: 'xwOBA', max: 100 },
+  { label: 'xBA', max: 100 },
+  { label: 'xSLG', max: 100 },
   { label: 'EV', max: 100 },
   { label: 'Barrel%', max: 100 },
+  { label: 'Hard%', max: 100 },
   { label: 'K%', max: 100 },
   { label: 'BB%', max: 100 },
+  { label: 'Chase%', max: 100 },
   { label: 'OAA', max: 100 },
 ];
-const KEYS = ['xwoba', 'exit_velocity', 'brl_percent', 'k_percent', 'bb_percent', 'oaa'];
+const KEYS = [
+  'xwoba',
+  'xba',
+  'xslg',
+  'exit_velocity',
+  'brl_percent',
+  'hard_hit_percent',
+  'k_percent',
+  'bb_percent',
+  'chase_percent',
+  'oaa',
+];
 
 /** Player Summary radar card. */
 export function HitterRadarCard({ mlbamId, color }: { mlbamId: number; color: string }) {

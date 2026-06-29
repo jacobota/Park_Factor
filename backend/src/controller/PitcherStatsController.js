@@ -57,6 +57,18 @@ router.get('/stats/pitcher-arsenal/:mlbamId', async (req, res) => {
     }
 });
 
+// get MLB pitcher full arsenal (per-pitch velo/IVB/HB/ext/spin/usage + Action+ proxy)
+router.get('/stats/arsenal-full/:mlbamId', async (req, res) => {
+    try {
+        const startYear = req.query['start-year'] ? `&start-year=${req.query['start-year']}` : '';
+        const response = await fetch(`${flaskUrl}/pitchers/api/pitcher-stats/arsenal-full?mlbam-id=${req.params.mlbamId}${startYear}`);
+        const data = await response.json();
+        res.status(200).json(data);
+    } catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
+
 // get MLB pitcher percentiles for current season
 router.get('/stats/percentiles/:mlbamId', async (req, res) => {
     try {

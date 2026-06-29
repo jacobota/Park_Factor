@@ -13,7 +13,7 @@ import {
   getPitcherSeasonStats,
 } from '@/api/stats';
 import { playerFullName } from '@/types';
-import { colors, spacing, typography } from '@/theme';
+import { colors, fonts, spacing, typography } from '@/theme';
 import type { ProfileStackParamList } from '@/navigation/types';
 
 /**
@@ -57,6 +57,7 @@ export function PlayerPage({ route }: NativeStackScreenProps<ProfileStackParamLi
 const styles = StyleSheet.create({
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: spacing.xl },
   loading: { flex: 1, backgroundColor: colors.pageBackground, alignItems: 'center', justifyContent: 'center' },
-  title: { ...typography.title, color: colors.primary, textAlign: 'center' },
+  // Archivo Narrow renders accented names; Norwester (typography.title) lacks those glyphs.
+  title: { ...typography.title, fontFamily: fonts.archivo, color: colors.primary, textAlign: 'center' },
   subtitle: { ...typography.smallText, color: colors.lightGray, marginTop: spacing.sm },
 });

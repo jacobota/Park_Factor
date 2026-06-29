@@ -74,7 +74,8 @@ const styles = StyleSheet.create({
   avatar: { width: AVATAR, height: AVATAR, borderRadius: AVATAR / 2, overflow: 'hidden' },
   avatarImg: { width: AVATAR, height: AVATAR },
   info: { flex: 1, marginLeft: 16 },
-  name: { ...typography.subtitleNorwester, color: colors.white },
+  // Archivo Narrow (not Norwester) so accented names — José, Muñoz, Suárez — render correctly.
+  name: { ...typography.subtitleArchivo, color: colors.white },
   team: { ...typography.textNorwester, color: colors.white, marginTop: 4 },
   star: { paddingLeft: 12 },
 });

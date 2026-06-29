@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { colors, radius, spacing, typography } from '@/theme';
+import { colors, fonts, radius, spacing, typography } from '@/theme';
 
 /**
  * FollowingPageTeamCard / FollowingPagePlayerCard, unified. A circular logo/headshot + name
@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
   left: { flexDirection: 'row', alignItems: 'center', flex: 1 },
   disc: { width: DISC, height: DISC, borderRadius: DISC / 2, backgroundColor: colors.white, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
   img: { width: DISC, height: DISC },
-  name: { ...typography.textNorwester, color: colors.white, marginLeft: spacing.lg, flex: 1 },
+  // Archivo Narrow renders accented names (José, Muñoz); Norwester lacks those glyphs.
+  name: { ...typography.textNorwester, fontFamily: fonts.archivo, color: colors.white, marginLeft: spacing.lg, flex: 1 },
   toggle: { paddingLeft: spacing.md },
 });

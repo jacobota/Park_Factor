@@ -9,7 +9,7 @@ import { Card } from '@/components/Card';
 import { UserProfileCard } from '@/components/cards/UserProfileCard';
 import { PostCard } from '@/components/cards/PostCard';
 import type { Post } from '@/types';
-import { colors, radius, spacing, typography } from '@/theme';
+import { colors, fonts, radius, spacing, typography } from '@/theme';
 import type { AccountStackParamList } from '@/navigation/types';
 
 // Both the News and Account stacks expose UserProfile + EditPost with identical params, so the
@@ -82,7 +82,8 @@ export function UserProfileScreen({ route }: { route: { params: { username: stri
 const styles = StyleSheet.create({
   center: { flex: 1, backgroundColor: colors.pageBackground, alignItems: 'center', justifyContent: 'center' },
   content: { padding: spacing.lg, backgroundColor: colors.pageBackground },
-  heading: { ...typography.bigTextNorwester, color: colors.primary, textAlign: 'center', marginBottom: spacing.md },
+  // Archivo Narrow renders accented usernames; Norwester lacks those glyphs.
+  heading: { ...typography.bigTextNorwester, fontFamily: fonts.archivo, color: colors.primary, textAlign: 'center', marginBottom: spacing.md },
   bioCard: { backgroundColor: colors.elevated, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.hairline, borderRadius: radius.lg, padding: spacing.lg, marginBottom: spacing.lg },
   bioTitle: { ...typography.bigTextNorwester, color: colors.white },
   divider: { height: StyleSheet.hairlineWidth, backgroundColor: colors.border, marginVertical: spacing.md },

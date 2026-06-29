@@ -49,4 +49,16 @@ router.get('/player-bio/:bbrefid', async (req, res) => {
     }
 });
 
+// Header/bio from the MLB Stats API (number, B/T, height, weight, born, age) — keyed by MLBAM id.
+router.get('/people/:mlbamid', async (req, res) => {
+    try {
+        const response = await fetch(`${flaskUrl}/players/api/people?mlbam-id=${req.params.mlbamid}`);
+        const data = await response.json();
+        res.status(200).json(data);
+    }
+    catch (err) {
+        res.status(400).json({message: err.message});
+    }
+});
+
 module.exports = router;

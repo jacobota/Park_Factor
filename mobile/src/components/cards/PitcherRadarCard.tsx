@@ -8,17 +8,32 @@ import { getStat } from '@/types';
 import { toNum } from '@/utils/format';
 import { colors, radius, spacing, typography } from '@/theme';
 
-// Pitcher radar axes (PitcherSpiderGraphView). NOTE: the GB% axis reuses the whiff_percent
-// value, matching the Swift source (pitcher percentiles carry no ground-ball percentile).
+// 10-axis pitcher radar — every axis is a Savant percentile (0-100, higher = better), so a fuller
+// polygon reads as a better pitcher. All values come from statcast_pitcher_percentile_ranks.
 const AXES: RadarAxis[] = [
   { label: 'xERA', max: 100 },
-  { label: 'FB Velo', max: 100 },
-  { label: 'Whiff%', max: 100 },
   { label: 'K%', max: 100 },
+  { label: 'Whiff%', max: 100 },
+  { label: 'Chase%', max: 100 },
   { label: 'BB%', max: 100 },
-  { label: 'GB%', max: 100 },
+  { label: 'FB Velo', max: 100 },
+  { label: 'FB Spin', max: 100 },
+  { label: 'EV', max: 100 },
+  { label: 'Hard%', max: 100 },
+  { label: 'Barrel%', max: 100 },
 ];
-const KEYS = ['xera', 'fb_velocity', 'whiff_percent', 'k_percent', 'bb_percent', 'whiff_percent'];
+const KEYS = [
+  'xera',
+  'k_percent',
+  'whiff_percent',
+  'chase_percent',
+  'bb_percent',
+  'fb_velocity',
+  'fb_spin',
+  'exit_velocity',
+  'hard_hit_percent',
+  'brl_percent',
+];
 
 export function PitcherRadarCard({ mlbamId, color }: { mlbamId: number; color: string }) {
   const { data } = useQuery({

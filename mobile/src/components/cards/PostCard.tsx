@@ -7,7 +7,7 @@ import { deletePost as deletePostApi } from '@/api/posts';
 import { updateLikedPosts } from '@/api/user';
 import { useAuth } from '@/context/AuthContext';
 import type { Post } from '@/types';
-import { colors, radius, spacing, typography } from '@/theme';
+import { colors, fonts, radius, spacing, typography } from '@/theme';
 
 /**
  * PostCardView — author row (avatar + verified badge), content, optional image, and a like
@@ -100,7 +100,8 @@ const styles = StyleSheet.create({
   card: { backgroundColor: colors.elevated, borderWidth: StyleSheet.hairlineWidth, borderColor: colors.hairline, borderRadius: radius.lg, padding: spacing.lg, marginBottom: spacing.lg },
   header: { flexDirection: 'row', alignItems: 'center' },
   authorRow: { flexDirection: 'row', alignItems: 'center', flexShrink: 1 },
-  author: { ...typography.textNorwester, color: colors.white, marginLeft: spacing.sm, flexShrink: 1 },
+  // Archivo Narrow renders accented author names; Norwester lacks those glyphs.
+  author: { ...typography.textNorwester, fontFamily: fonts.archivo, color: colors.white, marginLeft: spacing.sm, flexShrink: 1 },
   badge: { marginLeft: 4 },
   spacer: { flex: 1 },
   ownerBtn: { paddingHorizontal: spacing.sm },

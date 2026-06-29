@@ -17,7 +17,9 @@ const router = express.Router();
 // Get News Around the League
 router.get("/", async (req, res) => {
     try {
-        const response = await axios.get(`https://newsapi.org/v2/everything?q=MLB&sources=bleacher-report,espn&apiKey=${apiKey}`);
+        // NOTE: the old `sources=bleacher-report,espn` filter returns 0 results on the current
+        // NewsAPI plan, so we query broadly for MLB baseball and sort by recency instead.
+        const response = await axios.get(`https://newsapi.org/v2/everything?q=MLB%20baseball&language=en&sortBy=publishedAt&apiKey=${apiKey}`);
         const articles = response.data.articles;
         res.status(200).json(articles);
     } catch (err) {
@@ -28,7 +30,7 @@ router.get("/", async (req, res) => {
 // Get News for a Specific Team
 router.get("/:team", (req, res) => {
     const team = req.params.team;
-    axios.get(`https://newsapi.org/v2/everything?q=MLB%20AND%20${team}&sources=bleacher-report,espn&apiKey=${apiKey}`)
+    axios.get(`https://newsapi.org/v2/everything?q=MLB%20${encodeURIComponent(team)}&language=en&sortBy=publishedAt&apiKey=${apiKey}`)
         .then(response => {
             const articles = response.data.articles;
             res.status(200).json(articles);

@@ -12,7 +12,7 @@ import type { Player } from '@/types';
 import { playerHeadshotUrl } from '@/utils/images';
 import { teamColorByFG } from '@/utils/teams';
 import { fmt, fmtInt } from '@/utils/format';
-import { colors, radius, spacing, typography } from '@/theme';
+import { colors, fonts, radius, spacing, typography } from '@/theme';
 import type { ProfileStackParamList } from '@/navigation/types';
 
 type Nav = NativeStackNavigationProp<ProfileStackParamList>;
@@ -93,6 +93,7 @@ const styles = StyleSheet.create({
   header: { flexDirection: 'row', alignItems: 'center', padding: 20 },
   avatar: { width: AVATAR, height: AVATAR, borderRadius: AVATAR / 2, overflow: 'hidden' },
   avatarImg: { width: AVATAR, height: AVATAR },
-  name: { ...typography.subtitleNorwester, color: colors.white, flex: 1, marginHorizontal: 16 },
+  // Archivo Narrow renders accented names; Norwester lacks those glyphs.
+  name: { ...typography.subtitleNorwester, fontFamily: fonts.archivo, color: colors.white, flex: 1, marginHorizontal: 16 },
   loading: { paddingBottom: 20 },
 });

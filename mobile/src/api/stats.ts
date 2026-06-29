@@ -1,6 +1,7 @@
 import { api } from './client';
 import { leaderboardError, mapPlayer, normalizeLeaderboard } from '@/types';
 import type {
+  ArsenalPitch,
   HitterPercentile,
   HitterPreviewStats,
   HitterStats,
@@ -10,6 +11,7 @@ import type {
   PitchingStats,
   PitchType,
   Player,
+  PlayerPeople,
   PlayerRaw,
   RawLeaderboard,
   Team,
@@ -36,10 +38,10 @@ export const getPitcherLeaderboard = async (): Promise<Leaderboard> =>
   toLeaderboard((await api.get<PitcherLeaderboardResponse>('/pitchers/stats/leaderboard')).playerPitchingLeaderboard);
 
 export const getTeamHittingLeaderboard = async (): Promise<Leaderboard> =>
-  toLeaderboard((await api.get<TeamHittingLeaderboardResponse>('/team-stats/leaderboard/hitting')).teamHittingLeaderboard);
+  toLeaderboard((await api.get<TeamHittingLeaderboardResponse>('/teamStats/leaderboard/hitting')).teamHittingLeaderboard);
 
 export const getTeamPitchingLeaderboard = async (): Promise<Leaderboard> =>
-  toLeaderboard((await api.get<TeamPitchingLeaderboardResponse>('/team-stats/leaderboard/pitching')).teamPitchingLeaderboard);
+  toLeaderboard((await api.get<TeamPitchingLeaderboardResponse>('/teamStats/leaderboard/pitching')).teamPitchingLeaderboard);
 
 /** GET /players/player-id/:first/:last — returns matching player records. */
 export const lookupPlayerByName = async (first: string, last: string): Promise<Player[]> => {
@@ -89,6 +91,21 @@ export const getPitcherPercentiles = async (mlbamId: number): Promise<PitcherPer
 export const getPitcherArsenal = async (mlbamId: number): Promise<PitchType[]> =>
   (await api.get<{ pitcher_arsenal?: PitchType[] | null }>(`/pitchers/stats/pitcher-arsenal/${mlbamId}`))
     .pitcher_arsenal ?? [];
+
+/**
+ * GET /pitchers/stats/arsenal-full/:mlbamId — event-level per-pitch velo/break/spin + Action+.
+ * Pass `startYear` to widen the window from the current season back to a career span.
+ */
+export const getPitcherArsenalFull = async (mlbamId: number, startYear?: number): Promise<ArsenalPitch[]> => {
+  const q = startYear ? `?start-year=${startYear}` : '';
+  return (
+    await api.get<{ pitcher_arsenal_full?: ArsenalPitch[] | null }>(`/pitchers/stats/arsenal-full/${mlbamId}${q}`)
+  ).pitcher_arsenal_full ?? [];
+};
+
+/** GET /players/people/:mlbamId — header bio (number, B/T, height, weight, born, age). */
+export const getPlayerPeople = async (mlbamId: number): Promise<PlayerPeople | null> =>
+  (await api.get<{ player_people?: PlayerPeople | null }>(`/players/people/${mlbamId}`)).player_people ?? null;
 
 /** GET /teamStats/current-season/:teamIDfg — team batting/pitching/fielding aggregates. */
 export const getTeamSeasonStats = async (teamIDfg: number): Promise<TeamStats> => {

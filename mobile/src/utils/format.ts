@@ -11,3 +11,6 @@ export const fmt = (v: StatValue, decimals: number): string => toNum(v).toFixed(
 
 /** Integer stat formatting. */
 export const fmtInt = (v: StatValue): string => String(Math.trunc(toNum(v)));
+
+/** Percent formatting for fractional rate stats (0.30 -> "30.0%"). */
+export const fmtPct = (v: StatValue, decimals = 1): string => `${(toNum(v) * 100).toFixed(decimals)}%`;
